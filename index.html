@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Vibe Coding 手把手實戰班 - 用 LINE OA 打造預約系統 MVP 的課程學習引導">
+  <title>Vibe Coding 課程引導手冊</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <div class="header-brand">Vibe Coding<span>課程引導手冊</span></div>
+    <div class="header-progress" id="progressText">0 / 0 完成</div>
+  </div>
+</header>
+
+<nav class="tab-nav">
+  <div class="tab-nav-inner" id="tabNav"></div>
+</nav>
+
+<main class="main-content" id="mainContent"></main>
+
+<script src="data.js"></script>
+<script>
+(function() {
+  const nav = document.getElementById('tabNav');
+  const main = document.getElementById('mainContent');
+
+  // Build tabs
+  STAGES.forEach((stage, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'tab-btn' + (i === 0 ? ' active' : '');
+    btn.dataset.target = stage.id;
+    btn.innerHTML = `<span class="tab-num">${i + 1}</span>${stage.label}`;
+    btn.addEventListener('click', () => switchTab(stage.id));
+    nav.appendChild(btn);
+  });
+
+  // Build panels
+  STAGES.forEach((stage, i) => {
+    const panel = document.createElement('div');
+    panel.className = 'tab-panel' + (i === 0 ? ' active' : '');
+    panel.id = `panel-${stage.id}`;
+    panel.innerHTML = renderStage(stage);
+    main.appendChild(panel);
+  });
+
+  function switchTab(id) {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.target === id));
+    document.querySelectorAll('.tab-panel').forEach(p => {
+      p.classList.remove('active');
+      if (p.id === `panel-${id}`) {
+        // Re-trigger animation
+        void p.offsetWidth;
+        p.classList.add('active');
+      }
+    });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function renderStage(stage) {
+    let html = `
+      <div class="stage-header">
+        <div class="stage-badge ${stage.color}">${stage.label}</div>
+        <h1 class="stage-title">${stage.title}</h1>
+        <p class="stage-desc">${stage.desc}</p>
+      </div>
+      <div class="step-list">
+    `;
+    stage.steps.forEach((step, si) => {
+      html += `<div class="step-card">
+        <div class="step-header">
+          <div class="step-number ${stage.color}">${si + 1}</div>
+          <div>
+            <div class="step-title">${step.title}</div>
+            ${step.subtitle ? `<div class="step-subtitle">${step.subtitle}</div>` : ''}
+          </div>
+        </div>
+        <div class="step-body">
+          <p>${step.body}</p>`;
+
+      if (step.image) {
+        html += `
+          <div class="step-image-container" style="margin: 16px 0; border: 1px solid var(--c-border); border-radius: var(--radius); overflow: hidden; max-width: 100%;">
+            <img src="${step.image}" alt="LINE OA MVP 流程圖" style="width: 100%; height: auto; display: block; object-fit: contain;">
+          </div>
+        `;
+      }
+
+      if (step.flow) {
+        html += '<div class="flow-diagram">';
+        step.flow.forEach((node, ni) => {
+          html += `<span class="flow-node">${node}</span>`;
+          if (ni < step.flow.length - 1) html += '<span class="flow-arrow">&rarr;</span>';
+        });
+        html += '</div>';
+      }
+
+      if (step.techs) {
+        html += '<div class="tech-pills">';
+        step.techs.forEach(t => { html += `<span class="tech-pill">${t}</span>`; });
+        html += '</div>';
+      }
+
+      if (step.checklist) {
+        html += '<ul class="checklist">';
+        step.checklist.forEach((item, ci) => {
+          const uid = `${stage.id}-${si}-${ci}`;
+          html += `<li><input type="checkbox" id="${uid}" onchange="updateProgress()"><label for="${uid}">${item}</label></li>`;
+        });
+        html += '</ul>';
+      }
+
+      if (step.extra) {
+        html += `<p style="margin-top:8px;font-size:13px;color:var(--c-text-muted)">${step.extra}</p>`;
+      }
+
+      if (step.result) {
+        html += `<div class="result-box">${step.result}</div>`;
+      }
+
+      if (step.worksheet) {
+        html += renderWorksheet(step.worksheet, `${stage.id}-${si}`);
+      }
+
+      if (step.promptBox) {
+        html += `
+          <div class="prompt-output-box">
+            <div class="prompt-output-header">
+              <span>整合 AI 提示詞</span>
+              <button class="copy-btn" id="btn-copy-${step.promptBox.id}" onclick="copyToClipboard('${step.promptBox.id}')">${step.promptBox.buttonText}</button>
+            </div>
+            <textarea id="${step.promptBox.id}" readonly class="prompt-textarea" placeholder="填寫完前述步驟後，此處將動態生成相關提示詞..."></textarea>
+          </div>
+        `;
+      }
+
+      html += '</div></div>';
+    });
+    html += '</div>';
+    return html;
+  }
+
+  function renderWorksheet(ws, prefix) {
+    let html = `<div class="worksheet">
+      <div class="worksheet-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+        ${ws.title}
+      </div>
+      <div class="ws-grid">`;
+    ws.fields.forEach((f, fi) => {
+      const fid = f.id || `ws-${prefix}-${fi}`;
+      if (f.type === 'textarea') {
+        html += `</div><div class="ws-field"><label for="${fid}">${f.label}</label>
+          <textarea id="${fid}" placeholder="${f.hint || ''}"></textarea>
+          ${f.hint ? `<div class="ws-hint">${f.hint}</div>` : ''}</div><div class="ws-grid">`;
+      } else {
+        html += `<div class="ws-field"><label for="${fid}">${f.label}</label>
+          <input type="text" id="${fid}" placeholder="${f.hint || ''}">
+          ${f.hint ? `<div class="ws-hint">${f.hint}</div>` : ''}</div>`;
+      }
+    });
+    html += '</div>';
+
+    if (ws.hasCopyOutput) {
+      html += `
+        <div class="copy-output-box">
+          <div class="copy-output-header">
+            <span>LINE 憑證複製區</span>
+            <button class="copy-btn" onclick="copyToClipboard('${ws.copyTargetId}')">一鍵複製</button>
+          </div>
+          <textarea id="${ws.copyTargetId}" readonly class="copy-textarea" placeholder="在此處填寫上方欄位後，會自動產生方便複製的格式..."></textarea>
+        </div>
+      `;
+    }
+
+    html += '</div>';
+    return html;
+  }
+
+  // Save all input fields
+  function saveAllInputs() {
+    const data = {};
+    document.querySelectorAll('input[type="text"], textarea').forEach(el => {
+      if (el.id && !el.readOnly) {
+        data[el.id] = el.value;
+      }
+    });
+    try { localStorage.setItem('vibe-course-inputs', JSON.stringify(data)); } catch(e) {}
+  }
+
+  // Restore all input fields
+  function restoreAllInputs() {
+    try {
+      const saved = JSON.parse(localStorage.getItem('vibe-course-inputs') || '{}');
+      Object.entries(saved).forEach(([id, val]) => {
+        const el = document.getElementById(id);
+        if (el) el.value = val;
+      });
+    } catch(e) {}
+  }
+
+  // Dynamic Prompt & Credentials updates
+  function updateDynamicOutputs() {
+    const channelId = document.getElementById('line_channel_id')?.value || '';
+    const channelSecret = document.getElementById('line_channel_secret')?.value || '';
+    const accessToken = document.getElementById('line_access_token')?.value || '';
+
+    // Credentials Area
+    const credsArea = document.getElementById('line_credentials_copy');
+    if (credsArea) {
+      credsArea.value = `Channel ID: ${channelId}\nChannel Secret: ${channelSecret}\nAccess Token: ${accessToken}`;
+    }
+
+    // Step 4 Prompt Box (System Builder)
+    const productFields = document.getElementById('product_fields')?.value || '商品名稱, 價格, 上下架狀態, 上架時間, 下架時間, 名額';
+    const orderFields = document.getElementById('order_fields')?.value || '姓名, 電話, 預約時段, 付款狀態';
+    const adminNotify = document.getElementById('admin_notify_tpl')?.value || '[未設定管理員通知範本]';
+    const userNotify = document.getElementById('user_notify_tpl')?.value || '[未設定客戶通知範本]';
+
+    const promptArea = document.getElementById('system_prompt_output');
+    if (promptArea) {
+      promptArea.value = `你是一個專業的 Cloudflare & LINE OA 開發專家。請根據以下設定，使用 Cloudflare Worker + D1 Database 建立一套「課程預約系統 MVP」。
+
+【LINE OA 憑證設定】
+- Channel ID: ${channelId || '[請回前步驟填寫 Channel ID]'}
+- Channel Secret: ${channelSecret || '[請回前步驟填寫 Channel Secret]'}
+- Access Token: ${accessToken || '[請回前步驟填寫 Access Token]'}
+
+【預約系統設計規格】
+- 商品表 (products) 欄位結構定義: ${productFields}
+- 訂單表 (orders) 欄位結構定義: ${orderFields}
+- 通知範本設定:
+  * 管理員通知內容範本: 
+    ${adminNotify}
+  * 客戶通知內容範本: 
+    ${userNotify}
+
+【開發實作要求】
+1. 資料庫建置：
+   - 建立商品表與訂單表，欄位應符合上述結構定義。
+   - 訂單表需包含「付款狀態」欄位（如已付款、未付款等）。
+2. Webhook 接收 LINE 訊息：
+   - 當用戶輸入「預約」或觸發圖文選單時，從資料庫讀取處於「上架狀態」且在有效期內（上架時間 <= 當前時間 <= 下架時間）的商品，回傳商品 Flex Message 輪播。
+   - 用戶選取指定商品後，引導其複製填寫格式。
+   - 用戶送出預約資料後，自動寫入訂單資料庫（預設狀態為「未付款」），扣減該商品的賸餘名額，並發送「雙向通知」（發送給管理員與客戶，不涉及後續審核通知）。
+3. 建立 /admin 後台管理介面（僅限以下兩大功能，無需與 LINE 用戶即時通訊）：
+   - 【商品管理】：完整的商品 CRUD 功能（包含新增、修改、刪除，以及設定上下架狀態、起訖時間、限制名額）。
+   - 【訂單管理】：檢視訂單列表，提供切換「已付款 / 未付款」按鈕，以及「刪除訂單」按鈕。
+   - 【庫存回滾機制】：當管理員點擊「刪除訂單」時，系統必須自動釋放名額，將對應的商品名額（庫存）加回去！`;
+    }
+
+    // Step 9 Prompt Box (Rich Menu Image Prompt)
+    const richMenuArea = document.getElementById('rich_menu_image_prompt');
+    if (richMenuArea) {
+      richMenuArea.value = `A premium, minimalistic 3-column grid layout for a mobile app LINE Official Account Rich Menu, aspect ratio 2:1.
+The background is an elegant cream white with clean cobalt blue dividers.
+Each column contains a clean, modern line icon and a single text label:
+- Left Column: A calendar icon with text "立即預約" (Book Now).
+- Middle Column: A book icon with text "課程介紹" (Course Intro).
+- Right Column: A chat bubble icon with text "聯絡客服" (Contact Us).
+Clean typography, high-end editorial look, flat design, no gradients, professional user interface layout, 4k resolution. --ar 2:1`;
+    }
+  }
+
+  // Copy to Clipboard with Visual Feedback
+  window.copyToClipboard = function(id) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.select();
+    el.setSelectionRange(0, 99999);
+    try {
+      navigator.clipboard.writeText(el.value).then(() => {
+        const btn = document.querySelector(`button[onclick*="${id}"]`) || document.getElementById(`btn-copy-${id}`);
+        if (btn) {
+          const originalText = btn.textContent;
+          btn.textContent = '已複製！';
+          btn.style.background = 'var(--c-success)';
+          btn.style.color = '#fff';
+          setTimeout(() => {
+            btn.textContent = originalText;
+            btn.style.background = '';
+            btn.style.color = '';
+          }, 1500);
+        }
+      });
+    } catch (err) {
+      alert('複製失敗，請手動選取複製！');
+    }
+  };
+
+  // Listen for input events
+  document.body.addEventListener('input', (e) => {
+    if (e.target.matches('input, textarea')) {
+      saveAllInputs();
+      updateDynamicOutputs();
+    }
+  });
+
+  // Progress tracking
+  window.updateProgress = function() {
+    const all = document.querySelectorAll('.checklist input[type="checkbox"]');
+    const checked = document.querySelectorAll('.checklist input[type="checkbox"]:checked');
+    document.getElementById('progressText').textContent = `${checked.length} / ${all.length} 完成`;
+    // Save to localStorage
+    const state = {};
+    all.forEach(cb => { state[cb.id] = cb.checked; });
+    try { localStorage.setItem('vibe-course-progress', JSON.stringify(state)); } catch(e) {}
+  };
+
+  // Restore state
+  restoreAllInputs();
+  updateDynamicOutputs();
+  
+  try {
+    const saved = JSON.parse(localStorage.getItem('vibe-course-progress') || '{}');
+    Object.entries(saved).forEach(([id, checked]) => {
+      const cb = document.getElementById(id);
+      if (cb) cb.checked = checked;
+    });
+  } catch(e) {}
+  window.updateProgress();
+
+})();
+</script>
+
+</body>
+</html>
