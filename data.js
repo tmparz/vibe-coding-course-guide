@@ -26,16 +26,41 @@ const STAGES = [
         checklist: ["了解 MVP 最終樣貌","理解 MVP 範圍（包含與不包含）"] },
       { title: "MVP 範圍確認", body: "明確界定本次課程的實作範圍",
         checklist: ["包含：商品管理、商品上下架、商品名額","包含：訂單管理、Webhook、Rich Menu","包含：LINE 通知、Cloudflare 部署","不包含：金流、CRM、會員系統","不包含：Google Calendar、自動排課、LIFF、多角色權限"] },
-      { title: "Ch2 - LINE 生態系統", body: "認識 LINE 開發者平台的各個組成元件，並填寫下方憑證資訊以供後續生成 AI 提示詞。",
-        checklist: ["LINE OA（LINE Official Account）","LINE Developers 平台","取得 Channel ID","取得 Channel Secret","取得 Access Token"],
+      {
+        title: "Ch2 - LINE 生態系統建置",
+        body: "依照以下步驟完成 LINE 官方帳號與開發者後台設定，並填寫下方憑證資訊。<br><br>" +
+              "<strong>Step 1：建立 LINE 官方帳號 (LINE OA)</strong><br>" +
+              "網址：<a href='https://manager.line.biz/' target='_blank'>https://manager.line.biz/</a><br>" +
+              "建立未來用來與客戶互動的官方帳號。<br><br>" +
+              "<strong>Step 2：進入 LINE Developers</strong><br>" +
+              "網址：<a href='https://developers.line.biz/' target='_blank'>https://developers.line.biz/</a><br>" +
+              "登入 LINE Developers 後台。<br><br>" +
+              "<strong>Step 3：建立 Provider</strong><br>" +
+              "路徑：Console &rarr; Create a Provider，建立專案所屬容器。<br><br>" +
+              "<strong>Step 4：建立 Messaging API Channel</strong><br>" +
+              "路徑：Provider &rarr; Create a Channel &rarr; Messaging API。<br><br>" +
+              "<strong>Step 5：連結 LINE OA 與 Channel 綁定</strong><br>" +
+              "路徑：Create new Official Account 或 Link existing Official Account。<br><br>" +
+              "<strong>Step 6：取得開發憑證</strong><br>" +
+              "- <strong>Channel Secret</strong>：進入 Basic Settings &rarr; Channel Secret (用途：驗證 Webhook 來源與訊息安全)。<br>" +
+              "- <strong>Channel Access Token</strong>：進入 Messaging API &rarr; Issue (用途：主動發送通知與回覆訊息)。",
+        checklist: [
+          "LINE OA 已建立",
+          "LINE Developers 已登入",
+          "Provider 已建立",
+          "Messaging API Channel 已建立",
+          "LINE OA 已成功連結",
+          "已取得 Channel Secret",
+          "已取得 Channel Access Token"
+        ],
         result: "成果：取得 Access Token 和 Channel Secret",
         worksheet: {
           title: "LINE 帳號資訊記錄 (填寫後可在下方直接複製)",
           hasCopyOutput: true,
           copyTargetId: "line_credentials_copy",
           fields: [
-            { id: "line_channel_id", label: "Channel ID (必填)", type: "text", hint: "在 LINE Developers 的 Channel settings 中取得" },
-            { id: "line_channel_secret", label: "Channel Secret (必填)", type: "text", hint: "在 LINE Developers 的 Channel settings 中取得" },
+            { id: "line_channel_id", label: "Channel ID (必填)", type: "text", hint: "在 LINE Developers 的 Basic settings 中取得" },
+            { id: "line_channel_secret", label: "Channel Secret (必填)", type: "text", hint: "在 LINE Developers 的 Basic settings 中取得" },
             { id: "line_access_token", label: "Access Token (必填)", type: "textarea", hint: "在 Messaging API tab 最下方 Issue 取得的長效 Token" }
           ]
         }
