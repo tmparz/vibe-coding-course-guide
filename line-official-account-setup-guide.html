@@ -1,0 +1,627 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>LINE 官方帳號申請與 Messaging API 開通流程</title>
+  <style>
+    :root {
+      --bg: #f6f8f7;
+      --panel: #ffffff;
+      --ink: #18211f;
+      --muted: #64716d;
+      --line: #dce5e1;
+      --green: #06c755;
+      --green-dark: #07843d;
+      --blue: #1769aa;
+      --warn: #a45f00;
+      --warn-bg: #fff5df;
+      --shadow: 0 18px 45px rgba(18, 33, 28, 0.10);
+      --radius: 8px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: "Noto Sans TC", "Microsoft JhengHei", Arial, sans-serif;
+      line-height: 1.65;
+    }
+
+    a {
+      color: var(--blue);
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      border-bottom: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.94);
+      backdrop-filter: blur(12px);
+    }
+
+    .topbar-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: min(1160px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 14px 0;
+      gap: 20px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 800;
+      letter-spacing: 0;
+    }
+
+    .brand-mark {
+      width: 28px;
+      height: 28px;
+      border-radius: 7px;
+      background: var(--green);
+      color: #fff;
+      display: grid;
+      place-items: center;
+      font-size: 14px;
+      font-weight: 900;
+    }
+
+    .nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      font-size: 14px;
+    }
+
+    .nav a {
+      color: var(--muted);
+    }
+
+    .hero {
+      width: min(1160px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 56px 0 34px;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.05fr) minmax(280px, 0.95fr);
+      gap: 32px;
+      align-items: center;
+    }
+
+    .eyebrow {
+      margin: 0 0 10px;
+      color: var(--green-dark);
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(34px, 5vw, 58px);
+      line-height: 1.08;
+      letter-spacing: 0;
+    }
+
+    .hero-copy {
+      max-width: 720px;
+      margin: 18px 0 0;
+      color: var(--muted);
+      font-size: 18px;
+    }
+
+    .meta-list {
+      display: grid;
+      gap: 10px;
+      margin: 26px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .meta-list li {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      color: var(--muted);
+    }
+
+    .dot {
+      width: 9px;
+      height: 9px;
+      margin-top: 9px;
+      border-radius: 50%;
+      background: var(--green);
+      flex: 0 0 auto;
+    }
+
+    .hero-shot {
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fff;
+      box-shadow: var(--shadow);
+    }
+
+    .hero-shot img,
+    figure img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    main {
+      width: min(1160px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 20px 0 72px;
+    }
+
+    section {
+      margin-top: 34px;
+      padding: 30px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--panel);
+      box-shadow: 0 10px 28px rgba(18, 33, 28, 0.05);
+    }
+
+    h2 {
+      margin: 0 0 12px;
+      font-size: 28px;
+      line-height: 1.25;
+      letter-spacing: 0;
+    }
+
+    h3 {
+      margin: 26px 0 10px;
+      font-size: 20px;
+      line-height: 1.35;
+      letter-spacing: 0;
+    }
+
+    p {
+      margin: 0 0 14px;
+    }
+
+    .lead {
+      color: var(--muted);
+      font-size: 16px;
+    }
+
+    .flow {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 22px;
+    }
+
+    .flow-item {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 16px;
+      background: #fbfdfc;
+    }
+
+    .flow-item strong {
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .flow-item span {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .steps {
+      counter-reset: step;
+      display: grid;
+      gap: 14px;
+      margin: 20px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .steps li {
+      position: relative;
+      padding: 16px 16px 16px 54px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fbfdfc;
+    }
+
+    .steps li::before {
+      counter-increment: step;
+      content: counter(step);
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: var(--green);
+      color: #fff;
+      display: grid;
+      place-items: center;
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    .steps strong {
+      display: block;
+      margin-bottom: 3px;
+    }
+
+    .steps span {
+      color: var(--muted);
+    }
+
+    .figure-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+      margin-top: 22px;
+    }
+
+    figure {
+      margin: 0;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fff;
+    }
+
+    figcaption {
+      padding: 12px 14px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .callout {
+      margin: 18px 0 0;
+      padding: 16px 18px;
+      border-left: 4px solid var(--green);
+      border-radius: 6px;
+      background: #eefbf4;
+    }
+
+    .warning {
+      border-left-color: var(--warn);
+      background: var(--warn-bg);
+    }
+
+    .codebox {
+      overflow-x: auto;
+      margin: 16px 0 0;
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #111816;
+      color: #d7f8df;
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 14px;
+      line-height: 1.55;
+      white-space: pre;
+    }
+
+    .checklist {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .check {
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fbfdfc;
+    }
+
+    .check strong {
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .check span {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .footer-note {
+      margin-top: 28px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    @media (max-width: 900px) {
+      .hero-grid,
+      .figure-grid,
+      .checklist {
+        grid-template-columns: 1fr;
+      }
+
+      .flow {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 640px) {
+      .topbar-inner {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      section {
+        padding: 22px;
+      }
+
+      .flow {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media print {
+      .topbar {
+        position: static;
+      }
+
+      body {
+        background: #fff;
+      }
+
+      section,
+      .hero-shot {
+        box-shadow: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <span class="brand-mark">L</span>
+        <span>LINE 官方帳號流程文件</span>
+      </div>
+      <nav class="nav" aria-label="頁面導覽">
+        <a href="#overview">總覽</a>
+        <a href="#apply">申請帳號</a>
+        <a href="#messaging-api">Messaging API</a>
+        <a href="#access-token">Access token</a>
+        <a href="#security">安全事項</a>
+      </nav>
+    </div>
+  </header>
+
+  <header class="hero" id="overview">
+    <div class="hero-grid">
+      <div>
+        <p class="eyebrow">LINE Official Account / Messaging API</p>
+        <h1>LINE 官方帳號申請與 Messaging API 開通流程</h1>
+        <p class="hero-copy">
+          這份文件整理登入 LINE Official Account Manager、建立官方帳號、進入設定、開通 Messaging API、
+          前往 LINE Developers Console，以及取得 Channel access token 的完整操作位置。
+        </p>
+        <ul class="meta-list">
+          <li><span class="dot"></span><span>適用情境：新申請官方帳號、串接 Webhook、準備後端 Bot 程式環境變數。</span></li>
+          <li><span class="dot"></span><span>截圖中的密鑰、Webhook URL、access token 已遮罩，請勿在文件或前端程式碼中保存真實 token。</span></li>
+          <li><span class="dot"></span><span>若帳號尚未啟用 Messaging API，會在設定頁看到「啟用 Messaging API」按鈕；按下後會建立對應的 Developers Channel。</span></li>
+        </ul>
+      </div>
+      <figure class="hero-shot">
+        <img src="line-flow-screenshots/02-manager-home-after-login-marked.png" alt="LINE Official Account Manager 帳號列表，紅框標示建立入口">
+        <figcaption>登入後會先進入 LINE Official Account Manager 的帳號列表，紅框標示「建立」入口。</figcaption>
+      </figure>
+    </div>
+  </header>
+
+  <main>
+    <section>
+      <h2>流程總覽</h2>
+      <p class="lead">整體操作可以拆成四段：登入、申請官方帳號、開通 Messaging API、取得 access token 並設定 Webhook。</p>
+      <div class="flow">
+        <div class="flow-item">
+          <strong>1. 登入</strong>
+          <span>進入 manager.line.biz，使用 LINE Business ID 或 LINE 帳號登入。</span>
+        </div>
+        <div class="flow-item">
+          <strong>2. 建立官方帳號</strong>
+          <span>點選「建立」，填寫帳號、公司、業種與條款確認。</span>
+        </div>
+        <div class="flow-item">
+          <strong>3. 啟用 Messaging API</strong>
+          <span>在官方帳號後台進入「設定」中的 Messaging API。</span>
+        </div>
+        <div class="flow-item">
+          <strong>4. 取得 access token</strong>
+          <span>前往 LINE Developers Console 的 Messaging API 頁籤複製或發行 token。</span>
+        </div>
+      </div>
+    </section>
+
+    <section id="apply">
+      <h2>一、登入與申請 LINE 官方帳號</h2>
+      <p class="lead">先進入 LINE Official Account Manager。登入完成後，左側選單會出現「建立」入口，用來新增官方帳號。</p>
+      <ol class="steps">
+        <li>
+          <strong>進入登入頁</strong>
+          <span>開啟 <a href="https://manager.line.biz/" target="_blank" rel="noreferrer">manager.line.biz</a>，依畫面選擇 LINE 帳號或 Business ID 登入。</span>
+        </li>
+        <li>
+          <strong>從帳號列表點選「建立」</strong>
+          <span>登入後會看到目前可管理的官方帳號清單，左側選單的「建立」會進入申請表。</span>
+        </li>
+        <li>
+          <strong>填寫公司與店鋪資訊</strong>
+          <span>表單會要求帳號名稱、電子郵件、公司所在地、公司名稱、業種大分類與小分類。</span>
+        </li>
+        <li>
+          <strong>確認條款並送出</strong>
+          <span>閱讀 LINE 官方帳號服務條款與隱私權政策後，按「確定」進入確認頁。送出後才會正式建立帳號。</span>
+        </li>
+      </ol>
+
+      <div class="figure-grid">
+        <figure>
+          <img src="line-flow-screenshots/01-line-login-viewport-marked.png" alt="LINE 登入頁，紅框標示 QR code 與電子郵件登入">
+          <figcaption>登入頁：紅框標示 QR code 與電子郵件帳號登入入口。</figcaption>
+        </figure>
+        <figure>
+          <img src="line-flow-screenshots/03-create-official-account-entry-form-marked.png" alt="建立 LINE 官方帳號表單上半部，紅框標示必填欄位">
+          <figcaption>建立官方帳號：紅框標示帳號名稱、電子郵件、公司所在國家或地區等必填欄位。</figcaption>
+        </figure>
+        <figure>
+          <img src="line-flow-screenshots/04-create-official-account-form-bottom-marked.png" alt="建立 LINE 官方帳號表單資訊欄位，紅框標示登入資訊與帳號資訊">
+          <figcaption>表單資訊欄位：紅框標示登入資訊、服務地區、帳號名稱與電子郵件欄位。</figcaption>
+        </figure>
+        <figure>
+          <img src="line-flow-screenshots/05-official-account-dashboard-marked.png" alt="LINE 官方帳號後台首頁，紅框標示設定入口">
+          <figcaption>建立或選取帳號後，會進入該官方帳號的管理後台，紅框標示右上角「設定」。</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section id="messaging-api">
+      <h2>二、開通 Messaging API</h2>
+      <p class="lead">
+        Messaging API 是後端程式與 LINE 用戶互動的核心功能。開通後會產生 Channel ID、Channel secret，
+        並可以設定 Webhook URL 與 Channel access token。
+      </p>
+      <ol class="steps">
+        <li>
+          <strong>進入官方帳號後台的「設定」</strong>
+          <span>在帳號後台右上或上方導覽列點選「設定」。</span>
+        </li>
+        <li>
+          <strong>點選左側「Messaging API」</strong>
+          <span>左側設定選單中會看到 Messaging API。若尚未開通，這裡會出現「啟用 Messaging API」按鈕。</span>
+        </li>
+        <li>
+          <strong>選擇或建立 Provider</strong>
+          <span>啟用流程通常會要求選擇 LINE Developers Provider。Provider 可理解為開發者組織或專案歸屬。</span>
+        </li>
+        <li>
+          <strong>確認開通</strong>
+          <span>確認後系統會建立 Messaging API Channel，並回到設定頁顯示「使用中」。</span>
+        </li>
+      </ol>
+
+      <div class="callout warning">
+        <strong>注意：</strong>
+        按下「啟用 Messaging API」會建立 API 存取權與 Developers Channel，屬於外部系統狀態變更。
+        正式帳號操作前，請確認 Provider、帳號名稱與管理權限都正確。
+      </div>
+
+      <div class="figure-grid">
+        <figure>
+          <img src="line-flow-screenshots/06-account-settings-marked.png" alt="LINE 官方帳號設定頁，紅框標示 Messaging API">
+          <figcaption>帳號設定頁：紅框標示左側選單的「Messaging API」。</figcaption>
+        </figure>
+        <figure>
+          <img src="line-flow-screenshots/07-messaging-api-settings-redacted-marked.png" alt="Messaging API 設定頁，紅框標示狀態、Channel 資訊、Webhook 與 Developers Console">
+          <figcaption>Messaging API 已啟用後，紅框標示「使用中」、Channel 資訊、Webhook URL 與 LINE Developers Console 入口。</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section id="access-token">
+      <h2>三、取得 Channel access token</h2>
+      <p class="lead">
+        後端呼叫 LINE Messaging API 時，需要使用 Channel access token。這個 token 必須放在後端環境變數或密鑰管理服務，
+        不能寫在前端 HTML、公開 Git repository 或教學文件中。
+      </p>
+      <ol class="steps">
+        <li>
+          <strong>從 Messaging API 設定頁進入 LINE Developers Console</strong>
+          <span>在官方帳號後台的 Messaging API 頁面下方，點選「LINE Developers Console」。</span>
+        </li>
+        <li>
+          <strong>確認 Provider 與 Channel</strong>
+          <span>Console 左側選擇對應 Provider，進入該官方帳號的 Messaging API Channel。</span>
+        </li>
+        <li>
+          <strong>切到「Messaging API」頁籤</strong>
+          <span>頁面中會看到 Bot information、Webhook settings、LINE Official Account features 與 Channel access token。</span>
+        </li>
+        <li>
+          <strong>複製或發行 token</strong>
+          <span>若已有 token，使用複製按鈕取得；若尚未發行，按「Issue」。若要更換外洩或失效 token，才按「Reissue」。</span>
+        </li>
+      </ol>
+
+      <div class="callout warning">
+        <strong>Token 操作原則：</strong>
+        「Reissue」會產生新的 access token，可能導致舊 token 失效或需要同步更新後端環境變數。
+        不要在未安排部署更新前隨意重發正式帳號 token。
+      </div>
+
+      <h3>後端環境變數建議</h3>
+      <p>取得 token 後，建議把 LINE 串接資訊放在伺服器端的環境變數。</p>
+      <pre class="codebox">LINE_CHANNEL_ID=2010xxxxxx
+LINE_CHANNEL_SECRET=replace_with_channel_secret
+LINE_CHANNEL_ACCESS_TOKEN=replace_with_channel_access_token
+LINE_WEBHOOK_URL=https://your-domain.example.com/line/webhook</pre>
+
+      <div class="callout">
+        <strong>Webhook URL：</strong>
+        後端服務部署完成後，回到 LINE Official Account Manager 或 LINE Developers Console 填入 HTTPS Webhook URL。
+        常見格式為 <code>https://你的網域/line/webhook</code>。儲存後可在 Developers Console 進行 Webhook 驗證。
+      </div>
+
+      <figure style="margin-top: 22px;">
+        <img src="line-flow-screenshots/10-developers-console-full-redacted-marked.png" alt="LINE Developers Console Messaging API 頁面，紅框標示 access token 區域">
+        <figcaption>LINE Developers Console：紅框標示 Messaging API 頁籤、Webhook settings 與 Channel access token 區域。截圖已遮罩 token。</figcaption>
+      </figure>
+    </section>
+
+    <section id="security">
+      <h2>四、交付與安全檢查</h2>
+      <p class="lead">完成設定前，建議逐項確認以下內容，避免正式帳號串接後出現權限、Webhook 或密鑰管理問題。</p>
+      <div class="checklist">
+        <div class="check">
+          <strong>帳號權限</strong>
+          <span>確認操作人員在官方帳號與 Developers Console 都有管理員權限。</span>
+        </div>
+        <div class="check">
+          <strong>Provider 歸屬</strong>
+          <span>確認 Messaging API Channel 建在正確 Provider 底下，避免後續交接困難。</span>
+        </div>
+        <div class="check">
+          <strong>Webhook HTTPS</strong>
+          <span>Webhook URL 必須是公開可連線的 HTTPS 網址，本機或內網 URL 無法讓 LINE 正常呼叫。</span>
+        </div>
+        <div class="check">
+          <strong>Token 保存</strong>
+          <span>Channel secret 與 access token 僅放在後端環境變數或 Secret Manager，不放在前端程式碼。</span>
+        </div>
+        <div class="check">
+          <strong>部署同步</strong>
+          <span>若重發 token，後端環境變數也要同步更新並重新部署。</span>
+        </div>
+        <div class="check">
+          <strong>測試訊息</strong>
+          <span>Webhook 啟用後，用測試 LINE 帳號加入好友並發送訊息，確認後端有收到事件。</span>
+        </div>
+      </div>
+      <p class="footer-note">
+        文件產生日期：2026-06-24。截圖依本次瀏覽器操作建立，敏感資訊已遮罩。
+      </p>
+    </section>
+  </main>
+</body>
+</html>
