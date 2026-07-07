@@ -90,6 +90,7 @@ const STAGES = [
       },
       {
         title: 'Ch2 - LINE 生態系統建置',
+        image: '01_LINE三把鑰匙.png',
         body: '依照以下步驟完成 LINE 官方帳號與開發者後台設定，並填寫下方憑證資訊。<br><br>' +
           '<div class="antifraud-notice">📣 <strong>防呆提示</strong>：進行到每個步驟時，講師或小幫手會同步將直達連結發送到 LINE 群組。請用 Chrome 開啟，避免使用 LINE 內建瀏覽器（可能有權限問題）。</div><br>' +
           '<strong>Step 1：建立 LINE 官方帳號 (LINE OA)</strong><br>' +
