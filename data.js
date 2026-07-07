@@ -144,6 +144,7 @@ const STAGES = [
       },
       {
         title: 'Ch4 - Cloudflare 環境建置',
+        image: '03_Cloudflare環境建置.png',
         body: '建立雲端伺服器環境（免費！）<br><br>' +
           '<div class="antifraud-notice">📣 <strong>防呆提示</strong>：講師會同步把 Cloudflare 連結發到 LINE 群組，請點擊連結直接開啟，用 <strong>Gmail 帳號</strong>快速登入。若沒有 Gmail 請舉手告知。</div><br>' +
           '網址：<a href="https://dash.cloudflare.com/sign-up" target="_blank" class="ext-link-btn">🔗 開啟 Cloudflare 註冊頁面</a>',
