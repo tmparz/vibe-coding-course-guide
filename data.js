@@ -62,6 +62,7 @@ const STAGES = [
       {
         title: '技術架構總覽',
         body: '整個系統的資料流如下：',
+        image: '02_技術架構總覽.png',
         flow: ['使用者手機<br />Rich Menu', 'LINE 平台', 'Webhook (事件傳入)', 'Cloudflare Worker<br/>D1 Database', 'Messaging API (回覆傳出)', '使用者手機'],
         techs: ['LINE OA', 'Cloudflare Worker', 'D1 Database', 'Webhook', 'Rich Menu']
       }
