@@ -137,6 +137,7 @@ const STAGES = [
     steps: [
       {
         title: 'Ch3 - LINE 資料流',
+        image: '02_技術架構總覽.png',
         body: '理解使用者從 LINE 發送訊息到系統回應的完整資料流（形成雙向閉環）',
         flow: ['使用者傳送', 'LINE 平台接收', 'Webhook 轉發', 'Cloudflare Worker', 'D1 Database 存取', 'Messaging API 回覆', 'LINE 平台傳送', '使用者接收'],
         tip: '💡 <strong>白話比喻</strong>：整個流程就像你在便當店點餐。客人在點了便當（使用者 ➔ LINE OA），櫃台把訂單透過門鈴通知廚房（Webhook ➔ Cloudflare），廚房去倉庫拿貨並更新庫存（Cloudflare ➔ Database），最後出單告訴客人「好了！」（通知）。'
