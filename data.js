@@ -83,8 +83,9 @@ const STAGES = [
         body: '明確界定本次課程的實作範圍',
         checklist: [
           '✅ 包含：商品管理、商品上下架、庫存/名額',
+          '✅ 包含：按下訂購鍵在對話框產生文字訊息（觸發寫入 LINE 官方帳號 Chat 聊天紀錄）',
           '✅ 包含：訂單管理、Webhook、Rich Menu',
-          '✅ 包含：LINE 通知、Cloudflare 部署',
+          '✅ 包含：LINE 雙向即時通知（顧客確認＋管理員推播）、Cloudflare 部署',
           '❌ 不包含：金流、CRM、會員系統',
           '❌ 不包含：Google Calendar、自動排課、LIFF、多角色權限'
         ]
@@ -139,8 +140,8 @@ const STAGES = [
         title: 'Ch3 - LINE 資料流',
         image: '02_技術架構總覽.png',
         body: '理解使用者從 LINE 發送訊息到系統回應的完整資料流（形成雙向閉環）',
-        flow: ['使用者傳送', 'LINE 平台接收', 'Webhook 轉發', 'Cloudflare Worker', 'D1 Database 存取', 'Messaging API 回覆', 'LINE 平台傳送', '使用者接收'],
-        tip: '💡 <strong>白話比喻</strong>：整個流程就像你在便當店點餐。客人在點了便當（使用者 ➔ LINE OA），櫃台把訂單透過門鈴通知廚房（Webhook ➔ Cloudflare），廚房去倉庫拿貨並更新庫存（Cloudflare ➔ Database），最後出單告訴客人「好了！」（通知）。'
+        flow: ['使用者傳送/點擊選單', '對話框產生訂購文字', 'LINE 平台轉發 Webhook', 'Cloudflare Worker 處理', 'D1 資料庫扣庫存', 'Messaging API 雙向推播', 'LINE 官方後台記錄 Chat', '使用者與管理者接收'],
+        tip: '💡 <strong>關鍵細節：為什麼按下訂購鍵時，對話框一定要產生文字？</strong><br>LINE 官方帳號規定：如果顧客只有機器人單向發送訊息，官方帳號後台是無法開啟 1 對 1 真人聊天的！透過在訂購按鈕設定 <code>displayText</code> 或傳送指定文字，當客人按下「立即預約」時，系統會自動在對話框產生一條客人送出的文字紀錄。這樣不僅客人的聊天室有白紙黑字的訂單憑證，管理員登入 LINE Official Account Manager 後台也能立即在「聊天 (Chat)」看見這位客人，隨時接手真人客服或打上標籤！'
       },
       {
         title: 'Ch4 - Cloudflare 環境建置',
@@ -271,7 +272,7 @@ const STAGES = [
       {
         title: 'Step 10 - 預約流程打通',
         body: '完成端到端的流程測試',
-        flow: ['手機點選商品', '系統回傳列表', '送出預約資料', '系統寫入 D1', '發送管理員通知', '發送客戶通知'],
+        flow: ['手機點選商品', '系統回傳列表', '點擊訂購產生文字訊息', '寫入 LINE Chat 記錄', '系統寫入 D1 扣庫存', '發送雙向即時通知'],
         result: '銷售/預約流程完整打通 🎉'
       }
     ]
@@ -287,11 +288,12 @@ const STAGES = [
         checklist: [
           '商品新增成功',
           '商品顯示成功',
-          '訂單建立成功',
+          '按下訂購時對話框正確產生文字訊息（LINE Chat 留下對話紀錄）',
+          '訂單建立成功且名額庫存正確扣減',
           'Webhook 正常運作',
           'Rich Menu 正常顯示',
-          '管理員收到通知',
-          '客戶收到通知'
+          '管理員即時收到下單推播',
+          '客戶即時收到確認通知'
         ],
         result: '全部通過 = MVP 完成 🚀'
       },
