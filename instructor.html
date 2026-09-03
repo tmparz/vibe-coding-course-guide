@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Vibe Coding 手把手實戰班 - 講師阿茲 (Arz) 簡介與課堂實戰保證">
+  <title>講師簡介 ｜ Vibe Coding 實戰導師 阿茲 (Arz)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Noto+Sans+TC:wght@400;500;700;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0b0f19;
+      --surface: #111827;
+      --surface-card: #162032;
+      --surface-hover: #1c2940;
+      --border: #1f2d45;
+      --border-light: #293a56;
+      --accent: #2563eb;
+      --accent-glow: rgba(37, 99, 235, 0.25);
+      --emerald: #10b981;
+      --emerald-glow: rgba(16, 185, 129, 0.2);
+      --amber: #f59e0b;
+      --text: #f3f4f6;
+      --text-secondary: #9ca3af;
+      --text-muted: #6b7280;
+      --radius: 16px;
+      --radius-sm: 10px;
+      --radius-lg: 24px;
+      --font-main: 'Noto Sans TC', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      --transition: 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: var(--font-main);
+      line-height: 1.7;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* Ambient Background Glow */
+    body::before {
+      content: '';
+      position: fixed;
+      top: -200px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 900px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(37, 99, 235, 0.15) 0%, rgba(16, 185, 129, 0.05) 50%, transparent 70%);
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    /* Header */
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(11, 15, 25, 0.85);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .header-inner {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .header-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 800;
+      font-size: 16px;
+      letter-spacing: -0.01em;
+    }
+
+    .brand-badge {
+      font-size: 11px;
+      font-weight: 700;
+      background: var(--accent-glow);
+      color: #60a5fa;
+      border: 1px solid rgba(96, 165, 250, 0.3);
+      padding: 3px 8px;
+      border-radius: 999px;
+    }
+
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: var(--surface-card);
+      border: 1px solid var(--border);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      transition: all var(--transition);
+    }
+
+    .back-btn:hover {
+      color: #fff;
+      border-color: #60a5fa;
+      background: var(--surface-hover);
+      transform: translateX(-2px);
+    }
+
+    /* Main Container */
+    .main-container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 40px 24px 80px;
+      width: 100%;
+    }
+
+    /* Hero Profile Card */
+    .profile-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 40px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+      margin-bottom: 32px;
+    }
+
+    .profile-card::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 320px;
+      height: 320px;
+      background: radial-gradient(circle, rgba(96, 165, 250, 0.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .profile-top {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      flex-wrap: wrap;
+      margin-bottom: 24px;
+    }
+
+    .avatar-wrap {
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    .avatar {
+      width: 96px;
+      height: 96px;
+      border-radius: 28px;
+      background: linear-gradient(135deg, #1e3a8a, #047857);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 40px;
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35);
+      border: 2px solid rgba(255, 255, 255, 0.15);
+    }
+
+    .avatar-status {
+      position: absolute;
+      bottom: -2px;
+      right: -2px;
+      width: 22px;
+      height: 22px;
+      background: var(--emerald);
+      border: 3px solid var(--surface);
+      border-radius: 50%;
+    }
+
+    .profile-info {
+      flex: 1;
+      min-width: 260px;
+    }
+
+    .instructor-tags {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 8px;
+    }
+
+    .tag-badge {
+      font-size: 12px;
+      font-weight: 600;
+      padding: 3px 10px;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--text-secondary);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .tag-badge.primary {
+      background: var(--accent-glow);
+      color: #93c5fd;
+      border-color: rgba(147, 197, 253, 0.3);
+    }
+
+    .instructor-name {
+      font-size: 32px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+    }
+
+    .instructor-name span {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text-muted);
+      font-family: var(--font-mono);
+    }
+
+    .instructor-motto {
+      font-size: 17px;
+      color: #93c5fd;
+      font-weight: 500;
+    }
+
+    .bio-text {
+      color: var(--text-secondary);
+      font-size: 15px;
+      line-height: 1.75;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+    }
+
+    /* Stats Grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-top: 24px;
+    }
+
+    .stat-box {
+      background: var(--surface-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 20px;
+      text-align: center;
+      transition: border-color var(--transition);
+    }
+
+    .stat-box:hover {
+      border-color: var(--border-light);
+    }
+
+    .stat-num {
+      font-family: var(--font-mono);
+      font-size: 28px;
+      font-weight: 800;
+      color: #fff;
+      display: block;
+      line-height: 1.2;
+    }
+
+    .stat-num em {
+      font-style: normal;
+      color: #60a5fa;
+      font-size: 20px;
+    }
+
+    .stat-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-top: 4px;
+      display: block;
+    }
+
+    /* Section Title */
+    .section-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text);
+      margin: 36px 0 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .section-title::before {
+      content: '';
+      display: inline-block;
+      width: 4px;
+      height: 16px;
+      border-radius: 2px;
+      background: var(--accent);
+    }
+
+    /* Pillars (Why Arz) */
+    .pillars-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .pillar-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      transition: transform var(--transition), border-color var(--transition);
+    }
+
+    .pillar-card:hover {
+      transform: translateY(-3px);
+      border-color: var(--border-light);
+    }
+
+    .pillar-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+    }
+
+    .pillar-card:nth-child(1) .pillar-icon { background: rgba(239, 68, 68, 0.15); color: #f87171; }
+    .pillar-card:nth-child(2) .pillar-icon { background: rgba(59, 130, 246, 0.15); color: #60a5fa; }
+    .pillar-card:nth-child(3) .pillar-icon { background: rgba(16, 185, 129, 0.15); color: #34d399; }
+
+    .pillar-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .pillar-desc {
+      font-size: 13.5px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    /* Advice for Class (上課心態指南) */
+    .advice-box {
+      background: linear-gradient(135deg, rgba(30, 58, 138, 0.25) 0%, rgba(16, 185, 129, 0.1) 100%);
+      border: 1px solid rgba(96, 165, 250, 0.25);
+      border-radius: var(--radius-lg);
+      padding: 28px 32px;
+      margin-top: 32px;
+    }
+
+    .advice-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: #bfdbfe;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .advice-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .advice-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      font-size: 14px;
+      color: #e2e8f0;
+    }
+
+    .advice-item svg {
+      width: 18px;
+      height: 18px;
+      color: #34d399;
+      flex-shrink: 0;
+      margin-top: 3px;
+    }
+
+    /* Quick Links CTA */
+    .cta-bar {
+      margin-top: 40px;
+      padding: 24px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .cta-text {
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
+
+    .cta-text strong {
+      color: #fff;
+      display: block;
+      font-size: 15px;
+      margin-bottom: 2px;
+    }
+
+    .cta-buttons {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 18px;
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      font-weight: 700;
+      transition: all var(--transition);
+      cursor: pointer;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .btn-primary:hover {
+      background: #1d4ed8;
+      box-shadow: 0 4px 16px var(--accent-glow);
+    }
+
+    .btn-secondary {
+      background: var(--surface-card);
+      color: var(--text-secondary);
+      border: 1px solid var(--border);
+    }
+
+    .btn-secondary:hover {
+      background: var(--surface-hover);
+      color: #fff;
+      border-color: var(--border-light);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .profile-card { padding: 24px; }
+      .profile-top { gap: 18px; }
+      .instructor-name { font-size: 26px; }
+      .stats-grid { grid-template-columns: 1fr; gap: 10px; }
+      .pillars-grid { grid-template-columns: 1fr; }
+      .advice-box { padding: 20px; }
+      .cta-bar { flex-direction: column; align-items: flex-start; }
+      .cta-buttons { width: 100%; }
+      .cta-buttons .btn { flex: 1; justify-content: center; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="header-brand">
+        Vibe Coding <span class="brand-badge">實戰班</span>
+      </div>
+      <a href="index.html" class="back-btn">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+        返回課程手冊
+      </a>
+    </div>
+  </header>
+
+  <main class="main-container">
+
+    <!-- Profile Card -->
+    <div class="profile-card">
+      <div class="profile-top">
+        <div class="avatar-wrap">
+          <div class="avatar">👨‍💻</div>
+          <div class="avatar-status" title="實戰導師在線陪跑"></div>
+        </div>
+        <div class="profile-info">
+          <div class="instructor-tags">
+            <span class="tag-badge primary">主講導師</span>
+            <span class="tag-badge">系統開發顧問</span>
+            <span class="tag-badge">Vibe Coding 實戰派</span>
+          </div>
+          <h1 class="instructor-name">阿茲 <span>/ Arz</span></h1>
+          <p class="instructor-motto">「你不是缺工程師，你是缺一個聽得懂你的技術夥伴。」</p>
+        </div>
+      </div>
+
+      <p class="bio-text">
+        超過 20 年的軟體開發與架構經驗，跨足金融科技、電商系統、自動化工作流與 LINE 生態深度整合。
+        阿茲擅長將深奧繁雜的工程底層邏輯，翻譯成一般自僱者、顧問、老師都能秒懂的生活語言；
+        在課堂上，他不教死背語法，而是傳授「如何當好一個指揮 AI 的聰明老闆」，帶你用最短時間把系統做出來、跑起來！
+      </p>
+
+      <div class="stats-grid">
+        <div class="stat-box">
+          <span class="stat-num">20<em>+ 年</em></span>
+          <span class="stat-label">系統開發實戰積累</span>
+        </div>
+        <div class="stat-box">
+          <span class="stat-num">90<em>+ 套</em></span>
+          <span class="stat-label">商業系統專案交付</span>
+        </div>
+        <div class="stat-box">
+          <span class="stat-num">100<em>%</em></span>
+          <span class="stat-label">實作導向・帶作品回家</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pillars: Why Arz is helpful for class -->
+    <div class="section-title">這堂課，阿茲能為你帶來什麼？（實戰保證）</div>
+    <div class="pillars-grid">
+      <div class="pillar-card">
+        <div class="pillar-icon">🛠️</div>
+        <div class="pillar-title">一眼定位報錯，課堂不卡關</div>
+        <div class="pillar-desc">
+          每個人電腦環境不同，看見紅字不用慌！阿茲擁有 20 年除錯直覺，能一眼揪出盲點，現場更有完備的階段備援代碼，確保每位學員進度不脫節。
+        </div>
+      </div>
+      <div class="pillar-card">
+        <div class="pillar-icon">🧠</div>
+        <div class="pillar-title">傳授老闆思維，跳過語法泥淖</div>
+        <div class="pillar-desc">
+          今天不用學寫程式！阿茲教你如何拆解自己業務流程、轉譯成 AI 聽得懂的系統規格。你負責定目標與驗收，AI 負責寫扣與部屬。
+        </div>
+      </div>
+      <div class="pillar-card">
+        <div class="pillar-icon">🚀</div>
+        <div class="pillar-title">真實商用架構，絕非玩具 Demo</div>
+        <div class="pillar-desc">
+          選用 Cloudflare Worker + D1 Database + LINE OA，免主機租金、秒速開通、高穩定度。走出教室當天，這套系統就能直接上線接客營運。
+        </div>
+      </div>
+    </div>
+
+    <!-- Classroom Advice -->
+    <div class="advice-box">
+      <div class="advice-title">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+        導師阿茲給學員的課堂心法（帶著這 3 個心態上課，效果翻倍）
+      </div>
+      <ul class="advice-list">
+        <li class="advice-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          <div><strong>把你的「真實業務」帶來：</strong>不管是賣美甲、課程、塔羅還是顧問時段，直接用你的真實商品與時段規格來蓋系統。</div>
+        </li>
+        <li class="advice-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          <div><strong>擁抱報錯，別想著看懂每行程式碼：</strong>終端機出現紅字很正常，直接全選複製丟給 AI，按照 SOP 排查，這才是真實世界的 Vibe Coding。</div>
+        </li>
+        <li class="advice-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          <div><strong>先求有，再求好：</strong>今天專注在 6 小時內打通「最小可行產品 (MVP)」。先把收單閉環建立起來，未來再無痛擴充金流與預約日曆！</div>
+        </li>
+      </ul>
+    </div>
+
+    <!-- CTA Bar -->
+    <div class="cta-bar">
+      <div class="cta-text">
+        <strong>準備好開始打造你的 LINE 自動化系統了嗎？</strong>
+        <span>進入引導手冊，依照章節一步步跟著實作！</span>
+      </div>
+      <div class="cta-buttons">
+        <a href="line-official-account-setup-guide.html" class="btn btn-secondary">
+          開通 LINE OA 指南
+        </a>
+        <a href="index.html" class="btn btn-primary">
+          開啟課程引導手冊 &rarr;
+        </a>
+      </div>
+    </div>
+
+  </main>
+
+</body>
+
+</html>
