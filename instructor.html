@@ -4,8 +4,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="作品集 ｜ 講師簡介 - 吳政穎 (阿茲 / Arz)">
-  <title>作品集 ｜ 講師簡介 - 吳政穎 (阿茲)</title>
+  <meta name="description" content="關於我 ｜ 講師簡介 - 阿茲 (Arzbar)">
+  <title>關於我 ｜ 講師簡介 - 阿茲 (Arzbar)</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -93,27 +93,31 @@
     /* About Section */
     .about-section {
       display: grid;
-      grid-template-columns: 140px 1fr;
-      gap: 36px;
+      grid-template-columns: 130px 1fr;
+      gap: 32px;
       align-items: center;
       margin-bottom: 56px;
     }
 
     .avatar-box {
-      width: 130px;
-      height: 130px;
+      width: 124px;
+      height: 124px;
       display: flex;
       align-items: center;
       justify-content: center;
       border-radius: 50%;
       background: #ffffff;
       border: 1px solid var(--border);
-      padding: 8px;
+      overflow: hidden;
+      flex-shrink: 0;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
     }
 
-    .avatar-svg {
+    .avatar-img {
       width: 100%;
       height: 100%;
+      object-fit: cover;
+      object-position: center 20%;
       display: block;
     }
 
@@ -378,7 +382,7 @@
 
     <!-- Top Bar -->
     <header class="top-bar">
-      <h1 class="page-title">作品集</h1>
+      <h1 class="page-title">關於我</h1>
       <div class="nav-actions">
         <a href="index.html" class="nav-link-btn">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
@@ -390,40 +394,12 @@
     <!-- About Me -->
     <section class="about-section">
       <div class="avatar-box">
-        <!-- Minimalist Hand-Drawn Avatar (Notion Style SVG) -->
-        <svg class="avatar-svg" viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <!-- Hair background -->
-          <path d="M42 66C38 46 54 24 82 23C112 22 126 42 122 66C122 66 128 54 130 68C132 82 125 94 122 96C119 98 120 106 114 112C110 116 102 118 96 118" stroke="#191919" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" fill="#191919"/>
-          <!-- Neck & Shirt -->
-          <path d="M68 116V134C68 134 44 140 32 154H132C120 140 96 134 96 134V116" stroke="#191919" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="#ffffff"/>
-          <!-- Collar lines -->
-          <path d="M68 134L82 144L96 134" stroke="#191919" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-          <path d="M82 144V154" stroke="#191919" stroke-width="3" stroke-linecap="round"/>
-          <!-- Face Contour -->
-          <path d="M50 68C48 88 56 120 82 120C108 120 116 88 114 68" stroke="#191919" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="#ffffff"/>
-          <!-- Ears -->
-          <path d="M48 76C44 76 43 86 48 90" stroke="#191919" stroke-width="3.5" stroke-linecap="round"/>
-          <path d="M116 76C120 76 121 86 116 90" stroke="#191919" stroke-width="3.5" stroke-linecap="round"/>
-          <!-- Hair Front Bangs -->
-          <path d="M44 60C58 48 76 56 94 48C108 42 118 52 120 62C112 56 100 56 92 60C82 64 68 62 58 68C52 71 46 66 44 60Z" fill="#191919"/>
-          <!-- Glasses -->
-          <rect x="54" y="70" width="22" height="18" rx="4" stroke="#191919" stroke-width="3.5" fill="none"/>
-          <rect x="86" y="70" width="22" height="18" rx="4" stroke="#191919" stroke-width="3.5" fill="none"/>
-          <path d="M76 78H86" stroke="#191919" stroke-width="3.5" stroke-linecap="round"/>
-          <path d="M48 76L54 77" stroke="#191919" stroke-width="3" stroke-linecap="round"/>
-          <path d="M108 77L114 76" stroke="#191919" stroke-width="3" stroke-linecap="round"/>
-          <!-- Eyes inside glasses -->
-          <circle cx="65" cy="79" r="2.5" fill="#191919"/>
-          <circle cx="97" cy="79" r="2.5" fill="#191919"/>
-          <!-- Nose & Smile -->
-          <path d="M81 87C82 89 83 91 85 91" stroke="#191919" stroke-width="3" stroke-linecap="round"/>
-          <path d="M74 100C78 104 86 104 90 100" stroke="#191919" stroke-width="3.5" stroke-linecap="round"/>
-        </svg>
+        <img src="arzbar-avatar.jpg" alt="阿茲 (Arzbar)" class="avatar-img">
       </div>
       <div class="about-content">
         <h2>關於我</h2>
         <p class="about-bio">
-          我是 <strong>吳政穎（阿茲 / Arz）</strong>，一位擁有 15+ 年經驗的 AI Solution Manager 與系統開發顧問。我專精於 API 開發、LINE OA 訊息平台整合、金流系統串接與流程自動化，致力於帶領自僱者、顧問、老師用 AI 與現代工具快速打造真正可商用落地的系統。
+          我是 <strong>阿茲（Arzbar）</strong>，一位擁有 15+ 年經驗的 AI Solution Manager 與系統開發顧問。我專精於 API 開發、LINE OA 訊息平台整合、金流系統串接與流程自動化，致力於帶領自僱者、顧問、老師用 AI 與現代工具快速打造真正可商用落地的系統。
         </p>
         <span class="about-motto">「你不是缺工程師，你是缺一個聽得懂你的技術夥伴。」</span>
       </div>
