@@ -24,7 +24,7 @@
 
   <main class="main-content" id="mainContent"></main>
 
-  <script src="data.js?v=20260902-01"></script>
+  <script src="data.js?v=20260904-01"></script>
   <script>
     (function () {
       const nav = document.getElementById('tabNav');
@@ -372,11 +372,12 @@
         const channelId = document.getElementById('line_channel_id')?.value || '';
         const channelSecret = document.getElementById('line_channel_secret')?.value || '';
         const accessToken = document.getElementById('line_access_token')?.value || '';
+        const adminUid = document.getElementById('line_admin_uid')?.value || '';
 
         // Credentials Area
         const credsArea = document.getElementById('line_credentials_copy');
         if (credsArea) {
-          credsArea.value = `Channel ID: ${channelId}\nChannel Secret: ${channelSecret}\nAccess Token: ${accessToken}`;
+          credsArea.value = `Channel ID: ${channelId}\nChannel Secret: ${channelSecret}\nAdmin User ID: ${adminUid}\nAccess Token: ${accessToken}`;
         }
 
         // Step 1 Prompt Box (System Builder)
@@ -389,10 +390,11 @@
         if (promptArea) {
           promptArea.value = `你是一個專業的 Cloudflare & LINE OA 開發專家。請根據以下設定，使用 Cloudflare Worker + D1 Database 建立一套「LINE OA 銷售系統 MVP」。
 
-【LINE OA 憑證設定】
+【LINE OA 憑證與管理者設定】
 - Channel ID: ${channelId || '[請回前步驟填寫 Channel ID]'}
 - Channel Secret: ${channelSecret || '[請回前步驟填寫 Channel Secret]'}
 - Access Token: ${accessToken || '[請回前步驟填寫 Access Token]'}
+- Admin LINE UID: ${adminUid || '[請回前步驟填寫管理員 LINE UID (格式為 U 開頭的 33 碼英數)]'}
 
 【系統資料表規格】
 - 商品表 (products) 欄位結構定義: ${productFields}
@@ -412,7 +414,9 @@
      當使用者按下商品卡片裡的「立即預約／立即訂購」後，系統要讓使用者的 LINE 對話框裡，真的送出一則文字，例如：
      👉 我要預約【頭部芳香放鬆】
      這個按鈕不能只是「畫面上看起來有出現文字」，而是要真的由使用者送出一則 LINE 訊息。
-   - 系統收到該訂購事件後，自動建立訂單、寫入 D1 資料庫（預設狀態為「未付款」），扣減該商品的剩餘庫存，並發送「雙向即時通知」（推播給管理員與客戶）。
+   - 系統收到該訂購事件後，自動建立訂單、寫入 D1 資料庫（預設狀態為「未付款」），扣減該商品的剩餘庫存，並發送「雙向即時通知」：
+     * 客戶確認通知：使用該筆 Webhook event 的 replyToken 即時回覆下單成功確認訊息（或推播至客戶 source.userId）。
+     * 管理員推播通知：使用 LINE Messaging API Push Message (POST https://api.line.me/v2/bot/message/push)，將新訂單推播至上述設定的 Admin LINE UID，即時通知管理員。
 2. 建立後台管理介面：
    - 【商品管理】：完整的商品管理，依照前面的欄位定義。
    - 【訂單管理】：檢視訂單列表，提供切換「已付款 / 未付款」按鈕，以及「刪除訂單」按鈕。

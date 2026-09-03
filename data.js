@@ -105,19 +105,21 @@ const STAGES = [
           '路徑：Console &rarr; Create a Provider，建立專案所屬容器。<br><br>' +
           '<strong>Step 4：建立 Messaging API Channel</strong><br>' +
           '路徑：Provider &rarr; Create a Channel &rarr; Messaging API。<br><br>' +
-          '<strong>Step 5：取得開發憑證</strong><br>' +
+          '<strong>Step 5：取得開發憑證與管理員 UID</strong><br>' +
           '- <strong>Channel Secret</strong>：Basic Settings &rarr; Channel Secret（用途：驗證 Webhook 來源與訊息安全）<br>' +
-          '- <strong>Channel Access Token</strong>：Messaging API &rarr; Issue（用途：主動發送通知與回覆訊息）',
+          '- <strong>Channel Access Token</strong>：Messaging API &rarr; Issue（用途：主動發送通知與回覆訊息）<br>' +
+          '- <strong>Your user ID (管理員 LINE UID)</strong>：Basic Settings 頁面最下方 &rarr; Your user ID（用途：當有客戶下單時，系統推播訂單通知給哪一位管理員，格式為 U 開頭的 33 碼英數）',
         checklist: [
           'LINE OA 已建立',
           'LINE Developers 已登入',
           'Provider 已建立',
           'Messaging API Channel 已建立',
           '已取得 Channel Secret',
-          '已取得 Channel Access Token'
+          '已取得 Channel Access Token',
+          '已取得管理員 LINE UID (Your user ID)'
         ],
-        result: '成果：取得 Access Token 和 Channel Secret',
-        tip: '💡 <strong>為什麼要拿這兩把「鑰匙」？</strong><br>把 LINE OA 想像成你家大門。Channel Secret 是「門禁卡驗證碼」（確認訊息真的來自 LINE，不是假冒的）；Access Token 是「萬能遙控器」（讓你的系統可以主動幫你發訊息給客人）。等等我們要把這兩把鑰匙交給 AI，讓 AI 幫你打造整套門禁系統。',
+        result: '成果：取得 Channel ID、Channel Secret、Access Token 與管理員 LINE UID',
+        tip: '💡 <strong>為什麼要拿這三把「鑰匙」？</strong><br>把 LINE OA 想像成你的自動化店面：<br>1. <strong>Channel Secret</strong> 是「門禁密碼」（確認訊息真的來自 LINE，不是假冒攻擊）<br>2. <strong>Access Token</strong> 是「萬能發話遙控器」（讓 Worker 系統可以主動發訊息給客人）<br>3. <strong>Your user ID</strong> 是「老闆專屬信箱」（有客人下單時，系統推播通知給哪一位管理員）<br>等等我們把這三把鑰匙交給 AI，整套自動化銷售與推播系統就能完美運作！',
         worksheet: {
           title: 'LINE 帳號資訊記錄 (填寫後可在下方直接複製)',
           hasCopyOutput: true,
@@ -125,6 +127,7 @@ const STAGES = [
           fields: [
             { id: 'line_channel_id', label: 'Channel ID (必填)', type: 'text', hint: '在 LINE Developers 的 Basic settings 中取得' },
             { id: 'line_channel_secret', label: 'Channel Secret (必填)', type: 'text', hint: '在 LINE Developers 的 Basic settings 中取得' },
+            { id: 'line_admin_uid', label: '管理員 LINE UID (必填)', type: 'text', hint: '在 Basic settings 最下方「Your user ID」取得（格式為 U 開頭的 33 碼英數，非個人 LINE ID）' },
             { id: 'line_access_token', label: 'Access Token (必填)', type: 'textarea', hint: '在 Messaging API tab 最下方 Issue 取得的長效 Token' }
           ]
         }
