@@ -13,7 +13,8 @@
 
   <header class="site-header">
     <div class="header-inner">
-      <div class="header-brand">Vibe Coding<span>課程引導手冊</span></div>
+      <div class="header-brand">Vibe Coding<span>DAY 2 原教材</span></div>
+      <a href="./course/" class="header-instructor-btn" style="display:inline-flex;align-items:center;text-decoration:none;border-radius:999px;padding:6px 12px;background:#f5e4e7;color:#76506c;font-size:12px;font-weight:700;" title="兩日課程總覽">兩日課程入口</a>
       <a href="./day1/" class="header-instructor-btn" style="display:inline-flex;align-items:center;text-decoration:none;border-radius:999px;padding:6px 12px;background:var(--c-accent-light);color:var(--c-accent);font-size:12px;font-weight:700;margin-left:auto;" title="第一天 AI 辦公實戰與 LINE FAQ">DAY 1｜AI 辦公實戰</a>
       <a href="instructor.html" class="header-instructor-btn" style="margin-left:0;font-size:12px;font-weight:700;color:var(--c-accent);text-decoration:none;display:inline-flex;align-items:center;gap:4px;padding:6px 12px;border-radius:999px;background:var(--c-accent-light);transition:all var(--transition);">👨‍💻 講師簡介</a>
       <div class="header-progress" id="progressText" style="margin-left:0;">0 / 0 完成</div>
@@ -352,7 +353,7 @@
         const data = {};
         document.querySelectorAll('input[type="text"], textarea').forEach(el => {
           if (el.id && !el.readOnly) {
-            data[el.id] = el.value;
+            if (!['line_channel_secret','line_access_token'].includes(el.id)) data[el.id] = el.value;
           }
         });
         try { localStorage.setItem('vibe-course-inputs', JSON.stringify(data)); } catch (e) { }
@@ -362,6 +363,10 @@
       function restoreAllInputs() {
         try {
           const saved = JSON.parse(localStorage.getItem('vibe-course-inputs') || '{}');
+          // Earlier lessons once collected secrets. Delete previously stored values on visit.
+          delete saved.line_channel_secret;
+          delete saved.line_access_token;
+          try { localStorage.setItem('vibe-course-inputs', JSON.stringify(saved)); } catch (e) {}
           Object.entries(saved).forEach(([id, val]) => {
             const el = document.getElementById(id);
             if (el) el.value = val;
@@ -369,18 +374,10 @@
         } catch (e) { }
       }
 
-      // Dynamic Prompt & Credentials updates
+      // Dynamic prompt updates: secret values are never read or copied from this public page
       function updateDynamicOutputs() {
         const channelId = document.getElementById('line_channel_id')?.value || '';
-        const channelSecret = document.getElementById('line_channel_secret')?.value || '';
-        const accessToken = document.getElementById('line_access_token')?.value || '';
         const adminUid = document.getElementById('line_admin_uid')?.value || '';
-
-        // Credentials Area
-        const credsArea = document.getElementById('line_credentials_copy');
-        if (credsArea) {
-          credsArea.value = `Channel ID: ${channelId}\nChannel Secret: ${channelSecret}\nAdmin User ID: ${adminUid}\nAccess Token: ${accessToken}`;
-        }
 
         // Step 1 Prompt Box (System Builder)
         const productFields = document.getElementById('product_fields')?.value || '商品名稱, 價格, 上下架狀態, 上架時間, 下架時間, 剩餘庫存';
@@ -394,8 +391,8 @@
 
 【LINE OA 憑證與管理者設定】
 - Channel ID: ${channelId || '[請回前步驟填寫 Channel ID]'}
-- Channel Secret: ${channelSecret || '[請回前步驟填寫 Channel Secret]'}
-- Access Token: ${accessToken || '[請回前步驟填寫 Access Token]'}
+- Channel Secret: [請自行設定在 Cloudflare Worker secrets；請勿提供 AI]
+- Access Token: [請自行設定在 Cloudflare Worker secrets；請勿提供 AI]
 - Admin LINE UID: ${adminUid || '[請回前步驟填寫管理員 LINE UID (格式為 U 開頭的 33 碼英數)]'}
 
 【系統資料表規格】
