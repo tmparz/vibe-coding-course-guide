@@ -93,7 +93,7 @@ const STAGES = [
       {
         title: 'Ch2 - LINE 生態系統建置',
         image: '01_LINE三把鑰匙.png',
-        body: '依照以下步驟完成 LINE 官方帳號與開發者後台設定，並填寫下方憑證資訊。<br><br>' +
+        body: '依照以下步驟完成 LINE 官方帳號與開發者後台設定，；下方僅記錄非機密資訊，Secret 與 Token 不可輸入此公開教學網站。<br><br>' +
           '<div class="antifraud-notice">📣 <strong>防呆提示</strong>：進行到每個步驟時，講師或小幫手會同步將直達連結發送到 LINE 群組。請用 Chrome 開啟，避免使用 LINE 內建瀏覽器（可能有權限問題）。</div><br>' +
           '<strong>Step 1：建立 LINE 官方帳號 (LINE OA)</strong><br>' +
           '網址：<a href="https://manager.line.biz/" target="_blank" class="ext-link-btn">🔗 開啟 LINE Official Account Manager</a><br>' +
@@ -103,8 +103,8 @@ const STAGES = [
           '登入 LINE Developers 後台。<br><br>' +
           '<strong>Step 3：建立 Provider</strong><br>' +
           '路徑：Console &rarr; Create a Provider，建立專案所屬容器。<br><br>' +
-          '<strong>Step 4：建立 Messaging API Channel</strong><br>' +
-          '路徑：Provider &rarr; Create a Channel &rarr; Messaging API。<br><br>' +
+          '<strong>Step 4：從 OA Manager 啟用 Messaging API</strong><br>' +
+          '路徑：LINE Official Account Manager &rarr; 設定 &rarr; Messaging API &rarr; 啟用。再到 LINE Developers 找對應的 Channel。<br><br>' +
           '<strong>Step 5：取得開發憑證與管理員 UID</strong><br>' +
           '- <strong>Channel Secret</strong>：Basic Settings &rarr; Channel Secret（用途：驗證 Webhook 來源與訊息安全）<br>' +
           '- <strong>Channel Access Token</strong>：Messaging API &rarr; Issue（用途：主動發送通知與回覆訊息）<br>' +
@@ -119,16 +119,14 @@ const STAGES = [
           '已取得管理員 LINE UID (Your user ID)'
         ],
         result: '成果：取得 Channel ID、Channel Secret、Access Token 與管理員 LINE UID',
-        tip: '💡 <strong>為什麼要拿這三把「鑰匙」？</strong><br>把 LINE OA 想像成你的自動化店面：<br>1. <strong>Channel Secret</strong> 是「門禁密碼」（確認訊息真的來自 LINE，不是假冒攻擊）<br>2. <strong>Access Token</strong> 是「萬能發話遙控器」（讓 Worker 系統可以主動發訊息給客人）<br>3. <strong>Your user ID</strong> 是「老闆專屬信箱」（有客人下單時，系統推播通知給哪一位管理員）<br>等等我們把這三把鑰匙交給 AI，整套自動化銷售與推播系統就能完美運作！',
+        tip: '💡 <strong>為什麼要拿這三把「鑰匙」？</strong><br>把 LINE OA 想像成你的自動化店面：<br>1. <strong>Channel Secret</strong> 是「門禁密碼」（確認訊息真的來自 LINE，不是假冒攻擊）<br>2. <strong>Access Token</strong> 是「萬能發話遙控器」（讓 Worker 系統可以主動發訊息給客人）<br>3. <strong>Your user ID</strong> 是「老闆專屬信箱」（有客人下單時，系統推播通知給哪一位管理員）<br>請把 Channel Secret、Access Token 僅儲存在 Cloudflare Worker secrets；絕對不要貼到 AI 對話、GitHub 或本網站！',
         worksheet: {
-          title: 'LINE 帳號資訊記錄 (填寫後可在下方直接複製)',
-          hasCopyOutput: true,
+          title: 'LINE 非機密識別資訊（此頁不可輸入 Secret / Token）',
+          hasCopyOutput: false,
           copyTargetId: 'line_credentials_copy',
           fields: [
             { id: 'line_channel_id', label: 'Channel ID (必填)', type: 'text', hint: '在 LINE Developers 的 Basic settings 中取得' },
-            { id: 'line_channel_secret', label: 'Channel Secret (必填)', type: 'text', hint: '在 LINE Developers 的 Basic settings 中取得' },
             { id: 'line_admin_uid', label: '管理員 LINE UID (必填)', type: 'text', hint: '在 Basic settings 最下方「Your user ID」取得（格式為 U 開頭的 33 碼英數，非個人 LINE ID）' },
-            { id: 'line_access_token', label: 'Access Token (必填)', type: 'textarea', hint: '在 Messaging API tab 最下方 Issue 取得的長效 Token' }
           ]
         }
       }
