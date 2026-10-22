@@ -55,6 +55,7 @@ const STAGES = [
         checklist: [
           '✅ 攜帶筆電與充電線（建議用自己的電腦，公司電腦常常不能安裝軟體）',
           '✅ 手機已安裝並登入 LINE，手機 LINE 已登記 Email 和密碼',
+          '✅ 已建立自己的 LINE 官方帳號（課前檢查時老師陪你建立，<a href="../line-official-account-setup-guide.html#apply" target="_blank">申請步驟</a>）',
           '✅ 能用 Gmail 登入 Google AI Studio（aistudio.google.com）',
           '✅ 已訂閱 ChatGPT Plus，電腦已安裝 Codex 並登入',
           '✅ ChatGPT「設定 → 資料控管 → 為所有人改善模型」已關閉',
@@ -223,7 +224,7 @@ const STAGES = [
         title: '設定歡迎訊息與關鍵字自動回覆',
         image: '../line-flow-screenshots/05-official-account-dashboard-marked.png',
         body: '<div class="antifraud-notice">📣 <strong>防呆提示</strong>：講師會把每一步的連結發到 LINE 群組。請用 Chrome 開啟，不要用 LINE 內建瀏覽器。</div><br>' +
-          '<strong>Step 1：</strong>開啟 <a href="https://manager.line.biz/" target="_blank" class="ext-link-btn">🔗 LINE Official Account Manager</a>，選擇上課用的官方帳號。<br><br>' +
+          '<strong>Step 1：</strong>開啟 <a href="https://manager.line.biz/" target="_blank" class="ext-link-btn">🔗 LINE Official Account Manager</a>，選擇課前建立好的官方帳號。<br><br>' +
           '<strong>Step 2：</strong>設定一則<strong>歡迎訊息</strong>，用你自己的服務名稱。<br><br>' +
           '<strong>Step 3：</strong>從你的 FAQ 挑一題，設定<strong>關鍵字自動回覆</strong>。例如關鍵字「營業時間」，回覆你的營業時間。<br><br>' +
           '<strong>Step 4：</strong>用手機傳「營業時間」給你的官方帳號，確認收到回覆。<br><br>' +
@@ -232,9 +233,9 @@ const STAGES = [
           '歡迎訊息已設定',
           '一則關鍵字自動回覆已設定',
           '手機傳關鍵字，收到回覆',
-          '換一種問法，記下結果（下午會再比一次）'
+          '換一種問法，記下結果（等一下會再比一次）'
         ],
-        tip: '💡 <strong>關鍵字自動回覆</strong>只認得你設定的字。客人換個說法，它就聽不懂了。這就是下午要讓 AI 來幫忙的原因。'
+        tip: '💡 <strong>關鍵字自動回覆</strong>只認得你設定的字。客人換個說法，它就聽不懂了。這就是等一下要讓 AI 來幫忙的原因。'
       },
       {
         title: '開通 Messaging API，取得三把鑰匙',
@@ -280,8 +281,8 @@ const STAGES = [
         tip: '💡 <strong>Webhook = 門鈴。</strong>客人在 LINE 敲你，LINE 就去按你程式的門鈴。門鈴的地址，就是等一下要填的 Webhook URL。'
       },
       {
-        title: '和上午的關鍵字有什麼不同？',
-        body: '上午的關鍵字自動回覆，是 LINE 拿著一張「固定答案表」比對字。下午的機器人，是把客人的問題連同你的整份 FAQ 交給 AI，請它<strong>理解意思</strong>再回答。',
+        title: '和剛剛的關鍵字有什麼不同？',
+        body: '剛剛的關鍵字自動回覆，是 LINE 拿著一張「固定答案表」比對字。接下來的 AI 機器人，是把客人的問題連同你的整份 FAQ 交給 AI，請它<strong>理解意思</strong>再回答。',
         checklist: [
           '說得出訊息走過哪四站',
           '知道 Webhook URL 要填在 LINE Developers，不是貼在聊天室',
@@ -357,7 +358,7 @@ const STAGES = [
         body: '<strong>Step 1：</strong>LINE Developers &rarr; Messaging API 分頁 &rarr; Webhook URL 填入「<strong>Worker 網址/webhook/line</strong>」&rarr; Verify。<br><br>' +
           '<strong>Step 2：</strong>打開「Use webhook」。<br><br>' +
           '<strong>Step 3：</strong>回到 OA Manager &rarr; 回應設定，把「<strong>自動回應訊息</strong>」關閉。<br>' +
-          '（不關的話，客人問一題，上午的關鍵字和 AI 會<strong>各回一次</strong>）',
+          '（不關的話，客人問一題，剛剛設定的關鍵字和 AI 會<strong>各回一次</strong>）',
         checklist: [
           'Webhook Verify 顯示 Success',
           'Use webhook 已開啟',
@@ -373,7 +374,7 @@ const STAGES = [
     steps: [
       {
         title: '同一題，比兩次',
-        body: '上午你用「你們幾點開門？」問過關鍵字機器人，它聽不懂。現在再問一次。',
+        body: '剛剛你用「你們幾點開門？」問過關鍵字機器人，它聽不懂。現在再問一次。',
         checklist: [
           '「你們幾點開門？」機器人答對了',
           '同一題換三種問法，答案的內容都一樣',

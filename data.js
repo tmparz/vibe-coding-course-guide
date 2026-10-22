@@ -224,7 +224,7 @@ const STAGES = [
   },
   {
     id: 'afternoon1', label: 'Step 1-4 建置核心', color: 's3',
-    title: '下午實作前段：整合提示詞與核心系統',
+    title: '實作前段：整合提示詞與核心系統',
     desc: '使用彙整後的提示詞引導 AI 建立商品與訂單核心系統',
     steps: [
       {
