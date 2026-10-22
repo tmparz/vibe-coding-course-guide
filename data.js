@@ -38,7 +38,7 @@ const STAGES = [
           '<div class="glossary-table"><table><thead><tr><th>時間</th><th>內容</th><th>對應步驟</th></tr></thead><tbody>' +
           '<tr><td>00:00–00:20</td><td>複習：第一天的 FAQ 機器人還能用嗎</td><td>Ch1-2</td></tr>' +
           '<tr><td>00:20–00:35</td><td>MVP 範圍確認</td><td>Ch1</td></tr>' +
-          '<tr><td>00:35–01:05</td><td>建立系統欄位規格</td><td>Ch5</td></tr>' +
+          '<tr><td>00:35–01:05</td><td>確認 Cloudflare、安裝 Cloudflare Skill、建立系統欄位規格</td><td>Ch4–5</td></tr>' +
           '<tr><td>01:05–02:35</td><td>整合提示詞、建立系統、本地測試</td><td>Step 1–3</td></tr>' +
           '<tr><td>02:35–03:15</td><td>建立並接上 D1</td><td>Step 5–6</td></tr>' +
           '<tr><td>03:15–03:45</td><td>部署、串接 Webhook（第一天做過）</td><td>Step 7–8</td></tr>' +
@@ -378,6 +378,7 @@ const STAGES = [
           '問一題 FAQ：AI 依第一天的 FAQ 回答',
           '按「聯絡客服」後再傳訊息：機器人不回應，管理員收到通知',
           '真人接手中按預約按鈕：仍然建立訂單',
+          '把一個商品庫存改成 0 再按預約：回覆無法預約，沒有建立訂單',
           '沒輸入密碼打不開後台；輸入 Codex 給的密碼才看得到',
           '後台看得到真人接手中的客人，可以手動結束',
           '後台看得到 AI 答不出來的問題'
