@@ -27,7 +27,7 @@
 
   <main class="main-content" id="mainContent"></main>
 
-  <script src="data.js?v=20261022-03"></script>
+  <script src="data.js?v=20261022-04"></script>
   <script>
     (function () {
       const nav = document.getElementById('tabNav');
@@ -397,6 +397,7 @@
         const promptArea = document.getElementById('system_prompt_output');
         if (promptArea) {
           promptArea.value = `你是一個專業的 Cloudflare & LINE OA 開發專家。請根據以下設定，使用 Cloudflare Worker + D1 Database 建立一套「LINE OA 銷售系統 MVP」。
+請在新資料夾 line-shop 建立，不要修改第一天的 line-ai-faq。
 
 【LINE OA 憑證與管理者設定】
 - Channel ID: ${channelId || '[請回前步驟填寫 Channel ID]'}
@@ -425,9 +426,9 @@ ${myFaq || '[請回前步驟貼上第一天確認好的 FAQ]'}
 1. 開頭為「👉 我要預約【」：視為預約指令，取出【】內的商品名稱建立訂單。找不到該商品時，回覆「找不到這個項目，請從選單重新選擇」。
 2. 完全等於「瀏覽商品」或「購買」：回傳商品輪播。
 3. 完全等於「聯絡客服」或「人工」：進入真人接手模式，回覆一次「已轉給真人客服，請稍候」，並推播通知管理員。
-4. 該客人在真人接手模式中：不回應，也不要呼叫 Gemini。
+4. 該客人在真人接手模式中，或在後台被設定為「不使用 AI 回答」：不回應，也不要呼叫 Gemini。
 5. 其他文字：呼叫 Gemini（模型用 gemini-3.6-flash；不要用 gemini-2.5 或更舊的模型，新申請的金鑰會回 404。出現模型不存在或 404 時，查 https://ai.google.dev/gemini-api/docs/models 換成目前可用的 Flash 模型並告訴我。回 429 或 503 時等 2 秒重試一次，還是失敗就請客人傳「人工」），只能依照上面的 FAQ 回答；FAQ 沒有的內容，回覆請客人傳「人工」。客人想預約時，引導他點選單的「瀏覽商品」。Gemini 永遠不能建立、修改或取消訂單。
-   Gemini 答不出來時，把這個問題記錄到「問題紀錄」資料表。
+   Gemini 回覆「請傳人工」的那句話時（代表 FAQ 沒有答案），把客人的問題記錄到「問題紀錄」資料表。
 
 【真人接手模式】
 - 在 D1 建立「客人狀態」資料表：LINE userId、是否使用 AI 回答、真人接手到期時間、最後一則訊息時間。
@@ -446,6 +447,7 @@ ${myFaq || '[請回前步驟貼上第一天確認好的 FAQ]'}
      * 客戶確認通知：使用該筆 Webhook event 的 replyToken 即時回覆下單成功確認訊息（或推播至客戶 source.userId）。
      * 管理員推播通知：使用 LINE Messaging API Push Message (POST https://api.line.me/v2/bot/message/push)，將新訂單推播至上述設定的 Admin LINE UID，即時通知管理員。
 2. 建立後台管理介面：
+   - 【後台密碼】後台網址是公開的，一定要先登入才能看。請隨機產生一組 12 碼密碼，用 npx wrangler secret put ADMIN_PASSWORD 設定，部署完告訴我。後台頁面和後台用的 API 都要檢查密碼，沒登入的人不能看到或修改任何資料。
    - 【商品管理】：完整的商品管理，依照前面的欄位定義。
    - 【訂單管理】：檢視訂單列表，提供切換「已付款 / 未付款」按鈕，以及「刪除訂單」按鈕。
    - 當管理員點擊「刪除訂單」時，系統必須自動釋放庫存，將對應的商品庫存加回去！
