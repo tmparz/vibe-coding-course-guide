@@ -15,7 +15,7 @@
     <div class="header-inner">
       <div class="header-brand">Vibe Coding<span>DAY 2 原教材</span></div>
       <a href="./course/" class="header-instructor-btn" style="display:inline-flex;align-items:center;text-decoration:none;border-radius:999px;padding:6px 12px;background:#f5e4e7;color:#76506c;font-size:12px;font-weight:700;" title="兩日課程總覽">兩日課程入口</a>
-      <a href="./day1/" class="header-instructor-btn" style="display:inline-flex;align-items:center;text-decoration:none;border-radius:999px;padding:6px 12px;background:var(--c-accent-light);color:var(--c-accent);font-size:12px;font-weight:700;margin-left:auto;" title="第一天 AI 辦公實戰與 LINE FAQ">DAY 1｜AI 辦公實戰</a>
+      <a href="./day1/" class="header-instructor-btn" style="display:inline-flex;align-items:center;text-decoration:none;border-radius:999px;padding:6px 12px;background:var(--c-accent-light);color:var(--c-accent);font-size:12px;font-weight:700;margin-left:auto;" title="第一天 AI 協作與 LINE 關鍵字機器人">DAY 1｜AI 協作 × LINE</a>
       <a href="instructor.html" class="header-instructor-btn" style="margin-left:0;font-size:12px;font-weight:700;color:var(--c-accent);text-decoration:none;display:inline-flex;align-items:center;gap:4px;padding:6px 12px;border-radius:999px;background:var(--c-accent-light);transition:all var(--transition);">👨‍💻 講師簡介</a>
       <div class="header-progress" id="progressText" style="margin-left:0;">0 / 0 完成</div>
     </div>
@@ -27,7 +27,7 @@
 
   <main class="main-content" id="mainContent"></main>
 
-  <script src="data.js?v=20260904-01"></script>
+  <script src="data.js?v=20261022-01"></script>
   <script>
     (function () {
       const nav = document.getElementById('tabNav');
@@ -349,11 +349,13 @@
       };
 
       // Save all input fields
+      // 合併寫入，保留第一天頁面的欄位（兩天共用同一個 localStorage key）
       function saveAllInputs() {
-        const data = {};
+        let data = {};
+        try { data = JSON.parse(localStorage.getItem('vibe-course-inputs') || '{}'); } catch (e) { }
         document.querySelectorAll('input[type="text"], textarea').forEach(el => {
           if (el.id && !el.readOnly) {
-            if (!['line_channel_secret','line_access_token'].includes(el.id)) data[el.id] = el.value;
+            data[el.id] = el.value;
           }
         });
         try { localStorage.setItem('vibe-course-inputs', JSON.stringify(data)); } catch (e) { }
@@ -363,10 +365,6 @@
       function restoreAllInputs() {
         try {
           const saved = JSON.parse(localStorage.getItem('vibe-course-inputs') || '{}');
-          // Earlier lessons once collected secrets. Delete previously stored values on visit.
-          delete saved.line_channel_secret;
-          delete saved.line_access_token;
-          try { localStorage.setItem('vibe-course-inputs', JSON.stringify(saved)); } catch (e) {}
           Object.entries(saved).forEach(([id, val]) => {
             const el = document.getElementById(id);
             if (el) el.value = val;
@@ -374,10 +372,21 @@
         } catch (e) { }
       }
 
-      // Dynamic prompt updates: secret values are never read or copied from this public page
+      // Dynamic Prompt & Credentials updates
+      // 憑證只存在學員自己瀏覽器的 localStorage，本頁不會送出到任何伺服器
       function updateDynamicOutputs() {
         const channelId = document.getElementById('line_channel_id')?.value || '';
+        const channelSecret = document.getElementById('line_channel_secret')?.value || '';
+        const accessToken = document.getElementById('line_access_token')?.value || '';
         const adminUid = document.getElementById('line_admin_uid')?.value || '';
+        const geminiKey = document.getElementById('gemini_api_key')?.value || '';
+        const myFaq = document.getElementById('my_faq')?.value || '';
+
+        // Credentials Area
+        const credsArea = document.getElementById('line_credentials_copy');
+        if (credsArea) {
+          credsArea.value = `Channel ID: ${channelId}\nChannel Secret: ${channelSecret}\nAdmin User ID: ${adminUid}\nAccess Token: ${accessToken}`;
+        }
 
         // Step 1 Prompt Box (System Builder)
         const productFields = document.getElementById('product_fields')?.value || '商品名稱, 價格, 上下架狀態, 上架時間, 下架時間, 剩餘庫存';
@@ -391,9 +400,14 @@
 
 【LINE OA 憑證與管理者設定】
 - Channel ID: ${channelId || '[請回前步驟填寫 Channel ID]'}
-- Channel Secret: [請自行設定在 Cloudflare Worker secrets；請勿提供 AI]
-- Access Token: [請自行設定在 Cloudflare Worker secrets；請勿提供 AI]
+- Channel Secret: ${channelSecret || '[請回前步驟填寫 Channel Secret]'}
+- Access Token: ${accessToken || '[請回前步驟填寫 Access Token]'}
 - Admin LINE UID: ${adminUid || '[請回前步驟填寫管理員 LINE UID (格式為 U 開頭的 33 碼英數)]'}
+- Gemini API Key: ${geminiKey || '[請回前步驟填寫第一天的 Gemini API Key]'}
+
+【憑證保存規則】
+- Channel Secret、Access Token 與 Gemini API Key 只能放在本機的 .dev.vars，以及 Cloudflare Worker secrets（wrangler secret put）。
+- 不要把它們寫進任何程式碼、wrangler 設定檔或 README，也不要 commit 到 GitHub。
 
 【系統資料表規格】
 - 商品表 (products) 欄位結構定義: ${productFields}
@@ -404,11 +418,26 @@
   * 客戶通知內容範本:
     ${userNotify}
 
+【第一天的 FAQ（一般問題由 Gemini 依此回答）】
+${myFaq || '[請回前步驟貼上第一天確認好的 FAQ]'}
+
+【訊息分流規則】（收到文字訊息時，由上往下判斷，符合就停止）
+1. 開頭為「👉 我要預約【」：視為預約指令，取出【】內的商品名稱建立訂單。找不到該商品時，回覆「找不到這個項目，請從選單重新選擇」。
+2. 完全等於「瀏覽商品」或「購買」：回傳商品輪播。
+3. 完全等於「聯絡客服」或「人工」：進入真人接手模式，回覆一次「已轉給真人客服，請稍候」，並推播通知管理員。
+4. 該客人在真人接手模式中：不回應，也不要呼叫 Gemini。
+5. 其他文字：呼叫 Gemini，只能依照上面的 FAQ 回答；FAQ 沒有的內容，回覆請客人傳「人工」。客人想預約時，引導他點選單的「瀏覽商品」。Gemini 永遠不能建立、修改或取消訂單。
+   Gemini 答不出來時，把這個問題記錄到「問題紀錄」資料表。
+
+【真人接手模式】
+- 在 D1 建立「客人狀態」資料表：LINE userId、是否使用 AI 回答、真人接手到期時間、最後一則訊息時間。
+- 真人接手時間：從客人最後一則訊息起算 30 分鐘；客人在這段時間內再傳訊息，就重新起算。
+- 時間到了自動恢復由 AI 回答。
+
 【開發實作要求】
 1. Webhook 接收 LINE 訊息與 Rich Menu 點擊事件：
-   - 系統需配合一個 2 欄位 (2-column) 的 Rich Menu（左按鈕：瀏覽商品，右按鈕：聯絡客服）。
-   - 當用戶點擊「瀏覽商品」（或輸入「購買」）時：從資料庫讀取處於「上架狀態」且在有效期內的商品，回傳商品 Flex Message 輪播。
-   - 當用戶點擊「聯絡客服」時：回傳一則預設的客服聯絡文字資訊。
+   - 系統需配合一個 2 欄位 (2-column) 的 Rich Menu（左按鈕：瀏覽商品，右按鈕：聯絡客服）。兩個按鈕都要讓使用者真的送出一則文字（「瀏覽商品」、「聯絡客服」），讓 LINE 官方後台的聊天室留下這位客人的紀錄。
+   - 收到文字訊息時，依照上面的【訊息分流規則】處理。
    - 【關鍵機制】
      當使用者按下商品卡片裡的「立即預約／立即訂購」後，系統要讓使用者的 LINE 對話框裡，真的送出一則文字，例如：
      👉 我要預約【頭部芳香放鬆】
@@ -419,7 +448,9 @@
 2. 建立後台管理介面：
    - 【商品管理】：完整的商品管理，依照前面的欄位定義。
    - 【訂單管理】：檢視訂單列表，提供切換「已付款 / 未付款」按鈕，以及「刪除訂單」按鈕。
-   - 當管理員點擊「刪除訂單」時，系統必須自動釋放庫存，將對應的商品庫存加回去！`;
+   - 當管理員點擊「刪除訂單」時，系統必須自動釋放庫存，將對應的商品庫存加回去！
+   - 【客人狀態】：列出目前在真人接手中的客人，可以手動「結束真人接手」，也可以設定某位客人「不使用 AI 回答」。
+   - 【問題紀錄】：列出 Gemini 答不出來的問題與時間，讓管理員知道 FAQ 該補充什麼。`;
         }
 
         // Step 9 Rich Menu Image Prompt
