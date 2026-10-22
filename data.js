@@ -10,8 +10,8 @@ const TEMPLATES = {
     label: '📅 課程/活動預約版',
     productFields: '課程名稱,課程介紹, 價格, 上下架狀態, 開課時間, 上架時間, 下架時間, 剩餘名額',
     orderFields: '學員姓名, 課程名稱, 付款狀態',
-    adminNotify: '系統通知：[學員姓名] 已預約！課程：[課程名稱]，時段：[預約時段]，剩餘名額：[剩餘名額] 位。',
-    userNotify: '[學員姓名] 您好！預約成功 🎉 課程：[課程名稱]，時段：[預約時段]，單號：[單號]。期待與您相見！'
+    adminNotify: '系統通知：[學員姓名] 已預約！課程：[課程名稱]，開課時間：[開課時間]，剩餘名額：[剩餘名額] 位。',
+    userNotify: '[學員姓名] 您好！預約成功 🎉 課程：[課程名稱]，開課時間：[開課時間]，單號：[單號]。期待與您相見！'
   }
 };
 
@@ -60,7 +60,7 @@ const STAGES = [
         checklist: [
           '✅ 攜帶筆電與充電線',
           '✅ 確認自己有 Gmail 帳號，且能正常登入（Cloudflare 必須用 Gmail 快速登入）',
-          '✅ AI 工具帳號已登入（Claude / Codex / Antigravity 等，付費版）',
+          '✅ ChatGPT Plus 仍在訂閱中，Codex 可以正常登入',
           '✅ 手機已安裝並登入 LINE'
         ],
         extra: '⚠️ 若您忘記 Gmail 密碼，請務必在課前解決，否則無法完成 Cloudflare 帳號申請。'
@@ -125,11 +125,9 @@ const STAGES = [
           '<strong>Step 2：進入 LINE Developers</strong><br>' +
           '網址：<a href="https://developers.line.biz/" target="_blank" class="ext-link-btn">🔗 開啟 LINE Developers 後台</a><br>' +
           '登入 LINE Developers 後台。<br><br>' +
-          '<strong>Step 3：建立 Provider</strong><br>' +
-          '路徑：Console &rarr; Create a Provider，建立專案所屬容器。<br><br>' +
-          '<strong>Step 4：從 OA Manager 啟用 Messaging API</strong><br>' +
-          '路徑：LINE Official Account Manager &rarr; 設定 &rarr; Messaging API &rarr; 啟用。再到 LINE Developers 找對應的 Channel。<br><br>' +
-          '<strong>Step 5：取得開發憑證與管理員 UID</strong><br>' +
+          '<strong>Step 3：從 OA Manager 啟用 Messaging API</strong><br>' +
+          '路徑：LINE Official Account Manager &rarr; 設定 &rarr; Messaging API &rarr; 啟用（第一次會請你建立 Provider，取一個名字就好）。再到 LINE Developers 找對應的 Channel。<br><br>' +
+          '<strong>Step 4：取得開發憑證與管理員 UID</strong><br>' +
           '- <strong>Channel Secret</strong>：Basic Settings &rarr; Channel Secret（用途：驗證 Webhook 來源與訊息安全）<br>' +
           '- <strong>Channel Access Token</strong>：Messaging API &rarr; Issue（用途：主動發送通知與回覆訊息）<br>' +
           '- <strong>Your user ID (管理員 LINE UID)</strong>：Basic Settings 頁面最下方 &rarr; Your user ID（用途：當有客戶下單時，系統推播訂單通知給哪一位管理員，格式為 U 開頭的 33 碼英數）',
@@ -243,7 +241,8 @@ const STAGES = [
           '商品新增與修改功能',
           '商品上下架狀態切換',
           '訂單建立與查詢功能',
-          '訂單狀態修改（確認/取消）'
+          '訂單切換「已付款／未付款」',
+          '刪除訂單後，庫存加回去'
         ],
         extra: '⏱️ 預估此步驟實作與排障時間：30 - 45 分鐘'
       },
@@ -251,9 +250,9 @@ const STAGES = [
         title: 'Step 3 - 本地資料庫連接與測試',
         body: '在本地環境模擬連接 D1 資料庫，確認商品與訂單的核心功能完全正常。',
         checklist: [
-          '執行 wrangler d1 execute ... 初始化（cd = 進入資料夾，就像滑鼠點兩下）',
-          '啟動本地開發伺服器 npm run dev（等於在自己電腦開一個暫時的測試網頁）',
-          '確認本地 CRUD 測試通過'
+          'Codex 在本機建立資料表（wrangler d1 execute --local）',
+          'Codex 啟動本地測試網站 npm run dev（在自己電腦開一個暫時的測試網頁）',
+          '打開 Codex 給的本地後台網址，新增一個商品、改一次、再刪掉'
         ],
         extra: '⏱️ 預估此步驟實作與排障時間：20 - 30 分鐘'
       },
@@ -272,7 +271,7 @@ const STAGES = [
       {
         title: 'Step 5 - 建立 Cloudflare D1',
         body: '在 Cloudflare 上建立 D1 資料庫（超級 Excel，用來存商品和訂單）',
-        checklist: ['建立 D1 Database', '取得 Database ID', '設定 wrangler.toml 綁定'],
+        checklist: ['建立 D1 Database', '取得 Database ID', 'Codex 把 Database ID 填進 wrangler 設定檔'],
         extra: '⏱️ 預估此步驟實作與排障時間：15 - 25 分鐘',
         worksheet: {
           title: 'D1 資料庫資訊',
@@ -306,21 +305,33 @@ const STAGES = [
       },
       {
         title: 'Step 8 - LINE Webhook 串接',
-        body: '將 LINE OA 與你的 Worker 系統連接起來（Webhook = 門鈴。客人在 LINE 敲你，LINE 就去按 Cloudflare 的門鈴）',
+        body: '將 LINE OA 與你的 Worker 系統連接起來（Webhook = 門鈴。客人在 LINE 敲你，LINE 就去按 Cloudflare 的門鈴）<br><br>' +
+          '<div class="antifraud-notice">⚠️ 今天是<strong>新的 Worker</strong>，網址和第一天不一樣。LINE Developers 的 Webhook URL 要<strong>換成今天的網址</strong>，不然訊息還是會送到第一天的機器人。</div><br>' +
+          '<strong>Step 1：</strong>LINE Developers &rarr; Messaging API 分頁 &rarr; Webhook URL 改成「<strong>今天的 Worker URL/webhook/line</strong>」&rarr; Verify。<br><br>' +
+          '<strong>Step 2：</strong>確認「Use webhook」開啟、OA Manager 的「自動回應訊息」關閉、「聊天」開啟（第一天設過，再看一次）。',
         checklist: [
-          '設定 Webhook URL',
-          '回填 Access Token',
-          '回填 Channel Secret',
-          'Webhook 驗證通過'
+          'Webhook URL 已換成今天的 Worker 網址',
+          'Webhook Verify 顯示 Success',
+          '手機問一題 FAQ，今天的系統有回答'
         ]
       },
       {
         title: 'Step 9 - 建立 Rich Menu',
-        body: '設計並建立 LINE 官方帳號的圖文選單。請複製下方的 AI 產圖提示詞，至 Midjourney / DALL-E 等生圖工具產生選單底圖，隨後上傳至 LINE OA。',
+        body: '<strong>Step 1：</strong>複製下方的產圖提示詞，貼到 <strong>ChatGPT</strong> 產生選單底圖，下載圖片。<br><br>' +
+          '<strong>Step 2：</strong>LINE 規定選單圖片的尺寸是固定的。把圖片交給 Codex，說：「<strong>請把這張圖轉成 2500×843 的 JPG，檔案小於 1MB，左右兩格的文字要完整保留</strong>」。<br><br>' +
+          '<strong>Step 3：</strong>OA Manager &rarr; 圖文選單 &rarr; 建立 &rarr; 版型選「<strong>小型、左右兩格</strong>」&rarr; 上傳 Codex 轉好的圖片。<br><br>' +
+          '<strong>Step 4：</strong>左邊格子的動作選「<strong>文字</strong>」，內容填「瀏覽商品」；右邊選「<strong>文字</strong>」，填「聯絡客服」。<br><br>' +
+          '<strong>Step 5：</strong>設定顯示期間、儲存，用手機重新打開官方帳號的聊天室確認選單出現。',
         promptBox: {
           id: 'rich_menu_image_prompt',
           buttonText: '複製選單產圖提示詞'
-        }
+        },
+        checklist: [
+          '兩個按鈕的動作都是「文字」，不是連結',
+          '按左邊會送出「瀏覽商品」，收到商品輪播',
+          '按右邊會送出「聯絡客服」，進入真人接手'
+        ],
+        tip: '💡 動作一定要選「文字」：客人按下去，聊天室會真的出現一句話，系統才收得到，OA 聊天室也會留下這位客人。'
       },
       {
         title: 'Step 10 - 預約流程打通',
@@ -363,7 +374,8 @@ const STAGES = [
           '<strong>Step 1：</strong>LINE Developers &rarr; Messaging API &rarr; Channel access token &rarr; <strong>Reissue</strong>，取得新的 Token。<br><br>' +
           '<strong>Step 2：</strong>Google AI Studio &rarr; 建立一把新的 API Key，<strong>刪除舊的</strong>。<br><br>' +
           '<strong>Step 3：</strong>到 Cloudflare 後台 &rarr; Workers &rarr; 你的 Worker &rarr; 設定 &rarr; 變數和秘密，把兩把新鑰匙貼上取代舊的。<br><br>' +
-          '<strong>Step 4：</strong>用手機再測一次 FAQ 和預約，確認系統正常。',
+          '<strong>Step 4：</strong>用手機再測一次 FAQ 和預約，確認系統正常。<br><br>' +
+          '第一天的 Worker 已經沒有在用了（Webhook 換到今天的網址），可以請 Codex 執行 <code>npx wrangler delete line-ai-faq</code> 把它刪掉。',
         checklist: [
           'LINE Access Token 已重新發行',
           'Gemini 舊金鑰已刪除，新金鑰已建立',
@@ -374,11 +386,11 @@ const STAGES = [
       },
       {
         title: '備援方案',
-        body: '若學員實作遇到困難，講師提供 Demo 專案作為備援，確保學員至少能部署成功並帶作品回家。',
+        body: '每個人的 Codex 寫出來的程式都不一樣，沒有一份可以直接套用的備用專案。卡住時這樣處理：',
         checklist: [
-          '取得講師 Demo 專案',
-          '部署 Demo 專案到自己的 Cloudflare',
-          '串接自己的 LINE OA'
+          '把錯誤畫面截圖交給 Codex，請它只修這一個問題',
+          '卡超過 10 分鐘，老師接手一起排錯',
+          '時間真的不夠：先用老師的示範官方帳號體驗完整流程，課後老師再協助完成'
         ],
         result: '確保每位學員都能帶走可運作的系統'
       },

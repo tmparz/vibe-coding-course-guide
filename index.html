@@ -27,7 +27,7 @@
 
   <main class="main-content" id="mainContent"></main>
 
-  <script src="data.js?v=20261022-04"></script>
+  <script src="data.js?v=20261022-05"></script>
   <script>
     (function () {
       const nav = document.getElementById('tabNav');
@@ -152,7 +152,7 @@
             <div class="info-card__title">🛠️ 遇到報錯怎麼辦？四步驟 SOP</div>
             <div class="sop-steps">
               <div class="sop-step"><span class="sop-num">1</span><div><strong>冷靜，不要慌</strong><br>報錯是正常的，每個人環境不同，跑不出來很常見。</div></div>
-              <div class="sop-step"><span class="sop-num">2</span><div><strong>截圖 + 複製錯誤訊息</strong><br>把終端機（Terminal）的紅字錯誤訊息全部框選複製，或截圖。</div></div>
+              <div class="sop-step"><span class="sop-num">2</span><div><strong>截圖 + 複製錯誤訊息</strong><br>把 Codex 或網頁上的錯誤畫面截圖，或把紅字錯誤訊息整段複製。</div></div>
               <div class="sop-step"><span class="sop-num">3</span><div><strong>丟給 AI 排查</strong><br>打開你的 AI 工具，貼上錯誤訊息並說：「我跑這個指令出錯了，幫我看看怎麼修」</div></div>
               <div class="sop-step"><span class="sop-num">4</span><div><strong>照著 AI 指示修正</strong><br>AI 給的解法通常能解決 80% 的問題。解決後繼續往下走。</div></div>
             </div>
@@ -398,6 +398,7 @@
         if (promptArea) {
           promptArea.value = `你是一個專業的 Cloudflare & LINE OA 開發專家。請根據以下設定，使用 Cloudflare Worker + D1 Database 建立一套「LINE OA 銷售系統 MVP」。
 請在新資料夾 line-shop 建立，不要修改第一天的 line-ai-faq。
+我是零基礎學員，請先用三句白話說明你的計畫，再一步一步做，每一步做完用一句白話告訴我結果。
 
 【LINE OA 憑證與管理者設定】
 - Channel ID: ${channelId || '[請回前步驟填寫 Channel ID]'}
@@ -437,13 +438,15 @@ ${myFaq || '[請回前步驟貼上第一天確認好的 FAQ]'}
 
 【開發實作要求】
 1. Webhook 接收 LINE 訊息與 Rich Menu 點擊事件：
-   - 系統需配合一個 2 欄位 (2-column) 的 Rich Menu（左按鈕：瀏覽商品，右按鈕：聯絡客服）。兩個按鈕都要讓使用者真的送出一則文字（「瀏覽商品」、「聯絡客服」），讓 LINE 官方後台的聊天室留下這位客人的紀錄。
+   - Webhook 路徑用 POST /webhook/line，用 Channel Secret 驗證 x-line-signature，驗證失敗回 401；LINE 按 Verify 時 events 是空的，也要回 200。先回 200 給 LINE，再用 ctx.waitUntil 在背景處理（呼叫 Gemini 要幾秒）。
+   - 系統需配合一個 2 欄位 (2-column) 的 Rich Menu（左按鈕：瀏覽商品，右按鈕：聯絡客服）。圖文選單由我在 OA Manager 手動建立，你不用寫程式建立。兩個按鈕都要讓使用者真的送出一則文字（「瀏覽商品」、「聯絡客服」），讓 LINE 官方後台的聊天室留下這位客人的紀錄。
    - 收到文字訊息時，依照上面的【訊息分流規則】處理。
    - 【關鍵機制】
      當使用者按下商品卡片裡的「立即預約／立即訂購」後，系統要讓使用者的 LINE 對話框裡，真的送出一則文字，例如：
      👉 我要預約【頭部芳香放鬆】
      這個按鈕不能只是「畫面上看起來有出現文字」，而是要真的由使用者送出一則 LINE 訊息。
-   - 系統收到該訂購事件後，自動建立訂單、寫入 D1 資料庫（預設狀態為「未付款」），扣減該商品的剩餘庫存，並發送「雙向即時通知」：
+   - 訂單的購買人姓名，用 LINE 取得這位客人的顯示名稱。
+   - 系統收到該訂購事件後，自動建立訂單、寫入 D1 資料庫（預設狀態為「未付款」），扣減該商品的剩餘庫存（庫存已經是 0、商品下架或不在上架期間時，不建立訂單，回覆客人「這個項目目前無法預約」），並發送「雙向即時通知」：
      * 客戶確認通知：使用該筆 Webhook event 的 replyToken 即時回覆下單成功確認訊息（或推播至客戶 source.userId）。
      * 管理員推播通知：使用 LINE Messaging API Push Message (POST https://api.line.me/v2/bot/message/push)，將新訂單推播至上述設定的 Admin LINE UID，即時通知管理員。
 2. 建立後台管理介面：
@@ -452,18 +455,26 @@ ${myFaq || '[請回前步驟貼上第一天確認好的 FAQ]'}
    - 【訂單管理】：檢視訂單列表，提供切換「已付款 / 未付款」按鈕，以及「刪除訂單」按鈕。
    - 當管理員點擊「刪除訂單」時，系統必須自動釋放庫存，將對應的商品庫存加回去！
    - 【客人狀態】：列出目前在真人接手中的客人，可以手動「結束真人接手」，也可以設定某位客人「不使用 AI 回答」。
-   - 【問題紀錄】：列出 Gemini 答不出來的問題與時間，讓管理員知道 FAQ 該補充什麼。`;
+   - 【問題紀錄】：列出 Gemini 答不出來的問題與時間，讓管理員知道 FAQ 該補充什麼。
+
+【部署步驟】
+3. 先在本機建立資料表、用 npm run dev 測試，給我本地後台網址讓我試新增商品。
+4. 我確認後，建立雲端 D1、建立資料表，用 npx wrangler secret put 設定所有憑證和 ADMIN_PASSWORD。
+5. 部署，完成後告訴我：Worker 網址、後台網址與密碼、要貼到 LINE Developers 的 Webhook URL（Worker 網址/webhook/line）。
+
+【遇到錯誤時】
+先用白話說明發生什麼事，再告訴我你打算怎麼修，一次只修一個問題，不要整個專案重寫。`;
         }
 
         // Step 9 Rich Menu Image Prompt
         const richMenuArea = document.getElementById('rich_menu_image_prompt');
         if (richMenuArea) {
-          richMenuArea.value = `A premium, minimalistic 2-column grid layout for a mobile app LINE Official Account Rich Menu, aspect ratio 2:1.
+          richMenuArea.value = `A premium, minimalistic 2-column layout for a LINE Official Account Rich Menu. Wide banner, aspect ratio 3:1 (final size 2500x843). Keep all icons and text inside the central horizontal band so it can be cropped to 3:1.
 The background is an elegant cream white with clean cobalt blue dividers.
 Each column contains a clean, modern line icon and a single text label:
 - Left Column: A shopping bag icon with text "瀏覽商品" (Browse Products).
 - Right Column: A chat bubble icon with text "聯絡客服" (Contact Us).
-Clean typography, high-end editorial look, flat design, no gradients, professional user interface layout, 4k resolution. --ar 2:1`;
+Clean typography, high-end editorial look, flat design, no gradients, professional user interface layout, no extra text.`;
         }
       }
 
