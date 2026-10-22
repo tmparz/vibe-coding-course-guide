@@ -312,14 +312,12 @@ ${val('my_info') || '[請先在上方填寫你確定的資料]'}
         // DAY 1 部署提示詞
         const buildPrompt = document.getElementById('day1_build_prompt');
         if (buildPrompt) {
-          buildPrompt.value = `你是我的 LINE 機器人工程師。請幫我把「第一天 FAQ 機器人」部署上線。
-我是零基礎學員，請一步一步做，每一步做完用一句白話告訴我結果。
+          buildPrompt.value = `你是我的 LINE 機器人工程師。請從零開始，幫我做一個「LINE AI 客服」並部署上線。
+我是零基礎學員，請先用三句白話說明你的計畫，再一步一步做，每一步做完用一句白話告訴我結果。
 
-【專案】
-1. 下載 https://github.com/tmparz/vibe_coding_LINE_KETWORD 到我的電腦（沒有 git 就下載 ZIP 解壓縮）。
-2. 使用專案的 wrangler.jsonc（第一天版本）。不要建立 D1 或 R2，不要開啟預約功能。
-3. 把下面【我的 FAQ】改寫成 src/faq-data.js 的格式（question / answer），取代原本的示範內容。
-   「其他問法」不用另外建題，Gemini 會自己理解。
+【這個機器人要做什麼】
+客人在 LINE 傳任何文字，機器人把客人的問題連同【我的 FAQ】一起交給 Google Gemini，請它理解意思後，只依照 FAQ 回答。
+客人不會照 FAQ 的原句問，例如 FAQ 寫「營業時間」，客人可能問「你們幾點開門？」，都要答得出來。
 
 【我的 FAQ】
 ${val('my_faq') || '[請回「我的 FAQ」分頁貼上確認好的 FAQ]'}
@@ -333,13 +331,28 @@ ${val('my_faq') || '[請回「我的 FAQ」分頁貼上確認好的 FAQ]'}
 - 憑證只能用 npx wrangler secret put 設定到 Cloudflare，或放在本機的 .dev.vars。
 - 不要把它們寫進任何程式碼、wrangler 設定檔或 README，也不要 commit 到 GitHub。
 
+【技術規格】
+1. 在我的電腦建立一個新資料夾 line-ai-faq，用 Cloudflare Workers（JavaScript）。不需要資料庫，不要建立 D1 或 R2。
+2. FAQ 放在一個獨立的檔案，之後我要改 FAQ 只改這個檔案。
+3. GET /health 回傳 {"status":"ok"}，讓我確認有上線。
+4. POST /webhook/line 接收 LINE 訊息：
+   - 用 LINE_CHANNEL_SECRET 驗證 x-line-signature，驗證失敗回 401。
+   - LINE 按 Verify 時送來的 events 是空的，也要回 200。
+   - 先回 200 給 LINE，再在背景呼叫 Gemini 和回覆（用 ctx.waitUntil），避免逾時。
+   - 只處理文字訊息，用 replyToken 回覆。
+5. 客人傳「人工」：回覆「已通知真人客服，請稍候」，不呼叫 Gemini。
+6. 其他文字：呼叫 Gemini（模型 gemini-2.5-flash），規則：
+   - 用繁體中文，簡短親切，像店家在 LINE 回覆客人。
+   - 只能使用 FAQ 的內容，不能編造價格、日期、地址、優惠。
+   - FAQ 沒有的，回答：這個我需要確認，請傳「人工」，由真人為您回覆。
+   - Gemini 出錯時，也回覆上面這句，不要讓客人收不到回應。
+
 【部署步驟】
-4. 執行 npm install。
-5. 確認 npx wrangler whoami 已登入 Cloudflare，沒有的話執行 npx wrangler login。
-6. 用 npx wrangler secret put 設定上面三個憑證。
-7. 執行 npm run deploy，完成後告訴我 Worker 網址。
-8. 打開「Worker 網址/health」，確認看到 "status":"ok"。
-9. 告訴我要貼到 LINE Developers 的 Webhook URL：「Worker 網址/webhook/line」。
+7. 確認 npx wrangler whoami 已登入 Cloudflare，沒有的話執行 npx wrangler login。
+8. 用 npx wrangler secret put 設定上面三個憑證。
+9. 部署，完成後告訴我 Worker 網址。
+10. 打開「Worker 網址/health」，確認看到 "status":"ok"。
+11. 告訴我要貼到 LINE Developers 的 Webhook URL：「Worker 網址/webhook/line」。
 
 【遇到錯誤時】
 先用白話說明發生什麼事，再告訴我你打算怎麼修，一次只修一個問題，不要整個專案重寫。`;
