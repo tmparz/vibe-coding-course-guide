@@ -201,6 +201,22 @@ const STAGES = [
         extra: '⏱️ 第一天做過的話，約 5 分鐘'
       },
       {
+        title: '安裝 Cloudflare Skill（給 Codex 的操作手冊）',
+        body: 'Skill 就像幫 Codex 裝一本「Cloudflare 操作手冊」，之後建資料庫、查錯誤時，它會照手冊的安全步驟做（先查看、跟你確認、再動手）。<br><br>' +
+          '<strong>Step 1：</strong>把老師發的 <strong>cloudflare</strong> 資料夾存到電腦的「<strong>下載</strong>」資料夾（是壓縮檔的話先解壓縮）。<br><br>' +
+          '<strong>Step 2：</strong>在 Codex 貼上下面這段話。',
+        promptBox: {
+          id: 'skill_install_prompt',
+          buttonText: '複製安裝提示詞',
+          text: '老師給了我一個 Cloudflare 的 skill，資料夾名稱是 cloudflare，放在我電腦的「下載」資料夾裡。\n請幫我安裝成「每個專案都能用」的 skill：\n1. 找到這個資料夾，確認裡面有 SKILL.md\n2. 把整個資料夾複製到我的使用者資料夾底下的 .agents/skills/cloudflare（資料夾不存在就建立）\n3. 告訴我安裝好了沒有，以及你現在看不看得到這個 skill；需要重開 Codex 才看得到的話，請直接告訴我\n請用繁體中文白話回答我。'
+        },
+        checklist: [
+          'Codex 回報已安裝到 .agents/skills/cloudflare',
+          '重開 Codex 後，問它「你有 cloudflare 這個 skill 嗎？」，它回答有'
+        ],
+        tip: '💡 裝在「使用者資料夾」而不是某一個專案裡，是因為今天的專案資料夾（line-shop）等一下才會建立。裝在這裡，以後每個專案都用得到。'
+      },
+      {
         title: 'Ch5 - 建立系統欄位規格',
         body: '定義你的商品表與訂單表的欄位結構。這個步驟超重要！AI 等等要根據這份規格來幫你蓋系統。<br><br>👇 <strong>請先選擇符合你產業的範本，再微調</strong>：',
         templateSelector: true,
