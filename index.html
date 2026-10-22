@@ -27,7 +27,7 @@
 
   <main class="main-content" id="mainContent"></main>
 
-  <script src="data.js?v=20261022-01"></script>
+  <script src="data.js?v=20261022-02"></script>
   <script>
     (function () {
       const nav = document.getElementById('tabNav');
@@ -426,7 +426,7 @@ ${myFaq || '[請回前步驟貼上第一天確認好的 FAQ]'}
 2. 完全等於「瀏覽商品」或「購買」：回傳商品輪播。
 3. 完全等於「聯絡客服」或「人工」：進入真人接手模式，回覆一次「已轉給真人客服，請稍候」，並推播通知管理員。
 4. 該客人在真人接手模式中：不回應，也不要呼叫 Gemini。
-5. 其他文字：呼叫 Gemini，只能依照上面的 FAQ 回答；FAQ 沒有的內容，回覆請客人傳「人工」。客人想預約時，引導他點選單的「瀏覽商品」。Gemini 永遠不能建立、修改或取消訂單。
+5. 其他文字：呼叫 Gemini（模型用 gemini-3.5-flash-lite；不要用 gemini-2.5 或更舊的模型，新申請的金鑰用不了。出現模型不存在或 404 時，查 https://ai.google.dev/gemini-api/docs/models 換成目前可用的 Flash 模型並告訴我），只能依照上面的 FAQ 回答；FAQ 沒有的內容，回覆請客人傳「人工」。客人想預約時，引導他點選單的「瀏覽商品」。Gemini 永遠不能建立、修改或取消訂單。
    Gemini 答不出來時，把這個問題記錄到「問題紀錄」資料表。
 
 【真人接手模式】

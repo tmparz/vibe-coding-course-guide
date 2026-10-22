@@ -366,11 +366,14 @@ const STAGES = [
         body: '<strong>Step 1：</strong>LINE Developers &rarr; Messaging API 分頁 &rarr; Webhook URL 填入「<strong>Worker 網址/webhook/line</strong>」&rarr; Verify。<br><br>' +
           '<strong>Step 2：</strong>打開「Use webhook」。<br><br>' +
           '<strong>Step 3：</strong>回到 OA Manager &rarr; 回應設定，把「<strong>自動回應訊息</strong>」關閉。<br>' +
-          '（不關的話，客人問一題，剛剛設定的關鍵字和 AI 會<strong>各回一次</strong>）',
+          '（不關的話，客人問一題，剛剛設定的關鍵字和 AI 會<strong>各回一次</strong>）<br><br>' +
+          '<strong>Step 4：</strong>同一頁確認「<strong>聊天</strong>」是<strong>開啟</strong>的。<br>' +
+          '（關掉的話，OA Manager 的聊天室看不到客人的訊息，真人就沒辦法接手）',
         checklist: [
           'Webhook Verify 顯示 Success',
           'Use webhook 已開啟',
-          '自動回應訊息已關閉'
+          '自動回應訊息已關閉',
+          '聊天保持開啟'
         ]
       }
     ]

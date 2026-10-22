@@ -26,7 +26,7 @@
 
   <main class="main-content" id="mainContent"></main>
 
-  <script src="data.js?v=20261022-01"></script>
+  <script src="data.js?v=20261022-02"></script>
   <script>
     (function () {
       const nav = document.getElementById('tabNav');
@@ -342,7 +342,9 @@ ${val('my_faq') || '[請回「我的 FAQ」分頁貼上確認好的 FAQ]'}
    - 先回 200 給 LINE，再在背景呼叫 Gemini 和回覆（用 ctx.waitUntil），避免逾時。
    - 只處理文字訊息，用 replyToken 回覆。
 5. 客人傳「人工」：回覆「已通知真人客服，請稍候」，不呼叫 Gemini。
-6. 其他文字：呼叫 Gemini（模型 gemini-2.5-flash），規則：
+6. 其他文字：呼叫 Gemini，規則：
+   - 模型用 gemini-3.5-flash-lite（Google 建議新專案使用）。不要用 gemini-2.5 或更舊的模型，新申請的金鑰用不了。
+     如果呼叫時出現模型不存在或 404，先查 https://ai.google.dev/gemini-api/docs/models 換成目前可用的 Flash 模型，並告訴我換成哪一個。
    - 用繁體中文，簡短親切，像店家在 LINE 回覆客人。
    - 只能使用 FAQ 的內容，不能編造價格、日期、地址、優惠。
    - FAQ 沒有的，回答：這個我需要確認，請傳「人工」，由真人為您回覆。
