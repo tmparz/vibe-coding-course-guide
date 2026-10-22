@@ -1,4 +1,4 @@
-// DAY 1 教材資料：上半場 AI 協作，下半場 LINE 關鍵字機器人（內建關鍵字 → 內建 AI → 自己的 AI）
+// DAY 1 教材資料：上半場 AI 協作，下半場 LINE 關鍵字機器人（內建關鍵字 → 自己的 AI）
 // 欄位 id 與第二天共用（line_channel_secret 等），同一台電腦第二天會自動帶入
 
 const FAQ_TEMPLATES = {
@@ -40,11 +40,11 @@ const STAGES = [
           '<tr><td>00:45–01:45</td><td>AI 協作三招</td><td>一份通知草稿、一份驗算過的預算</td></tr>' +
           '<tr><td>01:45–02:30</td><td>我的真實任務：用 AI 整理「我的 LINE 要回答的問題」</td><td>5 題以上自己的 FAQ</td></tr>' +
           '<tr><td colspan="3"><strong>下半場：讓 LINE 自動回答（210 分鐘）</strong></td></tr>' +
-          '<tr><td>02:30–03:20</td><td>LINE 官方帳號：歡迎訊息、關鍵字自動回覆、試用內建 AI 聊天機器人（β）、開通 Messaging API</td><td>親手比較兩種內建功能</td></tr>' +
-          '<tr><td>03:20–03:35</td><td>LINE 訊息怎麼跑到程式裡</td><td>說得出訊息走過哪四站</td></tr>' +
-          '<tr><td>03:35–04:00</td><td>Cloudflare 與 Codex</td><td>Codex 能登入 Cloudflare</td></tr>' +
+          '<tr><td>02:30–03:10</td><td>LINE 官方帳號：歡迎訊息、關鍵字自動回覆、開通 Messaging API</td><td>手機收到一則關鍵字回覆</td></tr>' +
+          '<tr><td>03:10–03:30</td><td>LINE 訊息怎麼跑到程式裡（順便認識內建的 AI 聊天機器人）</td><td>說得出訊息走過哪四站</td></tr>' +
+          '<tr><td>03:30–04:00</td><td>Cloudflare 與 Codex</td><td>Codex 能登入 Cloudflare</td></tr>' +
           '<tr><td>04:00–05:20</td><td>申請 Gemini 鑰匙 → 把所有資料交給 Codex，從零做出 FAQ 機器人 → 串接 Webhook</td><td>機器人上線</td></tr>' +
-          '<tr><td>05:20–05:40</td><td>手機驗收：同一題比三次</td><td>說得出三種做法的差別</td></tr>' +
+          '<tr><td>05:20–05:40</td><td>手機驗收：同一題比兩次</td><td>親眼看到關鍵字和 AI 的差別</td></tr>' +
           '<tr><td>05:40–06:00</td><td>回顧、明天預告</td><td>知道明天為什麼需要後台</td></tr>' +
           '</tbody></table></div>',
         extra: '午休與短休息另計，放在單元交界處。'
@@ -218,7 +218,7 @@ const STAGES = [
   {
     id: 'line', label: 'LINE 官方帳號', color: 's3',
     title: '下半場：LINE 官方帳號，先做一個「沒有 AI 的機器人」',
-    desc: '先用 LINE 內建的關鍵字和 AI，再開通給自己的程式使用的 Messaging API',
+    desc: '先用 LINE 內建的關鍵字自動回覆，再開通給自己的程式使用的 Messaging API',
     steps: [
       {
         title: '設定歡迎訊息與關鍵字自動回覆',
@@ -238,31 +238,9 @@ const STAGES = [
         tip: '💡 <strong>關鍵字自動回覆</strong>只認得你設定的字。客人換個說法，它就聽不懂了。這就是等一下要讓 AI 來幫忙的原因。'
       },
       {
-        title: '再試試 LINE 內建的 AI 聊天機器人（β）',
-        body: 'LINE 官方帳號也有內建的 AI：<strong>AI 聊天機器人（β）</strong>。它會從你建立的問答裡，挑一題最適合的回覆客人，客人換個說法也能理解一部分。<br><br>' +
-          '<div class="antifraud-notice">💰 <strong>只測試，不啟用</strong>：建立問答和測試<strong>免費</strong>；要真的回覆客人，必須加購「聊天進階方案」（LINE 官方公告每月 NT$100）。今天只用後台的測試區。</div><br>' +
-          '<strong>Step 1：</strong>OA Manager &rarr; 自動回應 &rarr; <strong>AI 聊天機器人（β）</strong> &rarr; 啟用並同意條款（這一步只是開始設定，不會扣款）。<br><br>' +
-          '<strong>Step 2：</strong>建立問答：從你的 FAQ 挑 3 題，把問題貼進「問答範例」、答案貼進「回覆內容」。<br><br>' +
-          '<strong>Step 3：</strong>點側邊的「<strong>常見問答回應測試</strong>」，輸入「你們幾點開門？」這種換個說法的問題，看它怎麼回答。<br><br>' +
-          '<strong>Step 4：</strong>不要去「設定 &rarr; 回應設定」切換回應方式。',
-        checklist: [
-          '已建立 3 題問答',
-          '在「常見問答回應測試」換個說法問，記下結果',
-          '沒有更改回應設定，也沒有加購方案'
-        ],
-        tip: '💡 <strong>三種做法比一比</strong>（第三種是等一下要請 Codex 做的）<br>' +
-          '<div class="glossary-table"><table><thead><tr><th></th><th>內建關鍵字</th><th>內建 AI 聊天機器人（β）</th><th>自己的 AI 機器人</th></tr></thead><tbody>' +
-          '<tr><td>費用</td><td>免費</td><td>每月 NT$100（聊天進階方案）</td><td>Gemini、Cloudflare 免費額度內不用錢</td></tr>' +
-          '<tr><td>怎麼回答</td><td>字要完全一樣才回</td><td>從你建的問答裡挑一題回</td><td>AI 讀完整份 FAQ，組織成回答</td></tr>' +
-          '<tr><td>限制</td><td>換個說法就聽不懂</td><td>最多 100 題、每月有回覆上限；醫療、金融等業種可能不能用</td><td>要自己維護</td></tr>' +
-          '<tr><td>接預約、後台、真人接手</td><td>不行</td><td>不行</td><td>可以（明天做）</td></tr>' +
-          '</tbody></table></div>' +
-          '只需要回答固定問題的店家，用內建的就很夠了。我們自己做，是因為明天要讓 LINE 接預約、記住哪位客人正由真人服務，這些內建功能做不到。'
-      },
-      {
         title: '開通 Messaging API，取得三把鑰匙',
         image: '../01_LINE三把鑰匙.png',
-        body: '關鍵字回覆和 AI 聊天機器人（β）都是 LINE 內建的功能。要讓<strong>我們自己的程式</strong>接收 LINE 訊息，要先開通 Messaging API。<br><br>' +
+        body: '關鍵字回覆是 LINE 內建的功能。要讓<strong>我們自己的程式</strong>接收 LINE 訊息，要先開通 Messaging API。<br><br>' +
           '<strong>Step 1：</strong>OA Manager &rarr; 設定 &rarr; Messaging API &rarr; 啟用（第一次會請你建立 Provider，取一個名字就好）。<br><br>' +
           '<strong>Step 2：</strong>開啟 <a href="https://developers.line.biz/" target="_blank" class="ext-link-btn">🔗 LINE Developers</a>，找到剛剛啟用的 Channel。<br><br>' +
           '<strong>Step 3：</strong>取得以下資料，填進下方欄位：<br>' +
@@ -304,7 +282,15 @@ const STAGES = [
       },
       {
         title: '和剛剛的關鍵字有什麼不同？',
-        body: '剛剛的關鍵字自動回覆，是 LINE 拿著一張「固定答案表」比對字；內建 AI 聊天機器人是從你建的問答裡<strong>挑一題</strong>。接下來的 AI 機器人，是把客人的問題連同你的整份 FAQ 交給 AI，請它<strong>理解意思</strong>再組織回答，而且程式是你自己的，明天可以再加預約和後台。',
+        body: '剛剛的關鍵字自動回覆，是 LINE 拿著一張「固定答案表」比對字。接下來的 AI 機器人，是把客人的問題連同你的整份 FAQ 交給 AI，請它<strong>理解意思</strong>再組織回答。<br><br>' +
+          'LINE 後台其實也有內建的 <strong>AI 聊天機器人（β）</strong>，但要加購「聊天進階方案」（每月 NT$100），今天不操作，看一下差別就好：<br>' +
+          '<div class="glossary-table"><table><thead><tr><th></th><th>內建關鍵字</th><th>內建 AI 聊天機器人（β）</th><th>自己的 AI 機器人</th></tr></thead><tbody>' +
+          '<tr><td>費用</td><td>免費</td><td>每月 NT$100（聊天進階方案）</td><td>Gemini、Cloudflare 免費額度內不用錢</td></tr>' +
+          '<tr><td>怎麼回答</td><td>字要完全一樣才回</td><td>從你建的問答裡挑一題回</td><td>AI 讀完整份 FAQ，組織成回答</td></tr>' +
+          '<tr><td>限制</td><td>換個說法就聽不懂</td><td>最多 100 題、每月有回覆上限；醫療、金融等業種可能不能用</td><td>要自己維護</td></tr>' +
+          '<tr><td>接預約、後台、真人接手</td><td>不行</td><td>不行</td><td>可以（明天做）</td></tr>' +
+          '</tbody></table></div>' +
+          '只需要回答固定問題的店家，用內建的就夠了。我們自己做，是因為明天要讓 LINE 接預約、記住哪位客人正由真人服務，這些內建功能做不到。',
         checklist: [
           '說得出訊息走過哪四站',
           '知道 Webhook URL 要填在 LINE Developers，不是貼在聊天室',
@@ -391,12 +377,12 @@ const STAGES = [
   },
   {
     id: 'verify', label: '驗收與回顧', color: 's5',
-    title: '手機驗收：同一題比三次',
+    title: '手機驗收：同一題比兩次',
     desc: '手機真的收到正確回答，才算完成',
     steps: [
       {
-        title: '同一題，比三次',
-        body: '「你們幾點開門？」你已經問過兩次：關鍵字聽不懂；內建 AI 聊天機器人在測試區挑了一題回答。現在用手機問你自己的機器人。',
+        title: '同一題，比兩次',
+        body: '剛剛你用「你們幾點開門？」問過關鍵字機器人，它聽不懂。現在再問一次。',
         checklist: [
           '「你們幾點開門？」機器人答對了',
           '同一題換三種問法，答案的內容都一樣',
@@ -418,7 +404,7 @@ const STAGES = [
           '上午：我用三招，讓 AI 幫我完成一份工作',
           '上午：我用 AI 整理出自己的 FAQ',
           '下午：我請 Codex 幫我把機器人接上 LINE',
-          '下午：我說得出內建關鍵字、內建 AI、自己的 AI 機器人的差別'
+          '下午：我親眼看到關鍵字和 AI 的差別'
         ]
       }
     ]
