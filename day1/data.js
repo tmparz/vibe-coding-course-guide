@@ -41,7 +41,7 @@ const STAGES = [
           '<tr><td>01:45–02:30</td><td>我的真實任務：用 AI 整理「我的 LINE 要回答的問題」</td><td>5 題以上自己的 FAQ</td></tr>' +
           '<tr><td colspan="3"><strong>下半場：讓 LINE 自動回答（210 分鐘）</strong></td></tr>' +
           '<tr><td>02:30–03:10</td><td>LINE 官方帳號：歡迎訊息、關鍵字自動回覆、開通 Messaging API</td><td>手機收到一則關鍵字回覆</td></tr>' +
-          '<tr><td>03:10–03:30</td><td>LINE 訊息怎麼跑到程式裡（順便認識內建的 AI 聊天機器人）</td><td>說得出訊息走過哪四站</td></tr>' +
+          '<tr><td>03:10–03:30</td><td>LINE 訊息怎麼跑到程式裡（順便認識內建的 AI 聊天機器人）</td><td>能解釋 LINE、Worker、Google Gemini 與回覆的來回</td></tr>' +
           '<tr><td>03:30–04:00</td><td>Cloudflare 與 Codex</td><td>Codex 能登入 Cloudflare</td></tr>' +
           '<tr><td>04:00–05:20</td><td>申請 Gemini 鑰匙 → 把所有資料交給 Codex，從零做出 FAQ 機器人 → 串接 Webhook</td><td>機器人上線</td></tr>' +
           '<tr><td>05:20–05:40</td><td>手機驗收：同一題比兩次</td><td>親眼看到關鍵字和 AI 的差別</td></tr>' +
@@ -271,14 +271,14 @@ const STAGES = [
   {
     id: 'flow', label: '訊息怎麼走', color: 's3',
     title: '下半場：LINE 訊息怎麼跑到程式裡？',
-    desc: '不用背名詞，能用自己的話說出訊息走過哪四站就好',
+    desc: '用 FAQ 情境認識 LINE、Webhook、Cloudflare Worker 與 Google Gemini API 的訊息來回',
     steps: [
       {
         title: '一則訊息的旅程',
-        image: '../02_技術架構總覽.png',
-        body: '客人在 LINE 問「你們幾點開門？」，這則訊息會這樣走：',
-        flow: ['客人手機 LINE', 'LINE 平台按門鈴（Webhook）', 'Cloudflare Worker 帶上你的 FAQ', 'Gemini 根據 FAQ 回答', '回到客人手機'],
-        tip: '💡 <strong>Webhook = 門鈴。</strong>客人在 LINE 敲你，LINE 就去按你程式的門鈴。門鈴的地址，就是等一下要填的 Webhook URL。'
+        image: './faq-message-flow.svg',
+        body: '客人在 LINE 問「星期日有營業嗎？」，LINE 會把訊息交給 Cloudflare Worker；Worker 先讀取已確認的完整 FAQ，再透過 <strong>Google Gemini API</strong> 送出「這位顧客的問題＋完整 FAQ＋只依 FAQ 回答的規則」。Google 回傳文字答案給 Worker，Worker 最後呼叫 <strong>LINE Reply API</strong> 把結果送回客人手機。若 FAQ 沒有相關資訊，應引導客人傳「人工」，不能亂猜。<br><br><strong>重點：</strong>Google 不會直接傳 LINE 訊息；向 Google 發問的是 Worker，Gemini API Key 安全放在 Worker Secret。',
+        flow: ['① 顧客 LINE 提問', '② LINE Webhook', '③ Worker 讀取完整 FAQ', '④ Worker 詢問 Google Gemini API', '⑤ Google 傳回答案', '⑥ Worker 呼叫 LINE Reply API', '⑦ 顧客看到回覆'],
+        tip: '💡 <strong>Webhook = 門鈴。</strong>LINE 把顧客問題通知 Worker，Worker 帶著 FAQ 去詢問 Google Gemini API。請沿著上方新版情境圖的編號說出訊息如何出去、又如何回來。'
       },
       {
         title: '和剛剛的關鍵字有什麼不同？',
@@ -292,7 +292,7 @@ const STAGES = [
           '</tbody></table></div>' +
           '只需要回答固定問題的店家，用內建的就夠了。我們自己做，是因為明天要讓 LINE 接預約、記住哪位客人正由真人服務，這些內建功能做不到。',
         checklist: [
-          '說得出訊息走過哪四站',
+          '能指出 Worker 如何透過 Gemini API 詢問，以及如何把答案送回 LINE',
           '知道 Webhook URL 要填在 LINE Developers，不是貼在聊天室',
           '知道 AI 只會根據你給的 FAQ 回答，不知道的就請客人找真人'
         ]
@@ -312,7 +312,7 @@ const STAGES = [
       },
       {
         title: '讓 Codex 連上你的 Cloudflare',
-        body: '打開 Codex，貼上下面這句話：',
+        body: '先按下方按鈕，打開自己的 Cloudflare 後台確認已登入，再回到 Codex 貼上登入提示詞，讓 Wrangler 能使用你的 Cloudflare 帳號。<br><br><a href="https://dash.cloudflare.com/" target="_blank" rel="noopener noreferrer" class="ext-link-btn">開啟 Cloudflare 後台 ↗</a> <a href="https://developers.cloudflare.com/workers/wrangler/commands/general/#login" target="_blank" rel="noopener noreferrer" class="ext-link-btn">查看 Wrangler 登入教學 ↗</a><br><br>注意：開啟後台不等於 Codex 已連上，必須完成瀏覽器授權並以 <code>npx wrangler whoami</code> 確認。',
         promptBox: {
           id: 'cloud_login_prompt',
           buttonText: '複製登入提示詞',
@@ -333,7 +333,7 @@ const STAGES = [
     steps: [
       {
         title: '申請 Gemini API Key',
-        body: '開啟 <a href="https://aistudio.google.com/apikey" target="_blank" class="ext-link-btn">🔗 Google AI Studio</a> &rarr; 「Create API key」&rarr; 複製，貼到下方欄位。',
+        body: '先按「Google AI Studio」取得 Gemini API Key。這把金鑰提供給<strong>後端 Cloudflare Worker</strong> 使用，讓 Worker 可以向 Google Gemini API 詢問 FAQ。每次提問會把顧客問題與完整 FAQ 送到 Google，回覆再由 Worker 交回 LINE。<br><br><a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener noreferrer" class="ext-link-btn">開啟 Google AI Studio｜申請 API Key ↗</a> <a href="https://ai.google.dev/gemini-api/docs/api-key" target="_blank" rel="noopener noreferrer" class="ext-link-btn">Google 官方 API Key 教學 ↗</a><br><br>不要把實際金鑰放到 GitHub 或公開網頁。',
         worksheet: {
           title: 'Gemini 鑰匙（第二天會自動帶入）',
           fields: [
