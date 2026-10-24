@@ -26,7 +26,7 @@
 
   <main class="main-content" id="mainContent"></main>
 
-  <script src="data.js?v=20261024-faq-01"></script>
+  <script src="data.js?v=20261024-faq-image-02"></script>
   <script>
     (function () {
       const nav = document.getElementById('tabNav');
@@ -132,12 +132,16 @@
           </div>`;
           }
 
-          // Image
+          // Image: FAQ infographic can be opened at full size for classroom viewing.
           if (step.image) {
+            const isFaqFlow = stage.id === 'flow' && step.image === './faq-message-flow.webp';
             html += `
           <div class="step-image-container" style="margin: 16px 0; border: 1px solid var(--c-border); border-radius: var(--radius); overflow: hidden; max-width: 100%;">
-            <img src="${step.image}" alt="${step.title}" loading="lazy" style="width: 100%; height: auto; display: block; object-fit: contain;">
+            ${isFaqFlow ? '<a href="./faq-message-flow.webp" target="_blank" rel="noopener noreferrer" title="點擊放大 FAQ 訊息流程圖">' : ''}
+            <img src="${step.image}" alt="${isFaqFlow ? 'LINE FAQ 從顧客提問、Webhook、Cloudflare Worker 到 Google Gemini API 及回覆的完整流程圖' : step.title}" loading="lazy" style="width: 100%; height: auto; display: block; object-fit: contain;">
+            ${isFaqFlow ? '</a>' : ''}
           </div>
+          ${isFaqFlow ? '<p style="text-align:center;font-size:13px;color:var(--c-text-muted);">點擊圖片可在新分頁放大檢視</p>' : ''}
         `;
           }
 
