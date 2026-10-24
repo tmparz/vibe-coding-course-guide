@@ -55,6 +55,11 @@ const STAGES = [
         extra: '必須符合：願意自己動手做、願意使用 AI、系統建置在 LINE OA 上'
       },
       {
+        title: '📦 下載教材包',
+        body: '第二天的實作與驗收文件、開發提示詞範本、備用選單圖都在裡面。下載後在「下載」資料夾按右鍵 &rarr; 「解壓縮全部」，打開「第二天」資料夾。<br><br>' +
+          '<a href="downloads/兩天學員教材.zip" download class="ext-link-btn">⬇️ 下載兩天完整教材包</a>'
+      },
+      {
         title: '📋 課前準備（防呆清單）',
         body: '請在課程開始前確認以下設備與帳號都已備妥，尤其是 Gmail 帳號，少了它會卡在第一關！',
         checklist: [

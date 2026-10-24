@@ -1,4 +1,4 @@
-/* Shared classroom helpers: copy validation and masking of the three credential fields. */
+/* Shared classroom helpers: copy validation and cross-tab sync of the three credential fields. */
 (() => {
   const key = 'vibe-course-inputs';
   const secretIds = ['line_channel_secret', 'line_access_token', 'gemini_api_key'];
@@ -21,16 +21,6 @@
     return true;
   };
   document.addEventListener('DOMContentLoaded', () => {
-    // Mask single-line keys while retaining the shared DAY 1 / DAY 2 field IDs.
-    secretIds.forEach(id => {
-      const old = document.getElementById(id);
-      if (!old) return;
-      if (old.tagName === 'TEXTAREA') {
-        const input = document.createElement('input');
-        input.id = old.id; input.placeholder = old.placeholder; input.value = old.value;
-        input.type = 'password'; input.autocomplete = 'off'; old.replaceWith(input);
-      } else { old.type = 'password'; old.autocomplete = 'off'; }
-    });
     window.addEventListener('storage', e => {
       if (e.key !== key) return;
       try {

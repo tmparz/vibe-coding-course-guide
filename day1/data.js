@@ -50,6 +50,12 @@ const STAGES = [
         extra: '午休與短休息另計，放在單元交界處。'
       },
       {
+        title: '📦 下載教材包',
+        body: '上課要用的練習檔（練習表、Excel、會議筆記、FAQ 素材、可複製提示詞）都在裡面。下載後在「下載」資料夾按右鍵 &rarr; 「解壓縮全部」，打開 <strong>START.html</strong> 開始。<br><br>' +
+          '<a href="../downloads/第一天學員教材.zip" download class="ext-link-btn">⬇️ 下載第一天教材包</a> ' +
+          '<a href="../downloads/兩天學員教材.zip" download class="ext-link-btn">⬇️ 下載兩天完整教材包</a>'
+      },
+      {
         title: '📋 課前準備（防呆清單）',
         body: '請在上課前完成，課前檢查時老師會陪你一起確認。',
         checklist: [
