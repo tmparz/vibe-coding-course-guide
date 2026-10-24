@@ -13,7 +13,7 @@
 
   <header class="site-header">
     <div class="header-inner">
-      <div class="header-brand">Vibe Coding<span>DAY 2 原教材</span></div>
+      <div class="header-brand">Vibe Coding<span>DAY 2 預約系統</span></div>
       <a href="./course/" class="header-instructor-btn" style="display:inline-flex;align-items:center;text-decoration:none;border-radius:999px;padding:6px 12px;background:#f5e4e7;color:#76506c;font-size:12px;font-weight:700;" title="兩日課程總覽">兩日課程入口</a>
       <a href="./day1/" class="header-instructor-btn" style="display:inline-flex;align-items:center;text-decoration:none;border-radius:999px;padding:6px 12px;background:var(--c-accent-light);color:var(--c-accent);font-size:12px;font-weight:700;margin-left:auto;" title="第一天 AI 協作與 LINE 關鍵字機器人">DAY 1｜AI 協作 × LINE</a>
       <a href="instructor.html" class="header-instructor-btn" style="margin-left:0;font-size:12px;font-weight:700;color:var(--c-accent);text-decoration:none;display:inline-flex;align-items:center;gap:4px;padding:6px 12px;border-radius:999px;background:var(--c-accent-light);transition:all var(--transition);">👨‍💻 講師簡介</a>
@@ -27,7 +27,8 @@
 
   <main class="main-content" id="mainContent"></main>
 
-  <script src="data.js?v=20261024-skill-01"></script>
+  <script src="course-tools.js?v=20261023"></script>
+  <script src="data.js?v=20261024-02"></script>
   <script>
     (function () {
       const nav = document.getElementById('tabNav');
@@ -154,7 +155,7 @@
               <div class="sop-step"><span class="sop-num">1</span><div><strong>冷靜，不要慌</strong><br>報錯是正常的，每個人環境不同，跑不出來很常見。</div></div>
               <div class="sop-step"><span class="sop-num">2</span><div><strong>截圖 + 複製錯誤訊息</strong><br>把 Codex 或網頁上的錯誤畫面截圖，或把紅字錯誤訊息整段複製。</div></div>
               <div class="sop-step"><span class="sop-num">3</span><div><strong>丟給 AI 排查</strong><br>打開你的 AI 工具，貼上錯誤訊息並說：「我跑這個指令出錯了，幫我看看怎麼修」</div></div>
-              <div class="sop-step"><span class="sop-num">4</span><div><strong>照著 AI 指示修正</strong><br>AI 給的解法通常能解決 80% 的問題。解決後繼續往下走。</div></div>
+              <div class="sop-step"><span class="sop-num">4</span><div><strong>照著 AI 指示修正</strong><br>修正後重做剛剛失敗的操作，確認結果符合預期再往下走。</div></div>
             </div>
             <div class="info-card__footer">⭐ 這才是 Vibe Coding 的精髓：你不需要懂所有報錯，但要懂得用 AI 幫你解讀！</div>
           </div>`;
@@ -278,7 +279,7 @@
               <span>整合 AI 提示詞</span>
               <button class="copy-btn" id="btn-copy-${step.promptBox.id}" onclick="copyToClipboard('${step.promptBox.id}')">${step.promptBox.buttonText}</button>
             </div>
-            <textarea id="${step.promptBox.id}" readonly class="prompt-textarea" placeholder="填寫完前述步驟後，此處將動態生成相關提示詞..."></textarea>
+            <textarea id="${step.promptBox.id}" readonly class="prompt-textarea" placeholder="填寫完前述步驟後，此處將動態生成相關提示詞...">${(step.promptBox.text || "").replace(/&/g, "&amp;").replace(/</g, "&lt;")}</textarea>
           </div>
         `;
           }
@@ -353,7 +354,7 @@
       function saveAllInputs() {
         let data = {};
         try { data = JSON.parse(localStorage.getItem('vibe-course-inputs') || '{}'); } catch (e) { }
-        document.querySelectorAll('input[type="text"], textarea').forEach(el => {
+        document.querySelectorAll('input[type="text"], input[type="password"], textarea').forEach(el => {
           if (el.id && !el.readOnly) {
             data[el.id] = el.value;
           }
@@ -420,21 +421,37 @@
   * 客戶通知內容範本:
     ${userNotify}
 
-【第一天的 FAQ（一般問題由 Gemini 依此回答）】
+【FAQ 初始內容（第一天確認好的；系統建好後存進 D1，之後由我在後台修改）】
 ${myFaq || '[請回前步驟貼上第一天確認好的 FAQ]'}
 
 【訊息分流規則】（收到文字訊息時，由上往下判斷，符合就停止）
 1. 開頭為「👉 我要預約【」：視為預約指令，取出【】內的商品名稱建立訂單。找不到該商品時，回覆「找不到這個項目，請從選單重新選擇」。
 2. 完全等於「瀏覽商品」或「購買」：回傳商品輪播。
-3. 完全等於「聯絡客服」或「人工」：進入真人接手模式，回覆一次「已轉給真人客服，請稍候」，並推播通知管理員。
-4. 該客人在真人接手模式中，或在後台被設定為「不使用 AI 回答」：不回應，也不要呼叫 Gemini。
-5. 其他文字：呼叫 Gemini（模型用 gemini-3.6-flash；不要用 gemini-2.5 或更舊的模型，新申請的金鑰會回 404。出現模型不存在或 404 時，查 https://ai.google.dev/gemini-api/docs/models 換成目前可用的 Flash 模型並告訴我。回 429 或 503 時等 2 秒重試一次，還是失敗就請客人傳「人工」），只能依照上面的 FAQ 回答；FAQ 沒有的內容，回覆請客人傳「人工」。客人想預約時，引導他點選單的「瀏覽商品」。Gemini 永遠不能建立、修改或取消訂單。
-   Gemini 回覆「請傳人工」的那句話時（代表 FAQ 沒有答案），把客人的問題記錄到「問題紀錄」資料表。
+3. 完全等於「聯絡客服」或「人工」：首次進入真人接手模式才回覆「已轉給真人客服，請稍候」並通知管理員；已在接手期間再按，只延長時間，不重複回覆或推播。
+4. 該客人在後台的「AI 自動回覆」是關閉的，或正在真人接手模式中：不回應、不呼叫 Gemini、不寫問題紀錄，讓我在 LINE 官方帳號後台的聊天室跟他一對一聊天。
+5. 其他文字：讀取 D1 裡目前儲存的 FAQ，再呼叫 Gemini（模型用 gemini-3.6-flash；不要照抄舊模型名稱；可用模型依帳號、專案與當日政策確認。出現模型不存在或 404 時，查 https://ai.google.dev/gemini-api/docs/models 換成目前可用的 Flash 模型並告訴我。回 429 或 503 時等 2 秒重試一次，還是失敗就請客人傳「人工」），只能依照 D1 裡最新的 FAQ 回答；FAQ 沒有的內容，回覆請客人傳「人工」。客人想預約時，引導他點選單的「瀏覽商品」。Gemini 永遠不能建立、修改或取消訂單。
+   AI 回答使用結構化 status（answered / unknown）；程式另設 error 狀態。僅經格式驗證的 unknown 寫入問題紀錄；429、503、逾時、無效 JSON 等是 error，記不含個資與憑證的技術錯誤摘要，不算 FAQ 缺漏。不可只比對回覆字串。
 
-【真人接手模式】
-- 在 D1 建立「客人狀態」資料表：LINE userId、是否使用 AI 回答、真人接手到期時間、最後一則訊息時間。
+【FAQ 存放】
+- 在 D1 建立「設定」資料表存放 FAQ 全文與最後修改時間；第一次建立資料表時，寫入上面的 FAQ 初始內容。
+- Gemini 每次回答前都讀 D1 裡最新的 FAQ，不要把 FAQ 寫死在程式碼裡；我在後台改完儲存，下一則訊息就生效，不需要重新部署。
+- 儲存時拒絕空白內容，長度上限 20,000 字；同時保留上一版，讓我改錯時可以一鍵還原。
+
+【AI 開關與真人接手】
+- 在 D1 建立「客人」資料表：LINE userId、LINE 顯示名稱、AI 自動回覆（開／關，新客人預設開）、真人接手到期時間、第一次與最後一則訊息時間。
+- 任何客人傳來的訊息（包含按選單）都要寫入或更新這張表，讓後台看得到所有跟官方帳號說過話的人。顯示名稱用 LINE 取得個人資料的 API 抓；抓不到時先顯示 userId，不能因此讓訊息處理失敗。
+- 「AI 自動回覆」由我在後台手動開關，是永久設定；關閉後這位客人的一般訊息都不回應，直到我手動打開。預約指令和「瀏覽商品」不受影響。
 - 真人接手時間：從客人最後一則訊息起算 30 分鐘；客人在這段時間內再傳訊息，就重新起算。
-- 時間到了自動恢復由 AI 回答。
+- 每則有效的新訊息都先更新最後訊息時間；若仍在真人接手期間，連預約指令也會延長到期時間，再依分流規則處理。重送的舊事件不得延長。
+- 到期後下一則訊息可恢復 AI；不需背景排程。永久「不使用 AI 回答」不受 30 分鐘到期影響；手動結束真人接手也不得擅自解除永久設定。
+
+【訂單與庫存一致性】
+- 以 webhookEventId 建立唯一約束；同一事件重送不得新增第二筆訂單、再扣庫存或重複通知。
+- 訂單新增、條件扣庫存及事件處理紀錄必須在 D1 支援的同一原子操作中完成；不得先 SELECT 庫存後分開 INSERT / UPDATE。失敗要整筆回滾，庫存不能小於 0；UPDATE 影響 0 筆也必須視為下單失敗，不能留下訂單。
+- 商品名稱在本 MVP 必須唯一，禁止使用【】；不接受模糊比對。舊卡片的名稱已修改或商品已刪除時，請客人重開選單。
+- 刪除訂單與庫存回補為同一原子操作；重複刪除同一訂單只回補一次。付款狀態切換不得改變庫存。
+- 訂單成立與通知送達分開記錄。通知失敗保留訂單並讓後台顯示待處理，不得重建訂單；不能因 API 成功就宣稱手機已讀。
+- 本地測試至少涵蓋：事件重送、兩人搶最後一份、下單中途失敗回滾、重複刪除、下架／過期拒絕下單、重複人工不通知及永久停 AI、AI 關閉的客人傳一般問題時不回應也不呼叫 Gemini、後台改 FAQ 後下一則訊息就用新內容回答。先讓測試通過再部署。
 
 【開發實作要求】
 1. Webhook 接收 LINE 訊息與 Rich Menu 點擊事件：
@@ -450,17 +467,18 @@ ${myFaq || '[請回前步驟貼上第一天確認好的 FAQ]'}
      * 客戶確認通知：使用該筆 Webhook event 的 replyToken 即時回覆下單成功確認訊息（或推播至客戶 source.userId）。
      * 管理員推播通知：使用 LINE Messaging API Push Message (POST https://api.line.me/v2/bot/message/push)，將新訂單推播至上述設定的 Admin LINE UID，即時通知管理員。
 2. 建立後台管理介面：
-   - 【後台密碼】後台網址是公開的，一定要先登入才能看。請隨機產生一組 12 碼密碼，用 npx wrangler secret put ADMIN_PASSWORD 設定，部署完告訴我。後台頁面和後台用的 API 都要檢查密碼，沒登入的人不能看到或修改任何資料。
+   - 【後台密碼】後台網址是公開的，一定要先登入才能看。密碼不可放前端、網址查詢參數或日誌；登入使用 HttpOnly、Secure、SameSite cookie，限制猜密碼次數。修改資料的 API 要驗證登入與來源，避免跨站請求。請準備 ADMIN_PASSWORD 的本機互動輸入步驟，讓我自行輸入至少 12 碼的密碼，再以 wrangler secret put 設定；不要在對話、日誌或畫面回顯密碼。後台頁面和後台用的 API 都要檢查密碼，沒登入的人不能看到或修改任何資料。
    - 【商品管理】：完整的商品管理，依照前面的欄位定義。
    - 【訂單管理】：檢視訂單列表，提供切換「已付款 / 未付款」按鈕，以及「刪除訂單」按鈕。
    - 當管理員點擊「刪除訂單」時，系統必須自動釋放庫存，將對應的商品庫存加回去！
-   - 【客人狀態】：列出目前在真人接手中的客人，可以手動「結束真人接手」，也可以設定某位客人「不使用 AI 回答」。
+   - 【客人管理】：列出所有傳過訊息的客人（顯示名稱、最後訊息時間），依最後訊息時間排序，可用名稱搜尋。每位客人一個「AI 自動回覆」開關，切換後下一則訊息就生效；真人接手中的客人要標示出來，並提供「結束真人接手」按鈕。
+   - 【FAQ 管理】：用一個大的文字框（全寬、至少 20 行）顯示目前的 FAQ 全文，讓我直接修改後按「儲存」；顯示最後修改時間，提供「還原上一版」按鈕。
    - 【問題紀錄】：列出 Gemini 答不出來的問題與時間，讓管理員知道 FAQ 該補充什麼。
 
 【部署步驟】
 3. 先在本機建立資料表、用 npm run dev 測試，給我本地後台網址讓我試新增商品。
 4. 我確認後，建立雲端 D1、建立資料表，用 npx wrangler secret put 設定所有憑證和 ADMIN_PASSWORD。
-5. 部署，完成後告訴我：Worker 網址、後台網址與密碼、要貼到 LINE Developers 的 Webhook URL（Worker 網址/webhook/line）。
+5. 部署，完成後告訴我：Worker 網址、後台網址、密碼的自行設定方式、要貼到 LINE Developers 的 Webhook URL（Worker 網址/webhook/line）。
 
 【遇到錯誤時】
 先用白話說明發生什麼事，再告訴我你打算怎麼修，一次只修一個問題，不要整個專案重寫。`;
@@ -481,7 +499,7 @@ Clean typography, high-end editorial look, flat design, no gradients, profession
       // Copy to Clipboard with Visual Feedback
       window.copyToClipboard = function (id) {
         const el = document.getElementById(id);
-        if (!el) return;
+        if (!el || !window.courseValidateCopy(id)) return;
         el.select();
         el.setSelectionRange(0, 99999);
         try {
@@ -498,7 +516,7 @@ Clean typography, high-end editorial look, flat design, no gradients, profession
                 btn.style.color = '';
               }, 1500);
             }
-          });
+          }).catch(() => alert('複製失敗，請手動選取複製！'));
         } catch (err) {
           alert('複製失敗，請手動選取複製！');
         }
@@ -516,11 +534,13 @@ Clean typography, high-end editorial look, flat design, no gradients, profession
       window.updateProgress = function () {
         const all = document.querySelectorAll('.checklist input[type="checkbox"]');
         const checked = document.querySelectorAll('.checklist input[type="checkbox"]:checked');
-        document.getElementById('progressText').textContent = `${checked.length} / ${all.length} 完成`;
+        document.getElementById('progressText').textContent = `${checked.length} / ${all.length} 自我檢查`;
         const state = {};
         all.forEach(cb => { state[cb.id] = cb.checked; });
         try { localStorage.setItem('vibe-course-progress', JSON.stringify(state)); } catch (e) { }
       };
+
+      window.refreshCourseOutputs = updateDynamicOutputs;
 
       // Restore state
       restoreAllInputs();

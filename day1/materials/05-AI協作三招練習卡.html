@@ -1,0 +1,201 @@
+<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>AI 協作三招練習卡</title><style>*{box-sizing:border-box}body{margin:0;background:#fbf8f4;color:#342d34;font:17px/1.8 system-ui,'Microsoft JhengHei',sans-serif}main{max-width:1100px;margin:auto;padding:32px 24px 80px}h1{font-size:32px;line-height:1.4;color:#64485e}h2{font-size:24px;margin:36px 0 14px;color:#64485e}h3{font-size:20px}a{color:#64485e}nav{display:flex;gap:12px;flex-wrap:wrap}button,nav a{font:inherit;padding:8px 16px;border:1px solid #d8c9d2;border-radius:8px;background:white;color:#64485e;text-decoration:none;cursor:pointer}.table-wrap{overflow-x:auto;margin:18px 0}table{width:100%;border-collapse:collapse;background:white;font-size:15px}th,td{border:1px solid #d8cfd2;padding:10px 12px;text-align:left;vertical-align:top}th{background:#efe4e9}td:empty{min-width:90px}blockquote{border-left:4px solid #866e80;padding:8px 18px;margin:20px 0;background:#f0e9e8}pre{white-space:pre-wrap;overflow-wrap:anywhere;padding:18px;background:#efeae4;font-size:14px}code{overflow-wrap:anywhere}li{margin:6px 0}img{max-width:100%}@media(max-width:700px){main{padding:22px 16px}table{min-width:700px}h1{font-size:27px}}@media print{@page{size:A4;margin:15mm}body{background:white;font-size:10pt}main{padding:0;max-width:none}nav{display:none}h1{font-size:20pt}h2{font-size:15pt;break-after:avoid}h3{break-after:avoid}table{min-width:0;font-size:9pt}th,td{padding:6px}tr{break-inside:avoid}.table-wrap{overflow:visible}a{color:black}pre{font-size:9pt}}</style></head><body><main><nav><a href="../../course/index.html">回教材入口</a><button onclick="window.print()">列印這份教材</button></nav><h1>AI 協作三招練習卡</h1>
+<blockquote>
+<p>把 AI 當成一位<strong>很聰明、但第一天來上班的新同事</strong>。
+它什麼都會一點，但不知道你公司的狀況。你交代得越清楚，它做得越好。</p>
+</blockquote>
+<p>今天練三招：</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>招式</th>
+<th>一句話記住</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>第一招：交代清楚</td>
+<td>告訴它「你是誰、要做什麼、做成什麼樣子、不能做什麼」</td>
+</tr>
+<tr>
+<td>第二招：來回修改</td>
+<td>第一次的答案只是草稿，不滿意就直接說</td>
+</tr>
+<tr>
+<td>第三招：檢查它的錯</td>
+<td>AI 會算錯、會亂編，交出去之前一定要看過</td>
+</tr>
+</tbody></table></div>
+<p>本練習使用的都是<strong>虛構資料</strong>。平常工作時，不要把客人的個資或公司機密貼給 AI。</p>
+<hr>
+<h2>情境</h2>
+<p>你是公司的行政人員。主管在 <strong>11 月 3 日（星期二）早上</strong>，用 LINE 傳了這段訊息給你：</p>
+<pre><code>下禮拜五下午兩點要辦客戶說明會
+大概30個人
+報名表、通知客戶、簽到表這些幫我弄一下
+地點我再跟你說
+客戶名單在業務那邊
+</code></pre>
+<hr>
+<h2>第一招：交代清楚</h2>
+<h3>練習 1-1：先「隨便問」</h3>
+<p>把下面這句話貼給 ChatGPT：</p>
+<pre><code>幫我整理主管交代的事情
+</code></pre>
+<p>看看它回答什麼。是不是有點空泛？因為它根本不知道主管交代了什麼。</p>
+<h3>練習 1-2：再「交代清楚」</h3>
+<p>按左上角的「新對話」，把下面整段貼上：</p>
+<pre><code>【你的角色】
+你是一位細心的行政助理。
+
+【背景】
+主管在 11 月 3 日（星期二）傳來這段訊息：
+下禮拜五下午兩點要辦客戶說明會，大概30個人，
+報名表、通知客戶、簽到表這些幫我弄一下，
+地點我再跟你說，客戶名單在業務那邊。
+
+【請你完成】
+1. 一份活動籌備待辦清單（事項、負責人、期限、目前狀態）
+2. 一封給客戶的活動通知草稿
+3. 一份簽到表的欄位設計
+
+【限制】
+- 不知道的資訊請寫「待確認」，不要自己編造
+- 最後列出我需要問主管的問題
+</code></pre>
+<h3>想一想</h3>
+<ul>
+<li><input disabled="" type="checkbox"> 兩次的回答，哪一個比較能直接拿去用？</li>
+<li><input disabled="" type="checkbox"> 通知草稿裡的「地點」寫了什麼？AI 有沒有自己編一個地址？</li>
+<li><input disabled="" type="checkbox"> AI 說活動是幾月幾號？打開手機日曆對照看看。「下禮拜五」到底是哪一天，你確定嗎？</li>
+</ul>
+<blockquote>
+<p>💡 <strong>交代清楚的四個格子：角色、背景、任務、限制。</strong>
+會用 AI 作圖的同學，是不是發現和寫作圖提示詞很像？</p>
+</blockquote>
+<hr>
+<h2>第二招：來回修改</h2>
+<p>接著在<strong>同一個對話</strong>裡繼續打字，不用重開。</p>
+<h3>練習 2-1：改語氣</h3>
+<pre><code>客戶通知太正式了，我們的客戶大多是老客戶，
+請改成親切一點、像在 LINE 上傳訊息的口吻，100 字以內。
+</code></pre>
+<h3>練習 2-2：讓 AI 反過來問你</h3>
+<pre><code>在你幫我寫正式的報名表之前，
+請先問我 3 個你需要知道的問題，一次問一題。
+</code></pre>
+<p>照實回答它的問題。不知道的就說「還不知道」，看看它怎麼處理。</p>
+<h3>想一想</h3>
+<ul>
+<li><input disabled="" type="checkbox"> 你不用重新解釋一次背景，AI 就記得前面在聊什麼了，對嗎？</li>
+<li><input disabled="" type="checkbox"> 讓 AI 先問問題，和你自己想要交代什麼，哪一種比較輕鬆？</li>
+</ul>
+<blockquote>
+<p>💡 <strong>不滿意就直接說哪裡不好。</strong>「再好一點」沒有用，「太長了，改成 100 字」才有用。</p>
+</blockquote>
+<hr>
+<h2>第三招：檢查它的錯</h2>
+<h3>練習 3：主管改條件了</h3>
+<p>主管又傳來訊息：</p>
+<pre><code>客戶反應很好，人數改50人
+預算一樣，總共15000，你看怎麼辦
+</code></pre>
+<p>原本 30 人的預算如下：</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>項目</th>
+<th>單價</th>
+<th>計算方式</th>
+<th>30 人小計</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>場地租借（最多容納 40 人）</td>
+<td>4,000</td>
+<td>固定</td>
+<td>4,000</td>
+</tr>
+<tr>
+<td>午餐便當</td>
+<td>120</td>
+<td>每人</td>
+<td>3,600</td>
+</tr>
+<tr>
+<td>飲料</td>
+<td>30</td>
+<td>每人</td>
+<td>900</td>
+</tr>
+<tr>
+<td>講義印刷</td>
+<td>25</td>
+<td>每人</td>
+<td>750</td>
+</tr>
+<tr>
+<td>伴手禮</td>
+<td>100</td>
+<td>每人</td>
+<td>3,000</td>
+</tr>
+<tr>
+<td>雜支（名牌、文具）</td>
+<td>1,000</td>
+<td>固定</td>
+<td>1,000</td>
+</tr>
+<tr>
+<td><strong>合計</strong></td>
+<td></td>
+<td></td>
+<td><strong>13,250</strong></td>
+</tr>
+</tbody></table></div>
+<p>補充：可容納 60 人的場地，租金是 6,000 元。</p>
+<p>把下面這段連同上面的表格一起貼給 ChatGPT：</p>
+<pre><code>【背景】
+說明會人數從 30 人改為 50 人，總預算上限 15,000 元。
+原本的預算表如下：（貼上表格）
+補充：原場地最多 40 人；可容納 60 人的場地租金 6,000 元。
+
+【請你完成】
+1. 50 人版本的預算表，標出超支多少
+2. 2～3 個刪減方案，每個方案寫出省多少錢、對活動的影響
+3. Excel 公式：小計、合計、和預算的差額
+4. 一段 150 字以內、給主管的預算說明
+
+【限制】
+- 只能使用我提供的價格，不要自己編造市價
+- 資訊不足的地方，列出要問主管的問題
+</code></pre>
+<h3>自己驗算</h3>
+<ul>
+<li><input disabled="" type="checkbox"> AI 算出來的 50 人總額是多少？＿＿＿＿＿ 元</li>
+<li><input disabled="" type="checkbox"> 用計算機或 Excel 自己算一次：＿＿＿＿＿ 元</li>
+<li><input disabled="" type="checkbox"> 兩個數字一樣嗎？如果不一樣，是誰錯了？錯在哪裡？</li>
+<li><input disabled="" type="checkbox"> AI 有沒有注意到「場地只能坐 40 人」？</li>
+</ul>
+<blockquote>
+<p>💡 <strong>AI 負責想方案，Excel 負責算數字，你負責做決定。</strong>
+要交給主管或客人的東西，一定要自己看過一遍。</p>
+</blockquote>
+<hr>
+<h2>加分題（有時間再做）</h2>
+<p>請 ChatGPT 幫說明會做一張邀請圖：</p>
+<pre><code>幫我做一張客戶說明會的邀請圖，
+風格簡潔專業，主色是深藍色，
+上面要有：「客戶說明會」、日期待公布、下午 2:00。
+地點也寫「地點待公布」。
+</code></pre>
+<p>做完檢查一下：**圖上的字跟你交代的一模一樣嗎？有沒有多出你沒說的日期或地址？**AI 作圖時也常把文字寫錯，或自己補上內容。</p>
+<hr>
+<h2>今天帶走的小卡</h2>
+<pre><code>┌──────────────────────────────────┐
+│  AI 協作三招                      │
+│                                  │
+│  ① 交代清楚：角色、背景、任務、限制 │
+│  ② 來回修改：不滿意就直接說哪裡不好 │
+│  ③ 檢查錯誤：數字要驗算，事實要核對 │
+└──────────────────────────────────┘
+</code></pre>
+</main></body></html>

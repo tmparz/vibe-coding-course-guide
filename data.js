@@ -59,7 +59,7 @@ const STAGES = [
         body: '請在課程開始前確認以下設備與帳號都已備妥，尤其是 Gmail 帳號，少了它會卡在第一關！',
         checklist: [
           '✅ 攜帶筆電與充電線',
-          '✅ 確認自己有 Gmail 帳號，且能正常登入（Cloudflare 必須用 Gmail 快速登入）',
+          '✅ 確認自己有 Gmail 帳號，且能正常登入（課程建議用同一個 Gmail 管理帳號）',
           '✅ ChatGPT Plus 仍在訂閱中，Codex 可以正常登入',
           '✅ 手機已安裝並登入 LINE'
         ],
@@ -116,7 +116,7 @@ const STAGES = [
       {
         title: 'Ch2 - LINE 生態系統建置',
         image: '01_LINE三把鑰匙.png',
-        body: '<div class="antifraud-notice">✅ <strong>第一天已完成這一步</strong>：用同一台電腦開啟本頁，下方欄位會自動帶入第一天填的資料。換電腦的同學，請依步驟重新取得並填寫。</div><br>' +
+        body: '<div class="antifraud-notice">✅ <strong>第一天已完成這一步</strong>：用同一瀏覽器設定檔、同一網站網址開啟本頁，下方欄位會自動帶入第一天填的資料。換電腦的同學，請依步驟重新取得並填寫。</div><br>' +
           '依照以下步驟完成 LINE 官方帳號與開發者後台設定，並填寫下方憑證資訊。<br><br>' +
           '<div class="antifraud-notice">📣 <strong>防呆提示</strong>：進行到每個步驟時，講師或小幫手會同步將直達連結發送到 LINE 群組。請用 Chrome 開啟，避免使用 LINE 內建瀏覽器（可能有權限問題）。</div><br>' +
           '<strong>Step 1：建立 LINE 官方帳號 (LINE OA)</strong><br>' +
@@ -141,7 +141,7 @@ const STAGES = [
           '已取得管理員 LINE UID (Your user ID)'
         ],
         result: '成果：取得 Channel ID、Channel Secret、Access Token 與管理員 LINE UID',
-        tip: '💡 <strong>為什麼要拿這三把「鑰匙」？</strong><br>把 LINE OA 想像成你的自動化店面：<br>1. <strong>Channel Secret</strong> 是「門禁密碼」（確認訊息真的來自 LINE，不是假冒攻擊）<br>2. <strong>Access Token</strong> 是「萬能發話遙控器」（讓 Worker 系統可以主動發訊息給客人）<br>3. <strong>Your user ID</strong> 是「老闆專屬信箱」（有客人下單時，系統推播通知給哪一位管理員）<br>等等我們把這三把鑰匙交給 AI，整套自動化銷售與推播系統就能完美運作！',
+        tip: '💡 <strong>這三項 LINE 資料有什麼用？</strong><br>把 LINE OA 想像成你的自動化店面：<br>1. <strong>Channel Secret</strong> 是「門禁密碼」（確認訊息真的來自 LINE，不是假冒攻擊）<br>2. <strong>Access Token</strong> 是「萬能發話遙控器」（讓 Worker 系統可以主動發訊息給客人）<br>3. <strong>Your user ID</strong> 是「老闆專屬信箱」（有客人下單時，系統推播通知給哪一位管理員）<br>User ID 是收件人識別碼，不是密碼。要保密並在最後更換的是 Channel Secret、Access Token 和 Gemini API Key；仍須手機驗收才能確認系統運作。',
         worksheet: {
           title: 'LINE 帳號資訊記錄 (填寫後可在下方直接複製)',
           hasCopyOutput: true,
@@ -156,9 +156,9 @@ const STAGES = [
       },
       {
         title: '第一天的 FAQ 與 Gemini 鑰匙',
-        body: '今天的系統會<strong>保留第一天的 AI FAQ</strong>：客人一般的問題，照樣由 Gemini 根據你的 FAQ 回答。同一台電腦會自動帶入，換電腦的同學請到第一天頁面的「我的 FAQ」分頁複製，或重新貼上。',
+        body: '今天的系統會<strong>保留第一天的 AI FAQ</strong>：客人一般的問題，照樣由 Gemini 根據你的 FAQ 回答。同一瀏覽器設定檔、同一網站網址會自動帶入，換電腦的同學請到第一天頁面的「我的 FAQ」分頁複製，或重新貼上。',
         worksheet: {
-          title: '第一天資料（同一台電腦會自動帶入）',
+          title: '第一天資料（同一瀏覽器設定檔、同一網站網址會自動帶入）',
           fields: [
             { id: 'gemini_api_key', label: 'Gemini API Key', type: 'text', hint: '第一天在 Google AI Studio 建立的金鑰' },
             { id: 'my_faq', label: '我的 FAQ', type: 'textarea', hint: '第一天確認好的 FAQ' }
@@ -181,16 +181,17 @@ const STAGES = [
       },
       {
         title: '訊息分流規則：誰送的字，走哪條路',
-        body: '按鈕送出的文字有<strong>固定格式</strong>（例如「👉 我要預約【頭部芳香放鬆】」），客人自己打字幾乎不可能剛好打出這個格式。所以系統比對的是「格式」，不是「預約」兩個字。<br><br>' +
+        body: '按鈕送出的文字有<strong>固定格式</strong>（例如「👉 我要預約【頭部芳香放鬆】」），手動打出相同完整格式也會觸發下單；固定格式不是身分驗證。所以系統比對的是「格式」，不是「預約」兩個字。<br><br>' +
           '<div class="glossary-table"><table><thead><tr><th>順序</th><th>收到的文字</th><th>處理方式</th><th>真人接手中也處理？</th></tr></thead><tbody>' +
           '<tr><td>1</td><td>開頭是「👉 我要預約【」</td><td>建立預約、通知管理員</td><td>✅ 照常</td></tr>' +
           '<tr><td>2</td><td>「瀏覽商品」</td><td>回傳商品輪播</td><td>✅ 照常</td></tr>' +
           '<tr><td>3</td><td>「聯絡客服」或「人工」</td><td>進入真人接手模式、通知管理員</td><td>只延長時間</td></tr>' +
-          '<tr><td>4</td><td>這位客人在真人接手中</td><td>不回應，留給真人</td><td></td></tr>' +
-          '<tr><td>5</td><td>其他文字</td><td>AI 依第一天的 FAQ 回答</td><td></td></tr>' +
-          '</tbody></table></div>',
+          '<tr><td>4</td><td>這位客人在後台被關掉 AI，或在真人接手中</td><td>不回應，留給你在 OA 聊天室一對一回覆</td><td></td></tr>' +
+          '<tr><td>5</td><td>其他文字</td><td>AI 依後台裡最新的 FAQ 回答</td><td></td></tr>' +
+          '</tbody></table></div>' +
+          '<br><strong>兩種「AI 先別回」的差別：</strong>按「聯絡客服」是<strong>暫時</strong>的，客人 30 分鐘沒說話就恢復 AI；在後台把某位客人的「AI 自動回覆」關掉是<strong>永久</strong>的，要你自己再打開。',
         tip: '💡 <strong>會改動資料的事交給固定規則，回答問題交給 AI。</strong>客人打「我上次預約的是幾點？」，如果讓 AI 判斷要不要建立預約，它偶爾會判斷錯。所以 AI 永遠不能建立、修改或取消預約。',
-        checklist: ['說得出「我要預約」和「👉 我要預約【…】」為什麼走不同的路', '知道真人接手時，按鈕預約仍然會被處理']
+        checklist: ['說得出「我要預約」和「👉 我要預約【…】」為什麼走不同的路', '知道真人接手時，按鈕預約仍然會被處理', '知道想跟某位客人一對一聊天時，要先在後台關掉他的 AI']
       },
       {
         title: 'Ch4 - Cloudflare 環境建置',
@@ -333,7 +334,7 @@ const STAGES = [
       },
       {
         title: 'Step 9 - 建立 Rich Menu',
-        body: '<strong>Step 1：</strong>複製下方的產圖提示詞，貼到 <strong>ChatGPT</strong> 產生選單底圖，下載圖片。<br><br>' +
+        body: '產圖或改尺寸超過 10 分鐘，先用<a href="assets/rich-menu-backup.jpg" download>備用選單圖（2500×843 JPG）</a>繼續串接；圖文內容可於課後調整。<br><br><strong>Step 1：</strong>複製下方的產圖提示詞，貼到 <strong>ChatGPT</strong> 產生選單底圖，下載圖片。<br><br>' +
           '<strong>Step 2：</strong>LINE 規定選單圖片的尺寸是固定的。把圖片交給 Codex，說：「<strong>請把這張圖轉成 2500×843 的 JPG，檔案小於 1MB，左右兩格的文字要完整保留</strong>」。<br><br>' +
           '<strong>Step 3：</strong>OA Manager &rarr; 圖文選單 &rarr; 建立 &rarr; 版型選「<strong>小型、左右兩格</strong>」&rarr; 上傳 Codex 轉好的圖片。<br><br>' +
           '<strong>Step 4：</strong>左邊格子的動作選「<strong>文字</strong>」，內容填「瀏覽商品」；右邊選「<strong>文字</strong>」，填「聯絡客服」。<br><br>' +
@@ -364,7 +365,7 @@ const STAGES = [
     steps: [
       {
         title: '功能驗收清單',
-        body: '請逐一測試以下功能並打勾確認',
+        body: '請逐一實測，並在<a href="course/課堂驗收與交接.html">驗收與交接表</a>填實際結果；頁面勾選只代表自我檢查。',
         checklist: [
           '商品新增成功',
           '商品顯示成功',
@@ -375,31 +376,36 @@ const STAGES = [
           '管理員即時收到下單推播',
           '客戶即時收到確認通知',
           '自己打「我要預約」：AI 引導點選單，沒有建立訂單',
-          '問一題 FAQ：AI 依第一天的 FAQ 回答',
+          '問一題 FAQ：AI 依後台的 FAQ 回答',
+          '後台 FAQ 頁看得到第一天的 FAQ；改一句存檔後，不用重新部署，下一題就照新內容回答',
           '按「聯絡客服」後再傳訊息：機器人不回應，管理員收到通知',
           '真人接手中按預約按鈕：仍然建立訂單',
           '把一個商品庫存改成 0 再按預約：回覆無法預約，沒有建立訂單',
           '沒輸入密碼打不開後台；輸入 Codex 給的密碼才看得到',
-          '後台看得到真人接手中的客人，可以手動結束',
-          '後台看得到 AI 答不出來的問題'
+          '後台看得到所有傳過訊息的客人，真人接手中的可以手動結束',
+          '後台把自己的「AI 自動回覆」關掉，再傳一般問題：機器人不回，在 OA Manager 聊天室可以直接回覆；打開後 AI 恢復回答',
+          '後台看得到 FAQ 缺漏問題；API 暫時失敗不誤記為 FAQ 缺漏',
+          '重複按人工不再通知；永久停用 AI 不因 30 分鐘到期而恢復',
+          '老師已確認事件重送、最後一份庫存競爭與重複刪單測試'
         ],
-        result: '全部通過 = MVP 完成 🚀'
+        result: '填妥驗收結果、換完憑證且複測通過，才標記本次課堂 MVP 完成'
       },
       {
         title: '🔑 最後一步：換一把新鑰匙',
-        body: '這兩天你把鑰匙貼給了 AI，讓它幫你把系統接起來。現在你已經知道每一把鑰匙在管什麼了，最後一步是<strong>把它們換掉</strong>，讓舊的鑰匙失效。<br><br>' +
-          '<strong>Step 1：</strong>LINE Developers &rarr; Messaging API &rarr; Channel access token &rarr; <strong>Reissue</strong>，取得新的 Token。<br><br>' +
-          '<strong>Step 2：</strong>Google AI Studio &rarr; 建立一把新的 API Key，<strong>刪除舊的</strong>。<br><br>' +
-          '<strong>Step 3：</strong>到 Cloudflare 後台 &rarr; Workers &rarr; 你的 Worker &rarr; 設定 &rarr; 變數和秘密，把兩把新鑰匙貼上取代舊的。<br><br>' +
-          '<strong>Step 4：</strong>用手機再測一次 FAQ 和預約，確認系統正常。<br><br>' +
-          '第一天的 Worker 已經沒有在用了（Webhook 換到今天的網址），可以請 Codex 執行 <code>npx wrangler delete line-ai-faq</code> 把它刪掉。',
+        body: '這兩天貼給 AI 的三個憑證都要處理：<strong>Channel Secret、LINE Access Token、Gemini API Key</strong>。Channel ID 和 User ID 是識別碼，不需更換。<br><br>' +
+          '<strong>1. 先準備：</strong>記下目前 Worker、Webhook 與三個 secret 的名稱；選短暫可停機的時間，開好 LINE、AI Studio、Cloudflare 設定頁。新值由你自行輸入，不再貼進 AI 對話或教材。<br><br>' +
+          '<strong>2. Channel Secret：</strong>LINE Developers → Basic settings → Channel secret → Issue。舊值會立即失效，隨即更新目前 Worker 對應的 secret。<br><br>' +
+          '<strong>3. Access Token：</strong>Messaging API → Channel access token → Reissue；依畫面確認舊 Token 失效時間，更新 Worker。<br><br>' +
+          '<strong>4. Gemini：</strong>建立新 API Key → 更新 Worker → 測一題 FAQ → 刪除舊 Key。新 Key 不會重置同一專案的額度。<br><br>' +
+          '<strong>5. 驗收：</strong>Webhook Verify、手機 FAQ、一次預約及雙向通知都要重測。還需本機開發時，自行更新 .dev.vars；不再用的本機副本移除舊憑證。<br><br>' +
+          '<strong>6. 清理與交接：</strong>按頁面上方「清除本機教材中的三個憑證」，另複製一段一般文字覆蓋剪貼簿。保存 FAQ、程式與網址；完成<a href="course/課堂驗收與交接.html">驗收與交接表</a>。第一天的 Worker 先記錄停用，確認沒有用途後再自行決定是否刪除。',
         checklist: [
-          'LINE Access Token 已重新發行',
+          'Channel Secret 與 LINE Access Token 已重新發行，Worker 已更新',
           'Gemini 舊金鑰已刪除，新金鑰已建立',
-          'Cloudflare 上的鑰匙已更新',
+          '三個憑證在 Cloudflare 已更新，本機教材欄位已清除',
           '手機測試正常'
         ],
-        tip: '💡 <strong>為什麼要換？</strong>鑰匙貼給 AI 之後，會留在對話紀錄裡。換掉以後，就算舊的對話被別人看到，也拿不到你的帳號權限。以後正式經營，鑰匙只放在 Cloudflare 的「秘密」裡，不再貼給任何人。'
+        tip: '💡 <strong>為什麼要換？</strong>鑰匙貼給 AI 之後，會留在對話紀錄裡。換掉以後，就算舊的對話被別人看到，也拿不到你的帳號權限。新鑰匙由你在 Cloudflare secrets 或本機開發設定自行輸入。清除教材欄位不會清除 AI 對話，真正使舊憑證失效仍要靠重新發行與撤銷。'
       },
       {
         title: '備援方案',
@@ -409,7 +415,7 @@ const STAGES = [
           '卡超過 10 分鐘，老師接手一起排錯',
           '時間真的不夠：先用老師的示範官方帳號體驗完整流程，課後老師再協助完成'
         ],
-        result: '確保每位學員都能帶走可運作的系統'
+        result: '完成手機驗收才標示可運作；未完成者記錄卡點、下一步與預約補課時間（由老師確認），不把體驗示範帳號當成個人專案完成'
       },
       {
         title: '🚀 MVP 之後，然後呢？',

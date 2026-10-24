@@ -1,0 +1,41 @@
+<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>DAY 1｜延伸練習（選修）｜學員練習指南</title><style>*{box-sizing:border-box}body{margin:0;background:#fbf8f4;color:#342d34;font:17px/1.8 system-ui,'Microsoft JhengHei',sans-serif}main{max-width:1100px;margin:auto;padding:32px 24px 80px}h1{font-size:32px;line-height:1.4;color:#64485e}h2{font-size:24px;margin:36px 0 14px;color:#64485e}h3{font-size:20px}a{color:#64485e}nav{display:flex;gap:12px;flex-wrap:wrap}button,nav a{font:inherit;padding:8px 16px;border:1px solid #d8c9d2;border-radius:8px;background:white;color:#64485e;text-decoration:none;cursor:pointer}.table-wrap{overflow-x:auto;margin:18px 0}table{width:100%;border-collapse:collapse;background:white;font-size:15px}th,td{border:1px solid #d8cfd2;padding:10px 12px;text-align:left;vertical-align:top}th{background:#efe4e9}td:empty{min-width:90px}blockquote{border-left:4px solid #866e80;padding:8px 18px;margin:20px 0;background:#f0e9e8}pre{white-space:pre-wrap;overflow-wrap:anywhere;padding:18px;background:#efeae4;font-size:14px}code{overflow-wrap:anywhere}li{margin:6px 0}img{max-width:100%}@media(max-width:700px){main{padding:22px 16px}table{min-width:700px}h1{font-size:27px}}@media print{@page{size:A4;margin:15mm}body{background:white;font-size:10pt}main{padding:0;max-width:none}nav{display:none}h1{font-size:20pt}h2{font-size:15pt;break-after:avoid}h3{break-after:avoid}table{min-width:0;font-size:9pt}th,td{padding:6px}tr{break-inside:avoid}.table-wrap{overflow:visible}a{color:black}pre{font-size:9pt}}</style></head><body><main><nav><a href="../../course/index.html">回教材入口</a><button onclick="window.print()">列印這份教材</button></nav><h1>DAY 1｜延伸練習（選修）｜學員練習指南</h1>
+<blockquote>
+<p>課堂主線請用《05-AI協作三招練習卡》。這份是給<strong>提早完成、或課後想多練習</strong>的同學：三條路線任選一條，用的都是同一套三招（交代清楚、來回修改、檢查錯誤）。</p>
+</blockquote>
+<p>本資料包採 <strong>虛構教學資料</strong>；勿上傳真實顧客個資、財務機密、員工健康資訊與公司內部文件到未經核准的 AI 工具。</p>
+<h2>路線 A：會議整理 → 三種辦公成果</h2>
+<ol>
+<li>開啟《01-會議原始筆記.txt》；先只請 AI「幫我整理」。</li>
+<li>再要求 AI 用繁體中文輸出「會議摘要、待辦表、Email 草稿」，並規定未知項目標示「待確認」。</li>
+<li>比較輸出有沒有虛構年份、負責人、會議決議、寄送狀態。</li>
+<li>請 AI 產出「主管需確認問題」清單，作為你的交付驗收。</li>
+</ol>
+<h2>路線 B：Excel → 公式、分析與查核</h2>
+<ol>
+<li>開啟《02-課程營運數據.csv》，在 Excel 匯入時請使用 UTF-8。</li>
+<li>讓 AI 建議欄位與公式：<strong>實到率 = 實到人數 / 報名人數</strong>；<strong>預估實到收入 = 實到人數 × 每人收費</strong>。報名人數為零的課程要避免除以零。</li>
+<li>辨認「預估實到收入」與「實際已收款」不同：已收款需由財務原始紀錄確認。</li>
+<li>檢查哪些課程實到率低於 80%、哪些資料需要人工追蹤。建議用 Excel 自己重算，而非只信 AI。</li>
+<li>參考公式（假設資料從第 2 列開始）：<ul>
+<li>G2：<code>=IF(B2=0,&quot;不適用&quot;,C2/B2)</code>，設定百分比格式；零報名顯示「不適用」，不列為出席不佳。</li>
+<li>H2：<code>=C2*D2</code>，預估實到收入。</li>
+<li>I2：<code>=H2-E2</code>，<strong>預估與已收款差額</strong>（不直接等於應收帳款）。</li>
+</ul>
+</li>
+</ol>
+<h2>路線 C：客服問題 → FAQ＋人工交接</h2>
+<ol>
+<li>開啟《03-客服訊息待整理.txt》。</li>
+<li>讓 AI 將問題分類成：可答覆、需真人確認、需系統查詢。</li>
+<li>生成 FAQ 及可直接複製到 LINE 的回覆草稿；未知資訊一律標示待確認。</li>
+<li>詢問 AI：「如果要真正幫客人改期或查錄取，需要哪些資料及系統授權？」</li>
+<li>整理好的 FAQ，可以拿來和你在「我的 FAQ」分頁做的版本比較。</li>
+</ol>
+<h2>老師驗收</h2>
+<ul>
+<li>學員能指出 AI 的四項辦公能力：摘要、草擬、計算建議、流程規劃。</li>
+<li>每人至少完成 <strong>一份可交付辦公初稿</strong>，並說出人工必須查核的位置。</li>
+<li>分清「AI 幫我寫出回覆」與「系統真的寄信、改期、扣款」。</li>
+</ul>
+<p><strong>注意</strong>：這份文件提供練習目標和公式，不代表 AI 已完成資料修改；任何要對外送出的結果，都需要人工審核。</p>
+</main></body></html>

@@ -1,5 +1,5 @@
 // DAY 1 教材資料：上半場 AI 協作，下半場 LINE 關鍵字機器人（內建關鍵字 → 自己的 AI）
-// 欄位 id 與第二天共用（line_channel_secret 等），同一台電腦第二天會自動帶入
+// 欄位 id 與第二天共用（line_channel_secret 等），同一瀏覽器設定檔、同一網站網址第二天會自動帶入
 
 const FAQ_TEMPLATES = {
   handmade: {
@@ -131,11 +131,11 @@ const STAGES = [
       },
       {
         title: '第二招：來回修改',
-        body: '在<strong>同一個對話</strong>裡繼續打字，不用重開。依序送出下面兩段：',
+        body: '在<strong>同一個對話</strong>裡繼續打字。先送這段，看到改寫結果後，再做下一步。',
         promptBox: {
           id: 'collab_prompt_2',
-          buttonText: '複製第二招提示詞',
-          text: '客戶通知太正式了，我們的客戶大多是老客戶，\n請改成親切一點、像在 LINE 上傳訊息的口吻，100 字以內。\n\n（送出後，再送下面這段）\n\n在你幫我寫正式的報名表之前，\n請先問我 3 個你需要知道的問題，一次問一題。'
+          buttonText: '複製 2-1：修改語氣',
+          text: '客戶通知太正式了，我們的客戶大多是老客戶，\n請改成親切一點、像在 LINE 上傳訊息的口吻，100 字以內。'
         },
         checklist: [
           'AI 記得前面在聊什麼，不用重新解釋背景',
@@ -144,7 +144,12 @@ const STAGES = [
         tip: '💡 <strong>不滿意就直接說哪裡不好。</strong>「再好一點」沒有用，「太長了，改成 100 字」才有用。'
       },
       {
-        title: '第三招：檢查它的錯',
+        title: '第二招 2-2：讓 AI 先問清楚',
+        body: '等上一段回覆完成，再送出這段。每次只回答一題；不知道就說「還不知道」。',
+        promptBox: { id: 'collab_prompt_2_questions', buttonText: '複製 2-2：逐題追問', text: '在你幫我寫正式的報名表之前，請先問我 3 個你需要知道的問題，一次問一題，等我回答後再問下一題。資訊未確認前不要自行補上。' }
+      },
+      {
+        title: '第三招：檢查與驗算',
         body: '主管又傳來：「<strong>客戶反應很好，人數改50人，預算一樣，總共15000，你看怎麼辦</strong>」<br><br>' +
           '<div class="glossary-table"><table><thead><tr><th>項目</th><th>單價</th><th>計算方式</th><th>30 人小計</th></tr></thead><tbody>' +
           '<tr><td>場地租借（最多容納 40 人）</td><td>4,000</td><td>固定</td><td>4,000</td></tr>' +
@@ -166,7 +171,7 @@ const STAGES = [
           'AI 的刪減方案，減完真的低於 15,000 元嗎？',
           '方案裡的價格，是不是都來自上面的表？'
         ],
-        tip: '💡 <strong>AI 負責想方案，Excel 負責算數字，你負責做決定。</strong>',
+        tip: '💡 <strong>AI 負責想方案，Excel 負責算數字，你負責做決定。</strong>若這次 AI 都答對，說明你核對了哪些原始資料，再檢查這個刻意錯誤範例：「50 人租 6,000 元場地，伴手禮改每份 40 元，其他不變，就在 15,000 元內。」不要為了找錯硬改正確答案。',
         extra: '加分題（有時間再做）：請 ChatGPT 做一張說明會邀請圖，上面寫「日期待公布、下午 2:00、地點待公布」。做完檢查圖上的字有沒有寫錯，或多出你沒說的內容。'
       }
     ]
@@ -238,7 +243,7 @@ const STAGES = [
         tip: '💡 <strong>關鍵字自動回覆</strong>只認得你設定的字。客人換個說法，它就聽不懂了。這就是等一下要讓 AI 來幫忙的原因。'
       },
       {
-        title: '開通 Messaging API，取得三把鑰匙',
+        title: '開通 Messaging API，取得 LINE 連線資料',
         image: '../01_LINE三把鑰匙.png',
         body: '關鍵字回覆是 LINE 內建的功能。要讓<strong>我們自己的程式</strong>接收 LINE 訊息，要先開通 Messaging API。<br><br>' +
           '<strong>Step 1：</strong>OA Manager &rarr; 設定 &rarr; Messaging API &rarr; 啟用（第一次會請你建立 Provider，取一個名字就好）。<br><br>' +
@@ -253,7 +258,7 @@ const STAGES = [
           '已取得 Channel Access Token',
           '已取得管理員 UID'
         ],
-        tip: '💡 <strong>三把鑰匙是什麼？</strong><br>1. <strong>Channel Secret</strong> 是「門禁密碼」：確認訊息真的來自 LINE<br>2. <strong>Access Token</strong> 是「發話遙控器」：讓程式可以回覆客人<br>3. <strong>Your user ID</strong> 是「老闆專屬信箱」：有事時通知你<br>等一下我們會把鑰匙交給 AI，讓它幫你把機器人接起來。',
+        tip: '💡 <strong>這三項 LINE 資料是什麼？</strong><br>1. <strong>Channel Secret</strong> 是「門禁密碼」：確認訊息真的來自 LINE<br>2. <strong>Access Token</strong> 是「發話遙控器」：讓程式可以回覆客人<br>3. <strong>Your user ID</strong> 是「老闆專屬信箱」：有事時通知你<br>User ID 是收件人識別碼，不是密碼。真正要保密並在課末更換的是 Channel Secret、Access Token，以及稍後的 Gemini API Key。',
         worksheet: {
           title: 'LINE 帳號資訊記錄（第二天會自動帶入）',
           hasCopyOutput: true,
@@ -409,7 +414,7 @@ const STAGES = [
           '問一個 FAQ 沒有的問題（例如「有優惠嗎？」），機器人請你找真人，沒有亂編',
           '傳「人工」，機器人回覆「真人客服會回覆您」，電腦上 OA Manager 的聊天室也看得到這則訊息'
         ],
-        extra: '⚠️ 連續很快問很多題，可能會收到「請傳人工」：這是 Gemini 免費額度每分鐘的次數限制，不是壞掉。等一分鐘再問就好。',
+        extra: '⚠️ 一直收到「請傳人工」，可能是 FAQ 缺資料，也可能是 API 失敗。請老師查看錯誤：429 要區分每分鐘與每日額度；每日額度不是等一分鐘就恢復。不要連續重送，先記錄問題。',
         result: '🎉 你的 LINE 機器人聽得懂人話了！'
       },
       {
