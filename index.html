@@ -27,8 +27,8 @@
 
   <main class="main-content" id="mainContent"></main>
 
-  <script src="course-tools.js?v=20261024-02"></script>
-  <script src="data.js?v=20261024-04"></script>
+  <script src="course-tools.js?v=20261024-03"></script>
+  <script src="data.js?v=20261024-05"></script>
   <script>
     (function () {
       const nav = document.getElementById('tabNav');
@@ -389,16 +389,11 @@
           credsArea.value = `Channel ID: ${channelId}\nChannel Secret: ${channelSecret}\nAdmin User ID: ${adminUid}\nAccess Token: ${accessToken}`;
         }
 
-        // Step 1 Prompt Box (System Builder)
-        const productFields = document.getElementById('product_fields')?.value || '商品名稱, 價格, 上下架狀態, 上架時間, 下架時間, 剩餘庫存';
-        const orderFields = document.getElementById('order_fields')?.value || '購買人姓名, 商品名稱, 付款狀態';
-        const adminNotify = document.getElementById('admin_notify_tpl')?.value || '[未設定管理員通知範本]';
-        const userNotify = document.getElementById('user_notify_tpl')?.value || '[未設定客戶通知範本]';
-
-        const promptArea = document.getElementById('system_prompt_output');
-        if (promptArea) {
-          promptArea.value = `你是一個專業的 Cloudflare & LINE OA 開發專家。請根據以下設定，使用 Cloudflare Worker + D1 Database 建立一套「LINE OA 銷售系統 MVP」。
-請在新資料夾 line-shop 建立，不要修改第一天的 line-ai-faq。
+        // Step A1 Prompt Box (AI 客服後台)
+        const faqPromptArea = document.getElementById('faq_system_prompt');
+        if (faqPromptArea) {
+          faqPromptArea.value = `你是一個專業的 Cloudflare & LINE OA 開發專家。請使用 Cloudflare Worker + D1 Database 建立一套「LINE AI 客服系統」，把我第一天做的 FAQ 機器人升級成有後台、有記憶的版本。
+請在新資料夾 line-shop 建立，不要修改第一天的 line-ai-faq。下午我會在同一個專案加上商品與預約，所以請把程式分成清楚的檔案（例如 webhook、後台、資料表各自分開），資料表用 migration 檔管理，方便之後擴充。
 我是零基礎學員，請先用三句白話說明你的計畫，再一步一步做，每一步做完用一句白話告訴我結果。
 
 【LINE OA 憑證與管理者設定】
@@ -412,24 +407,13 @@
 - Channel Secret、Access Token 與 Gemini API Key 只能放在本機的 .dev.vars，以及 Cloudflare Worker secrets（wrangler secret put）。
 - 不要把它們寫進任何程式碼、wrangler 設定檔或 README，也不要 commit 到 GitHub。
 
-【系統資料表規格】
-- 商品表 (products) 欄位結構定義: ${productFields}
-- 訂單表 (orders) 欄位結構定義: ${orderFields}
-- 通知範本設定:
-  * 管理員通知內容範本:
-    ${adminNotify}
-  * 客戶通知內容範本:
-    ${userNotify}
-
 【FAQ 初始內容（第一天確認好的；系統建好後存進 D1，之後由我在後台修改）】
 ${myFaq || '[請回前步驟貼上第一天確認好的 FAQ]'}
 
 【訊息分流規則】（收到文字訊息時，由上往下判斷，符合就停止）
-1. 開頭為「👉 我要預約【」：視為預約指令，取出【】內的商品名稱建立訂單。找不到該商品時，回覆「找不到這個項目，請從選單重新選擇」。
-2. 完全等於「瀏覽商品」或「購買」：回傳商品輪播。
-3. 完全等於「聯絡客服」或「人工」：首次進入真人接手模式才回覆「已轉給真人客服，請稍候」並通知管理員；已在接手期間再按，只延長時間，不重複回覆或推播。
-4. 該客人在後台的「AI 自動回覆」是關閉的，或正在真人接手模式中：不回應、不呼叫 Gemini、不寫問題紀錄，讓我在 LINE 官方帳號後台的聊天室跟他一對一聊天。
-5. 其他文字：讀取 D1 裡目前儲存的 FAQ，再呼叫 Gemini（模型用 gemini-3.6-flash；不要照抄舊模型名稱；可用模型依帳號、專案與當日政策確認。出現模型不存在或 404 時，查 https://ai.google.dev/gemini-api/docs/models 換成目前可用的 Flash 模型並告訴我。回 429 或 503 時等 2 秒重試一次，還是失敗就請客人傳「人工」），只能依照 D1 裡最新的 FAQ 回答；FAQ 沒有的內容，回覆請客人傳「人工」。客人想預約時，引導他點選單的「瀏覽商品」。Gemini 永遠不能建立、修改或取消訂單。
+1. 完全等於「聯絡客服」或「人工」：首次進入真人接手模式才回覆「已轉給真人客服，請稍候」並推播通知管理員；已在接手期間再傳，只延長時間，不重複回覆或推播。
+2. 該客人在後台的「AI 自動回覆」是關閉的，或正在真人接手模式中：不回應、不呼叫 Gemini、不寫問題紀錄，讓我在 LINE 官方帳號後台的聊天室跟他一對一聊天。
+3. 其他文字：讀取 D1 裡目前儲存的 FAQ，再呼叫 Gemini（模型用 gemini-3.6-flash；不要照抄舊模型名稱；可用模型依帳號、專案與當日政策確認。出現模型不存在或 404 時，查 https://ai.google.dev/gemini-api/docs/models 換成目前可用的 Flash 模型並告訴我。回 429 或 503 時等 2 秒重試一次，還是失敗就請客人傳「人工」），只能依照 D1 裡最新的 FAQ 回答；FAQ 沒有的內容，回覆請客人傳「人工」。用繁體中文，簡短親切，像店家在 LINE 回覆客人；不能編造價格、日期、地址、優惠。
    AI 回答使用結構化 status（answered / unknown）；程式另設 error 狀態。僅經格式驗證的 unknown 寫入問題紀錄；429、503、逾時、無效 JSON 等是 error，記不含個資與憑證的技術錯誤摘要，不算 FAQ 缺漏。不可只比對回覆字串。
 
 【FAQ 存放】
@@ -439,52 +423,109 @@ ${myFaq || '[請回前步驟貼上第一天確認好的 FAQ]'}
 
 【AI 開關與真人接手】
 - 在 D1 建立「客人」資料表：LINE userId、LINE 顯示名稱、AI 自動回覆（開／關，新客人預設開）、真人接手到期時間、第一次與最後一則訊息時間。
-- 任何客人傳來的訊息（包含按選單）都要寫入或更新這張表，讓後台看得到所有跟官方帳號說過話的人。顯示名稱用 LINE 取得個人資料的 API 抓；抓不到時先顯示 userId，不能因此讓訊息處理失敗。
-- 「AI 自動回覆」由我在後台手動開關，是永久設定；關閉後這位客人的一般訊息都不回應，直到我手動打開。預約指令和「瀏覽商品」不受影響。
-- 真人接手時間：從客人最後一則訊息起算 30 分鐘；客人在這段時間內再傳訊息，就重新起算。
-- 每則有效的新訊息都先更新最後訊息時間；若仍在真人接手期間，連預約指令也會延長到期時間，再依分流規則處理。重送的舊事件不得延長。
-- 到期後下一則訊息可恢復 AI；不需背景排程。永久「不使用 AI 回答」不受 30 分鐘到期影響；手動結束真人接手也不得擅自解除永久設定。
+- 任何客人傳來的訊息都要寫入或更新這張表，讓後台看得到所有跟官方帳號說過話的人。顯示名稱用 LINE 取得個人資料的 API 抓；抓不到時先顯示 userId，不能因此讓訊息處理失敗。
+- 「AI 自動回覆」由我在後台手動開關，是永久設定；關閉後這位客人的一般訊息都不回應，直到我手動打開。
+- 真人接手時間：從客人最後一則訊息起算 30 分鐘；客人在這段時間內再傳訊息，就重新起算。到期後下一則訊息可恢復 AI，不需背景排程。
+- 永久「AI 自動回覆」關閉不受 30 分鐘到期影響；手動結束真人接手也不得擅自解除永久設定。
 
-【訂單與庫存一致性】
-- 以 webhookEventId 建立唯一約束；同一事件重送不得新增第二筆訂單、再扣庫存或重複通知。
-- 訂單新增、條件扣庫存及事件處理紀錄必須在 D1 支援的同一原子操作中完成；不得先 SELECT 庫存後分開 INSERT / UPDATE。失敗要整筆回滾，庫存不能小於 0；UPDATE 影響 0 筆也必須視為下單失敗，不能留下訂單。
-- 商品名稱在本 MVP 必須唯一，禁止使用【】；不接受模糊比對。舊卡片的名稱已修改或商品已刪除時，請客人重開選單。
-- 刪除訂單與庫存回補為同一原子操作；重複刪除同一訂單只回補一次。付款狀態切換不得改變庫存。
-- 訂單成立與通知送達分開記錄。通知失敗保留訂單並讓後台顯示待處理，不得重建訂單；不能因 API 成功就宣稱手機已讀。
-- 本地測試至少涵蓋：事件重送、兩人搶最後一份、下單中途失敗回滾、重複刪除、下架／過期拒絕下單、重複人工不通知及永久停 AI、AI 關閉的客人傳一般問題時不回應也不呼叫 Gemini、後台改 FAQ 後下一則訊息就用新內容回答。先讓測試通過再部署。
+【事件處理紀錄】
+- 在 D1 建立事件處理紀錄，以 webhookEventId 建立唯一約束；同一事件重送不得重複回覆、重複推播或延長真人接手。下午的訂單功能也會沿用這張表。
 
 【開發實作要求】
-1. Webhook 接收 LINE 訊息與 Rich Menu 點擊事件：
-   - Webhook 路徑用 POST /webhook/line，用 Channel Secret 驗證 x-line-signature，驗證失敗回 401；LINE 按 Verify 時 events 是空的，也要回 200。先回 200 給 LINE，再用 ctx.waitUntil 在背景處理（呼叫 Gemini 要幾秒）。
-   - 系統需配合一個 2 欄位 (2-column) 的 Rich Menu（左按鈕：瀏覽商品，右按鈕：聯絡客服）。圖文選單由我在 OA Manager 手動建立，你不用寫程式建立。兩個按鈕都要讓使用者真的送出一則文字（「瀏覽商品」、「聯絡客服」），讓 LINE 官方後台的聊天室留下這位客人的紀錄。
-   - 收到文字訊息時，依照上面的【訊息分流規則】處理。
-   - 【關鍵機制】
-     當使用者按下商品卡片裡的「立即預約／立即訂購」後，系統要讓使用者的 LINE 對話框裡，真的送出一則文字，例如：
-     👉 我要預約【頭部芳香放鬆】
-     這個按鈕不能只是「畫面上看起來有出現文字」，而是要真的由使用者送出一則 LINE 訊息。
-   - 訂單的購買人姓名，用 LINE 取得這位客人的顯示名稱。
-   - 系統收到該訂購事件後，自動建立訂單、寫入 D1 資料庫（預設狀態為「未付款」），扣減該商品的剩餘庫存（庫存已經是 0、商品下架或不在上架期間時，不建立訂單，回覆客人「這個項目目前無法預約」），並發送「雙向即時通知」：
-     * 客戶確認通知：使用該筆 Webhook event 的 replyToken 即時回覆下單成功確認訊息（或推播至客戶 source.userId）。
-     * 管理員推播通知：使用 LINE Messaging API Push Message (POST https://api.line.me/v2/bot/message/push)，將新訂單推播至上述設定的 Admin LINE UID，即時通知管理員。
-2. 建立後台管理介面：
+1. Webhook：
+   - 路徑用 POST /webhook/line，用 Channel Secret 驗證 x-line-signature，驗證失敗回 401；LINE 按 Verify 時 events 是空的，也要回 200。先回 200 給 LINE，再用 ctx.waitUntil 在背景處理（呼叫 Gemini 要幾秒）。
+   - 只處理文字訊息，依照上面的【訊息分流規則】處理，用 replyToken 回覆；通知管理員用 Push Message (POST https://api.line.me/v2/bot/message/push) 推播到 Admin LINE UID。
+2. 後台管理介面：
    - 【後台密碼】後台網址是公開的，一定要先登入才能看。密碼不可放前端、網址查詢參數或日誌；登入使用 HttpOnly、Secure、SameSite cookie，限制猜密碼次數。修改資料的 API 要驗證登入與來源，避免跨站請求。請準備 ADMIN_PASSWORD 的本機互動輸入步驟，讓我自行輸入至少 12 碼的密碼，再以 wrangler secret put 設定；不要在對話、日誌或畫面回顯密碼。後台頁面和後台用的 API 都要檢查密碼，沒登入的人不能看到或修改任何資料。
-   - 【商品管理】：完整的商品管理，依照前面的欄位定義。
-   - 【訂單管理】：檢視訂單列表，提供切換「已付款 / 未付款」按鈕，以及「刪除訂單」按鈕。
-   - 當管理員點擊「刪除訂單」時，系統必須自動釋放庫存，將對應的商品庫存加回去！
    - 【客人管理】：列出所有傳過訊息的客人（顯示名稱、最後訊息時間），依最後訊息時間排序，可用名稱搜尋。每位客人一個「AI 自動回覆」開關，切換後下一則訊息就生效；真人接手中的客人要標示出來，並提供「結束真人接手」按鈕。
    - 【FAQ 管理】：用一個大的文字框（全寬、至少 20 行）顯示目前的 FAQ 全文，讓我直接修改後按「儲存」；顯示最後修改時間，提供「還原上一版」按鈕。
-   - 【問題紀錄】：列出 Gemini 答不出來的問題與時間，讓管理員知道 FAQ 該補充什麼。
+   - 【問題紀錄】：列出 Gemini 答不出來的問題與時間，讓我知道 FAQ 該補充什麼。
+   - 後台的選單要預留位置，下午會再加上「商品管理」和「訂單管理」。
+3. 本地測試至少涵蓋：事件重送不重複回覆、重複人工不重複通知、永久關閉 AI 不因 30 分鐘到期而恢復、AI 關閉的客人傳一般問題時不回應也不呼叫 Gemini、後台改 FAQ 後下一則訊息就用新內容回答。先讓測試通過再部署。
 
 【部署步驟】
-3. 先在本機建立資料表、用 npm run dev 測試，給我本地後台網址讓我試新增商品。
-4. 我確認後，建立雲端 D1、建立資料表，用 npx wrangler secret put 設定所有憑證和 ADMIN_PASSWORD。
-5. 部署，完成後告訴我：Worker 網址、後台網址、密碼的自行設定方式、要貼到 LINE Developers 的 Webhook URL（Worker 網址/webhook/line）。
+4. 先在本機建立資料表、用 npm run dev 測試，給我本地後台網址，讓我試登入、看 FAQ、改 FAQ。
+5. 我確認後，建立雲端 D1、建立資料表，用 npx wrangler secret put 設定所有憑證和 ADMIN_PASSWORD。
+6. 部署，完成後告訴我：Worker 網址、後台網址、D1 資料庫名稱、密碼的自行設定方式、要貼到 LINE Developers 的 Webhook URL（Worker 網址/webhook/line）。
+7. 在專案資料夾用 git 存一個還原點（commit），訊息寫「上午：AI 客服後台完成」。
 
 【遇到錯誤時】
 先用白話說明發生什麼事，再告訴我你打算怎麼修，一次只修一個問題，不要整個專案重寫。`;
         }
 
-        // Step 9 Rich Menu Image Prompt
+        // Step B1 Prompt Box (商品與預約)
+        const productFields = document.getElementById('product_fields')?.value || '商品名稱, 價格, 上下架狀態, 上架時間, 下架時間, 剩餘庫存';
+        const orderFields = document.getElementById('order_fields')?.value || '購買人姓名, 商品名稱, 付款狀態';
+        const adminNotify = document.getElementById('admin_notify_tpl')?.value || '[未設定管理員通知範本]';
+        const userNotify = document.getElementById('user_notify_tpl')?.value || '[未設定客戶通知範本]';
+        const popularItems = document.getElementById('popular_items')?.value.trim() || '';
+
+        const bookingPromptArea = document.getElementById('booking_system_prompt');
+        if (bookingPromptArea) {
+          bookingPromptArea.value = `你是一個專業的 Cloudflare & LINE OA 開發專家。上午我們在 line-shop 專案完成了「LINE AI 客服系統」（FAQ 管理、客人 AI 開關、真人接手、問題紀錄、後台密碼）。現在請在同一個專案、同一個 Worker 加上「商品與預約」功能。
+我是零基礎學員。開始之前：
+1. 先用 git 存一個還原點（commit），訊息寫「加商品與預約之前」。
+2. 讀懂現有的程式結構，用三句白話告訴我你打算加什麼、會改到哪些檔案。
+3. 不要重寫上午完成的功能；上午的 FAQ、客人資料表和後台登入都要保持原樣可用。
+每一步做完用一句白話告訴我結果。
+
+【憑證】
+LINE 與 Gemini 的憑證上午已經用 wrangler secret put 設定好了，請直接沿用，不要再向我要，也不要寫進程式碼。
+
+【系統資料表規格】
+- 商品表 (products) 欄位結構定義: ${productFields}
+- 訂單表 (orders) 欄位結構定義: ${orderFields}
+- 通知範本設定:
+  * 管理員通知內容範本:
+    ${adminNotify}
+  * 客戶通知內容範本:
+    ${userNotify}
+${popularItems ? `
+【先建立的商品草稿】
+以下是客人最常問的項目。商品表建好後，請把它們建成商品，上下架狀態設為「下架」；價格、庫存、時間等我會自己在後台填，不要自己編。
+${popularItems}
+` : ''}
+【訊息分流規則】（在上午的規則最前面加上第 1、2 條，其餘維持上午的做法）
+1. 開頭為「👉 我要預約【」：視為預約指令，取出【】內的商品名稱建立訂單。找不到該商品時，回覆「找不到這個項目，請從選單重新選擇」。
+2. 完全等於「瀏覽商品」或「購買」：回傳商品輪播。
+3. 以下維持上午的規則：「聯絡客服」或「人工」進入真人接手；AI 關閉或真人接手中的客人不回應；其他文字由 Gemini 依 D1 的 FAQ 回答。
+- 第 1、2 條不受「AI 自動回覆」開關和真人接手影響，照常處理；真人接手期間的預約指令也會延長接手到期時間。
+- 請在 Gemini 的指示裡加上：客人想預約或購買時，引導他點選單的「瀏覽商品」。Gemini 永遠不能建立、修改或取消訂單。
+
+【訂單與庫存一致性】
+- 沿用上午的事件處理紀錄（webhookEventId 唯一約束）；同一事件重送不得新增第二筆訂單、再扣庫存或重複通知。
+- 訂單新增、條件扣庫存及事件處理紀錄必須在 D1 支援的同一原子操作中完成；不得先 SELECT 庫存後分開 INSERT / UPDATE。失敗要整筆回滾，庫存不能小於 0；UPDATE 影響 0 筆也必須視為下單失敗，不能留下訂單。
+- 商品名稱在本 MVP 必須唯一，禁止使用【】；不接受模糊比對。舊卡片的名稱已修改或商品已刪除時，請客人重開選單。
+- 刪除訂單與庫存回補為同一原子操作；重複刪除同一訂單只回補一次。付款狀態切換不得改變庫存。
+- 訂單成立與通知送達分開記錄。通知失敗保留訂單並讓後台顯示待處理，不得重建訂單；不能因 API 成功就宣稱手機已讀。
+
+【開發實作要求】
+1. 預約流程：
+   - 系統需配合一個 2 欄位 (2-column) 的 Rich Menu（左按鈕：瀏覽商品，右按鈕：聯絡客服）。圖文選單由我在 OA Manager 手動建立，你不用寫程式建立。兩個按鈕都會讓使用者真的送出一則文字（「瀏覽商品」、「聯絡客服」）。
+   - 【關鍵機制】
+     當使用者按下商品卡片裡的「立即預約／立即訂購」後，系統要讓使用者的 LINE 對話框裡，真的送出一則文字，例如：
+     👉 我要預約【頭部芳香放鬆】
+     這個按鈕要用傳送文字的 message action，不能用 postback；要真的由使用者送出一則 LINE 訊息。
+   - 訂單的購買人姓名，用上午客人資料表裡的 LINE 顯示名稱。
+   - 系統收到該訂購事件後，自動建立訂單、寫入 D1 資料庫（預設狀態為「未付款」），扣減該商品的剩餘庫存（庫存已經是 0、商品下架或不在上架期間時，不建立訂單，回覆客人「這個項目目前無法預約」），並發送「雙向即時通知」：
+     * 客戶確認通知：使用該筆 Webhook event 的 replyToken 即時回覆下單成功確認訊息（或推播至客戶 source.userId）。
+     * 管理員推播通知：使用 LINE Messaging API Push Message，將新訂單推播至 Admin LINE UID。
+2. 後台加上兩個頁面（沿用上午的登入保護）：
+   - 【商品管理】：完整的商品管理，依照前面的欄位定義，可以上下架。
+   - 【訂單管理】：檢視訂單列表，提供切換「已付款 / 未付款」按鈕，以及「刪除訂單」按鈕；刪除訂單時自動把庫存加回去。
+3. 本地測試至少涵蓋：事件重送、兩人搶最後一份、下單中途失敗回滾、重複刪除、下架／過期拒絕下單、AI 關閉或真人接手中按預約仍建立訂單；並確認上午的 FAQ 回答、FAQ 管理和 AI 開關仍正常。先讓測試通過再部署。
+
+【部署步驟】
+4. 先在本機建立新的資料表、用 npm run dev 測試，給我本地後台網址讓我試商品和訂單。
+5. 我確認後，在雲端 D1 只新增商品和訂單相關的資料表，不能刪除或清空上午的 FAQ、客人和問題紀錄。
+6. 部署到同一個 Worker（網址不變，LINE Webhook 不用改），完成後告訴我結果。
+7. 再用 git 存一個還原點，訊息寫「下午：商品與預約完成」。
+
+【遇到錯誤時】
+先用白話說明發生什麼事，再告訴我你打算怎麼修，一次只修一個問題，不要整個專案重寫；改壞了可以請我決定要不要退回剛剛的還原點。`;
+        }
+
+        // Step B4 Rich Menu Image Prompt
         const richMenuArea = document.getElementById('rich_menu_image_prompt');
         if (richMenuArea) {
           richMenuArea.value = `A premium, minimalistic 2-column layout for a LINE Official Account Rich Menu. Wide banner, aspect ratio 3:1 (final size 2500x843). Keep all icons and text inside the central horizontal band so it can be cropped to 3:1.

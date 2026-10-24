@@ -34,17 +34,20 @@ const STAGES = [
       },
       {
         title: '🗓️ 今日排程（第二天）',
-        body: '第一天已經上過 LINE 生態系統、資料流和 Cloudflare，所以今天直接從系統規格開始，多出來的時間留給實作和排障。' +
+        body: '上午先把第一天的 FAQ 機器人升級成有後台的 AI 客服，下午在同一個系統加上預約或賣商品。' +
           '<div class="glossary-table"><table><thead><tr><th>時間</th><th>內容</th><th>對應步驟</th></tr></thead><tbody>' +
-          '<tr><td>00:00–00:20</td><td>複習：第一天的 FAQ 機器人還能用嗎</td><td>Ch1-2</td></tr>' +
-          '<tr><td>00:20–00:35</td><td>MVP 範圍確認</td><td>Ch1</td></tr>' +
-          '<tr><td>00:35–01:05</td><td>確認 Cloudflare 與 Cloudflare Skill、建立系統欄位規格</td><td>Ch4–5</td></tr>' +
-          '<tr><td>01:05–02:35</td><td>整合提示詞、建立系統、本地測試</td><td>Step 1–3</td></tr>' +
-          '<tr><td>02:35–03:15</td><td>建立並接上 D1</td><td>Step 5–6</td></tr>' +
-          '<tr><td>03:15–03:45</td><td>部署、串接 Webhook（第一天做過）</td><td>Step 7–8</td></tr>' +
-          '<tr><td>03:45–04:30</td><td>用 AI 產生選單圖，在 OA 後台建立圖文選單</td><td>Step 9</td></tr>' +
-          '<tr><td>04:30–05:20</td><td>預約流程打通、驗收</td><td>Step 10、驗收</td></tr>' +
-          '<tr><td>05:20–06:00</td><td>換一把新鑰匙、緩衝</td><td>驗收</td></tr>' +
+          '<tr><td colspan="3"><strong>上午：AI 客服後台</strong></td></tr>' +
+          '<tr><td>00:00–00:20</td><td>複習：昨天的機器人，和它的三個問題</td><td>開場</td></tr>' +
+          '<tr><td>00:20–00:40</td><td>今天的目標、確認 LINE 資料、Cloudflare、Skill</td><td>準備</td></tr>' +
+          '<tr><td>00:40–01:40</td><td>提示詞 A：建立 AI 客服後台、本機測試</td><td>A1–A2</td></tr>' +
+          '<tr><td>01:40–02:20</td><td>建立雲端 D1、部署、Webhook 換成今天的網址</td><td>A3–A4</td></tr>' +
+          '<tr><td>02:20–02:50</td><td>營運演練：補 FAQ、關 AI 一對一、整理要上架的項目</td><td>A5</td></tr>' +
+          '<tr><td colspan="3"><strong>下午：預約與商品</strong></td></tr>' +
+          '<tr><td>02:50–03:10</td><td>完整訊息分流、建立商品與訂單規格</td><td>規格</td></tr>' +
+          '<tr><td>03:10–04:20</td><td>提示詞 B：加上商品與預約、本機測試、部署更新</td><td>B1–B3</td></tr>' +
+          '<tr><td>04:20–05:00</td><td>用 AI 產生選單圖，在 OA 後台建立圖文選單</td><td>B4</td></tr>' +
+          '<tr><td>05:00–05:30</td><td>預約流程打通、驗收</td><td>B5、驗收</td></tr>' +
+          '<tr><td>05:30–06:00</td><td>換一把新鑰匙、緩衝</td><td>驗收</td></tr>' +
           '</tbody></table></div>',
         extra: '午休與短休息另計，放在單元交界處。'
       },
@@ -90,63 +93,48 @@ const STAGES = [
     ]
   },
   {
-    id: 'morning1', label: 'Ch1-2 成果與生態', color: 's1',
-    title: '上午前半：成果展示與 LINE 生態系統',
-    desc: '了解今天要完成什麼，以及 LINE 開發者生態系統的核心概念',
+    id: 'morning1', label: '複習與準備', color: 's1',
+    title: '上午開場：昨天的機器人，和它的三個問題',
+    desc: '確認第一天的機器人還在，找出它做不到的事，再把今天要用的資料準備好',
     steps: [
       {
         title: '複習：第一天的 FAQ 機器人還能用嗎？',
         body: '用手機問你的官方帳號一題 FAQ，確認昨天的機器人還在運作。<br><br>' +
-          '昨天最後看到的問題：<strong>真人在聊天室回覆時，機器人也跟著回</strong>，因為它沒有記憶。今天的系統會加上資料庫和後台，讓它記得每位客人的狀態。',
-        checklist: ['手機問一題 FAQ，機器人有回答', '說得出昨天「真人和機器人同時回覆」的原因']
+          '昨天的機器人很好用，但有三個問題：<br>' +
+          '1. <strong>真人在聊天室回覆時，機器人也跟著回</strong>：它沒有記憶，不知道真人已經在處理<br>' +
+          '2. <strong>改 FAQ 要請 Codex 改檔案、重新部署</strong>：沒辦法自己上網頁修改<br>' +
+          '3. <strong>不知道客人問了哪些答不出來的問題</strong>：FAQ 不知道該補什麼<br><br>' +
+          '今天上午先把這三個問題解決，做出一個<strong>有後台的 AI 客服</strong>；下午再加上<strong>預約或賣商品</strong>。',
+        checklist: ['手機問一題 FAQ，機器人有回答', '說得出昨天機器人的三個問題']
       },
       {
-        title: 'Ch1 - 課程成果展示',
-        body: '第一天開場已經看過成品。這裡再看一次今天要完成的 MVP 系統，包含完整的銷售/預約流程。',
-        checklist: ['了解 MVP 最終樣貌', '理解 MVP 範圍（包含與不包含）']
-      },
-      {
-        title: 'MVP 範圍確認',
-        body: '明確界定本次課程的實作範圍',
+        title: '今天要完成什麼',
+        body: '今天的系統做在<strong>同一個專案</strong>（line-shop）裡，分兩段蓋：',
         checklist: [
-          '✅ 包含：商品管理、商品上下架、庫存/名額',
-          '✅ 包含：按下訂購鍵在對話框產生文字訊息（觸發寫入 LINE 官方帳號 Chat 聊天紀錄）',
-          '✅ 包含：訂單管理、Webhook、Rich Menu',
-          '✅ 包含：LINE 雙向即時通知（顧客確認＋管理員推播）、Cloudflare 部署',
-          '✅ 包含：保留第一天的 AI FAQ、真人接手模式、記錄 AI 答不出來的問題',
+          '✅ 上午：AI 客服後台（後台密碼、FAQ 線上修改、每位客人的 AI 開關、真人接手、問題紀錄）',
+          '✅ 下午：商品管理、上下架、庫存或名額',
+          '✅ 下午：按下訂購鍵在對話框產生文字訊息（LINE 官方帳號聊天室留下紀錄）',
+          '✅ 下午：訂單管理、圖文選單、雙向即時通知（顧客確認＋管理員推播）',
           '❌ 不包含：金流、CRM、會員系統',
           '❌ 不包含：Google Calendar、自動排課、LIFF、多角色權限'
-        ]
+        ],
+        tip: '💡 <strong>為什麼先做客服、再做預約？</strong>上午做完，你手上就有一個能用的 AI 客服；營運演練時你會看到客人最常問哪些商品或服務，下午就先把它們上架。'
       },
       {
-        title: 'Ch2 - LINE 生態系統建置',
+        title: 'LINE 連線資料',
         image: '01_LINE三把鑰匙.png',
         body: '<div class="antifraud-notice">✅ <strong>第一天已完成這一步</strong>：用同一瀏覽器設定檔、同一網站網址開啟本頁，下方欄位會自動帶入第一天填的資料。換電腦的同學，請依步驟重新取得並填寫。</div><br>' +
-          '依照以下步驟完成 LINE 官方帳號與開發者後台設定，並填寫下方憑證資訊。<br><br>' +
-          '<div class="antifraud-notice">📣 <strong>防呆提示</strong>：進行到每個步驟時，講師或小幫手會同步將直達連結發送到 LINE 群組。請用 Chrome 開啟，避免使用 LINE 內建瀏覽器（可能有權限問題）。</div><br>' +
-          '<strong>Step 1：建立 LINE 官方帳號 (LINE OA)</strong><br>' +
-          '網址：<a href="https://manager.line.biz/" target="_blank" class="ext-link-btn">🔗 開啟 LINE Official Account Manager</a><br>' +
-          '建立未來用來與客戶互動的官方帳號。<br><br>' +
-          '<strong>Step 2：進入 LINE Developers</strong><br>' +
-          '網址：<a href="https://developers.line.biz/" target="_blank" class="ext-link-btn">🔗 開啟 LINE Developers 後台</a><br>' +
-          '登入 LINE Developers 後台。<br><br>' +
-          '<strong>Step 3：從 OA Manager 啟用 Messaging API</strong><br>' +
-          '路徑：LINE Official Account Manager &rarr; 設定 &rarr; Messaging API &rarr; 啟用（第一次會請你建立 Provider，取一個名字就好）。再到 LINE Developers 找對應的 Channel。<br><br>' +
-          '<strong>Step 4：取得開發憑證與管理員 UID</strong><br>' +
-          '- <strong>Channel Secret</strong>：Basic Settings &rarr; Channel Secret（用途：驗證 Webhook 來源與訊息安全）<br>' +
-          '- <strong>Channel Access Token</strong>：Messaging API &rarr; Issue（用途：主動發送通知與回覆訊息）<br>' +
-          '- <strong>Your user ID (管理員 LINE UID)</strong>：Basic Settings 頁面最下方 &rarr; Your user ID（用途：當有客戶下單時，系統推播訂單通知給哪一位管理員，格式為 U 開頭的 33 碼英數）',
+          '<strong>Step 1：</strong>開啟 <a href="https://manager.line.biz/" target="_blank" class="ext-link-btn">🔗 LINE Official Account Manager</a>，確認 設定 &rarr; Messaging API 已啟用。<br><br>' +
+          '<strong>Step 2：</strong>開啟 <a href="https://developers.line.biz/" target="_blank" class="ext-link-btn">🔗 LINE Developers</a>，找到對應的 Channel，取得：<br>' +
+          '- <strong>Channel ID</strong> 與 <strong>Channel Secret</strong>：Basic settings<br>' +
+          '- <strong>Your user ID（管理員 LINE UID）</strong>：Basic settings 最下方，U 開頭的 33 碼<br>' +
+          '- <strong>Channel Access Token</strong>：Messaging API 分頁最下方 Issue',
         checklist: [
-          'LINE OA 已建立',
-          'LINE Developers 已登入',
-          'Provider 已建立',
-          'Messaging API Channel 已建立',
-          '已取得 Channel Secret',
+          '已取得 Channel ID 與 Channel Secret',
           '已取得 Channel Access Token',
           '已取得管理員 LINE UID (Your user ID)'
         ],
-        result: '成果：取得 Channel ID、Channel Secret、Access Token 與管理員 LINE UID',
-        tip: '💡 <strong>這三項 LINE 資料有什麼用？</strong><br>把 LINE OA 想像成你的自動化店面：<br>1. <strong>Channel Secret</strong> 是「門禁密碼」（確認訊息真的來自 LINE，不是假冒攻擊）<br>2. <strong>Access Token</strong> 是「萬能發話遙控器」（讓 Worker 系統可以主動發訊息給客人）<br>3. <strong>Your user ID</strong> 是「老闆專屬信箱」（有客人下單時，系統推播通知給哪一位管理員）<br>User ID 是收件人識別碼，不是密碼。要保密並在最後更換的是 Channel Secret、Access Token 和 Gemini API Key；仍須手機驗收才能確認系統運作。',
+        tip: '💡 <strong>這三項 LINE 資料有什麼用？</strong><br>1. <strong>Channel Secret</strong> 是「門禁密碼」：確認訊息真的來自 LINE<br>2. <strong>Access Token</strong> 是「發話遙控器」：讓系統可以回覆、推播<br>3. <strong>Your user ID</strong> 是「老闆專屬信箱」：客人找真人或下單時通知你<br>User ID 是收件人識別碼，不是密碼。要保密並在最後更換的是 Channel Secret、Access Token 和 Gemini API Key。',
         worksheet: {
           title: 'LINE 帳號資訊記錄 (填寫後可在下方直接複製)',
           hasCopyOutput: true,
@@ -161,7 +149,7 @@ const STAGES = [
       },
       {
         title: '第一天的 FAQ 與 Gemini 鑰匙',
-        body: '今天的系統會<strong>保留第一天的 AI FAQ</strong>：客人一般的問題，照樣由 Gemini 根據你的 FAQ 回答。同一瀏覽器設定檔、同一網站網址會自動帶入，換電腦的同學請到第一天頁面的「我的 FAQ」分頁複製，或重新貼上。',
+        body: '上午的 AI 客服會用<strong>第一天確認好的 FAQ</strong> 當作起點，建好後存進資料庫，之後你就能在後台直接修改。同一瀏覽器設定檔、同一網站網址會自動帶入，換電腦的同學請到第一天頁面的「我的 FAQ」分頁複製，或重新貼上。',
         worksheet: {
           title: '第一天資料（同一瀏覽器設定檔、同一網站網址會自動帶入）',
           fields: [
@@ -169,37 +157,9 @@ const STAGES = [
             { id: 'my_faq', label: '我的 FAQ', type: 'textarea', hint: '第一天確認好的 FAQ' }
           ]
         }
-      }
-    ]
-  },
-  {
-    id: 'morning2', label: 'Ch3-5 資料流與設定', color: 's2',
-    title: '上午後半：資料流、環境建置與系統設定',
-    desc: '理解 LINE 訊息如何流動，並完成 Cloudflare 環境建置與系統規格定義',
-    steps: [
-      {
-        title: 'Ch3 - LINE 資料流',
-        image: '02_技術架構總覽.png',
-        body: '第一天已經學過訊息怎麼走。今天的系統多了資料庫，訊息進來後要先<strong>分流</strong>：按鈕送出的指令走預約，客人自己打的字走 AI FAQ。',
-        flow: ['使用者傳送/點擊選單', '對話框產生訂購文字', 'LINE 平台轉發 Webhook', 'Cloudflare Worker 處理', 'D1 資料庫扣庫存', 'Messaging API 雙向推播', 'LINE 官方後台記錄 Chat', '使用者與管理者接收'],
-        tip: '💡 <strong>關鍵細節：為什麼按下訂購鍵時，對話框一定要產生文字？</strong><br>LINE 官方帳號規定：如果顧客只有機器人單向發送訊息，官方帳號後台是無法開啟 1 對 1 真人聊天的！所以訂購按鈕要設定成<strong>傳送文字（message action）</strong>，不要用只送資料的 postback（即使加上 displayText，系統收到的也不是文字訊息，分流規則會比對不到），當客人按下「立即預約」時，系統會自動在對話框產生一條客人送出的文字紀錄。這樣不僅客人的聊天室有白紙黑字的訂單憑證，管理員登入 LINE Official Account Manager 後台也能立即在「聊天 (Chat)」看見這位客人，隨時接手真人客服或打上標籤！'
       },
       {
-        title: '訊息分流規則：誰送的字，走哪條路',
-        body: '按鈕送出的文字有<strong>固定格式</strong>（例如「👉 我要預約【頭部芳香放鬆】」），手動打出相同完整格式也會觸發下單；固定格式不是身分驗證。所以系統比對的是「格式」，不是「預約」兩個字。<br><br>' +
-          '<div class="glossary-table"><table><thead><tr><th>順序</th><th>收到的文字</th><th>處理方式</th><th>真人接手中也處理？</th></tr></thead><tbody>' +
-          '<tr><td>1</td><td>開頭是「👉 我要預約【」</td><td>建立預約、通知管理員</td><td>✅ 照常</td></tr>' +
-          '<tr><td>2</td><td>「瀏覽商品」</td><td>回傳商品輪播</td><td>✅ 照常</td></tr>' +
-          '<tr><td>3</td><td>「聯絡客服」或「人工」</td><td>進入真人接手模式、通知管理員</td><td>只延長時間</td></tr>' +
-          '<tr><td>4</td><td>這位客人在後台被關掉 AI，或在真人接手中</td><td>不回應，留給你在 OA 聊天室一對一回覆</td><td></td></tr>' +
-          '<tr><td>5</td><td>其他文字</td><td>AI 依後台裡最新的 FAQ 回答</td><td></td></tr>' +
-          '</tbody></table></div>' +
-          '<br><strong>兩種「AI 先別回」的差別：</strong>按「聯絡客服」是<strong>暫時</strong>的，客人 30 分鐘沒說話就恢復 AI；在後台把某位客人的「AI 自動回覆」關掉是<strong>永久</strong>的，要你自己再打開。',
-        tip: '💡 <strong>會改動資料的事交給固定規則，回答問題交給 AI。</strong>客人打「我上次預約的是幾點？」，如果讓 AI 判斷要不要建立預約，它偶爾會判斷錯。所以 AI 永遠不能建立、修改或取消預約。',
-        checklist: ['說得出「我要預約」和「👉 我要預約【…】」為什麼走不同的路', '知道真人接手時，按鈕預約仍然會被處理', '知道想跟某位客人一對一聊天時，要先在後台關掉他的 AI']
-      },
-      {
-        title: 'Ch4 - Cloudflare 環境建置',
+        title: '確認 Cloudflare 登入',
         image: '03_Cloudflare環境建置.png',
         body: '<div class="antifraud-notice">✅ <strong>第一天已完成</strong>：Codex 已經登入過你的 Cloudflare。請 Codex 執行 <code>npx wrangler whoami</code>，確認還是登入狀態就好。</div><br>' +
           '換電腦或還沒有帳號的同學：<a href="https://dash.cloudflare.com/sign-up" target="_blank" class="ext-link-btn">🔗 開啟 Cloudflare 註冊頁面</a>，用 <strong>Gmail 帳號</strong>快速登入。',
@@ -221,10 +181,139 @@ const STAGES = [
           '問 Codex「你有 cloudflare 這個 skill 嗎？」，它回答有'
         ],
         tip: '💡 skill 裝在「使用者資料夾」，不是裝在某個專案裡，所以第一天裝的今天照樣能用，等一下建立的 line-shop 專案也用得到。'
+      }
+    ]
+  },
+  {
+    id: 'faqadmin', label: '上午：AI 客服後台', color: 's2',
+    title: '上午：把 FAQ 機器人升級成有後台的 AI 客服',
+    desc: '一段提示詞建好後台、資料庫和真人接手，部署上線後用營運演練把 FAQ 補完整',
+    steps: [
+      {
+        title: '上午的訊息分流：誰該回、誰不該回',
+        body: '系統多了資料庫，就能記得每位客人的狀態。收到客人的文字訊息時，由上往下判斷：<br><br>' +
+          '<div class="glossary-table"><table><thead><tr><th>順序</th><th>收到的文字</th><th>處理方式</th></tr></thead><tbody>' +
+          '<tr><td>1</td><td>「聯絡客服」或「人工」</td><td>進入真人接手模式，通知老闆；接手中再傳只延長時間</td></tr>' +
+          '<tr><td>2</td><td>這位客人在後台被關掉 AI，或在真人接手中</td><td>不回應，留給你在 OA 聊天室一對一回覆</td></tr>' +
+          '<tr><td>3</td><td>其他文字</td><td>AI 依後台裡最新的 FAQ 回答；答不出來的記進問題紀錄</td></tr>' +
+          '</tbody></table></div>' +
+          '<br><strong>兩種「AI 先別回」的差別：</strong>客人傳「人工」是<strong>暫時</strong>的，客人 30 分鐘沒說話就恢復 AI；在後台把某位客人的「AI 自動回覆」關掉是<strong>永久</strong>的，要你自己再打開。',
+        checklist: ['知道想跟某位客人一對一聊天時，要先在後台關掉他的 AI', '說得出「傳人工」和「後台關 AI」的差別']
       },
       {
-        title: 'Ch5 - 建立系統欄位規格',
-        body: '定義你的商品表與訂單表的欄位結構。這個步驟超重要！AI 等等要根據這份規格來幫你蓋系統。<br><br>👇 <strong>請先選擇符合你產業的範本，再微調</strong>：',
+        title: 'Step A1 - 交給 Codex：建立 AI 客服後台',
+        body: '下面的提示詞已經自動放進你的 LINE 資料、Gemini 鑰匙和第一天的 FAQ。請<strong>開一個新的 Codex 對話</strong>，整段貼上。',
+        promptBox: {
+          id: 'faq_system_prompt',
+          buttonText: '複製提示詞 A（AI 客服後台）'
+        },
+        checklist: [
+          'Codex 用三句白話說明了計畫',
+          'Codex 讓你自己輸入後台密碼（至少 12 碼），沒有顯示在畫面上'
+        ],
+        tip: '💡 <strong>這段提示詞在做什麼？</strong>把鑰匙、FAQ 和規則一次交給 AI。你負責說需求、按允許、驗收結果；AI 負責寫程式、建資料庫。',
+        extra: '⏱️ 預估實作與排障時間：40 - 60 分鐘'
+      },
+      {
+        title: 'Step A2 - 在自己電腦上試後台',
+        body: 'Codex 會先在你的電腦開一個暫時的測試網站（npm run dev），給你本機後台網址。打開它，逐項試：',
+        checklist: [
+          '沒輸入密碼打不開後台，輸入自己設的密碼才看得到',
+          '「FAQ 管理」的大文字框裡，看得到第一天的 FAQ',
+          '改一句 FAQ 存檔，再按「還原上一版」，內容回來了',
+          '「客人管理」和「問題紀錄」頁面打得開（現在還是空的沒關係）'
+        ],
+        extra: '⏱️ 預估：15 - 20 分鐘'
+      },
+      {
+        title: 'Step A3 - 建立雲端資料庫並部署',
+        body: '本機試過沒問題後，跟 Codex 說「<strong>可以了，請建立雲端 D1 並部署</strong>」。它會建立雲端資料庫（D1，像一本放在雲端的超級 Excel）、設定鑰匙和後台密碼、部署上線。<br><br>' +
+          '完成後，Codex 會給你 Worker 網址、後台網址，以及要貼到 LINE 的 Webhook URL。',
+        checklist: [
+          'Codex 回報雲端 D1 建立完成',
+          'Codex 回報部署成功，給了 Worker 網址和後台網址',
+          '用手機或電腦打開雲端後台網址，輸入密碼登入成功'
+        ],
+        worksheet: {
+          title: '部署資訊記錄（下午會用到）',
+          fields: [
+            { id: 'cloudflare_db_name', label: 'D1 資料庫名稱', type: 'text', hint: 'Codex 建立的名稱，例如：line-shop-db' },
+            { id: 'cloudflare_worker_url', label: 'Worker 網址', type: 'text', hint: '例如：https://line-shop.xxx.workers.dev' }
+          ]
+        },
+        extra: '⏱️ 預估：15 - 25 分鐘'
+      },
+      {
+        title: 'Step A4 - LINE Webhook 換成今天的網址',
+        body: '<div class="antifraud-notice">⚠️ 今天是<strong>新的 Worker</strong>，網址和第一天不一樣。LINE Developers 的 Webhook URL 要<strong>換成今天的網址</strong>，不然訊息還是會送到第一天的機器人。</div><br>' +
+          '<strong>Step 1：</strong>LINE Developers &rarr; Messaging API 分頁 &rarr; Webhook URL 改成「<strong>今天的 Worker 網址/webhook/line</strong>」&rarr; Verify。<br><br>' +
+          '<strong>Step 2：</strong>確認「Use webhook」開啟、OA Manager 的「自動回應訊息」關閉、「聊天」開啟（第一天設過，再看一次）。',
+        checklist: [
+          'Webhook URL 已換成今天的 Worker 網址',
+          'Webhook Verify 顯示 Success',
+          '手機問一題 FAQ，今天的系統有回答',
+          '後台「客人管理」出現了你自己'
+        ]
+      },
+      {
+        title: 'Step A5 - 營運演練：把 FAQ 補完整',
+        body: '兩人一組，一個扮<strong>客人</strong>（用手機傳訊息給對方的官方帳號），一個扮<strong>老闆</strong>（看自己的後台），做完再交換。<br><br>' +
+          '<strong>1. 問倒 AI：</strong>客人問 3 個 FAQ 沒寫到的問題，AI 會請客人傳「人工」。<br><br>' +
+          '<strong>2. 補 FAQ：</strong>老闆到「問題紀錄」看到這些問題，在「FAQ 管理」補上答案、存檔。<br><br>' +
+          '<strong>3. 再問一次：</strong>客人問同樣的問題，AI 這次答得出來（不用重新部署）。<br><br>' +
+          '<strong>4. 一對一聊天：</strong>老闆在「客人管理」關掉這位客人的 AI，到 OA Manager 聊天室直接回覆；客人再傳一般問題，機器人不會插話。聊完記得把 AI 打開。<br><br>' +
+          '<strong>5. 整理下午要上架的項目：</strong>看看客人問最多的是哪些商品或服務，寫在下面。下午的提示詞會自動帶入，先建成商品草稿。',
+        checklist: [
+          '問題紀錄裡看得到客人問倒 AI 的題目',
+          '補完 FAQ 後，同一題 AI 答得出來',
+          '關掉 AI 後，可以在 OA 聊天室一對一聊天，機器人沒有插話',
+          '寫下下午要先上架的 2 到 3 個項目'
+        ],
+        worksheet: {
+          title: '下午要先上架的項目',
+          fields: [
+            { id: 'popular_items', label: '客人最常問的商品或服務（一行一項，只寫名稱和一句介紹，價格之後在後台填）', type: 'textarea', hint: '例如：頭部芳香放鬆 - 30 分鐘舒壓按摩' }
+          ]
+        },
+        result: '🎉 上午完成：你有一個自己能管理的 AI 客服了！',
+        extra: '⏱️ 預估：30 分鐘'
+      },
+      {
+        title: '🗣️ AI 溝通心法與語音輸入',
+        body: '遇到卡關或想要改功能，如何最有效率地跟 AI 溝通？',
+        aiTips: true
+      }
+    ]
+  },
+  {
+    id: 'booking', label: '下午：預約與商品', color: 's3',
+    title: '下午：在同一個系統加上預約或賣商品',
+    desc: '定義商品與訂單規格，讓 Codex 在上午的系統上加功能，接上圖文選單完成預約流程',
+    steps: [
+      {
+        title: '預約的訊息怎麼走',
+        image: '02_技術架構總覽.png',
+        body: '下午加上預約後，訊息進來要先<strong>分流</strong>：按鈕送出的指令走預約，客人自己打的字照樣走上午的 AI 客服。',
+        flow: ['使用者傳送/點擊選單', '對話框產生訂購文字', 'LINE 平台轉發 Webhook', 'Cloudflare Worker 處理', 'D1 資料庫扣庫存', 'Messaging API 雙向推播', 'LINE 官方後台記錄 Chat', '使用者與管理者接收'],
+        tip: '💡 <strong>關鍵細節：為什麼按下訂購鍵時，對話框一定要產生文字？</strong><br>如果顧客只有機器人單向發送訊息，官方帳號後台的聊天室看不到這位客人。所以訂購按鈕要設定成<strong>傳送文字（message action）</strong>，不要用只送資料的 postback（即使加上 displayText，系統收到的也不是文字訊息，分流規則會比對不到）。客人按下「立即預約」時，對話框會出現一條客人送出的文字，客人有訂單憑證，你在 OA Manager 的聊天室也能立刻看到這位客人。'
+      },
+      {
+        title: '完整的訊息分流規則',
+        body: '按鈕送出的文字有<strong>固定格式</strong>（例如「👉 我要預約【頭部芳香放鬆】」），手動打出相同完整格式也會觸發下單；固定格式不是身分驗證。所以系統比對的是「格式」，不是「預約」兩個字。<br><br>' +
+          '<div class="glossary-table"><table><thead><tr><th>順序</th><th>收到的文字</th><th>處理方式</th><th>AI 關閉或真人接手中也處理？</th></tr></thead><tbody>' +
+          '<tr><td>1</td><td>開頭是「👉 我要預約【」</td><td>建立預約、通知管理員</td><td>✅ 照常</td></tr>' +
+          '<tr><td>2</td><td>「瀏覽商品」</td><td>回傳商品輪播</td><td>✅ 照常</td></tr>' +
+          '<tr><td>3</td><td>「聯絡客服」或「人工」</td><td>進入真人接手模式、通知管理員</td><td>只延長時間</td></tr>' +
+          '<tr><td>4</td><td>這位客人在後台被關掉 AI，或在真人接手中</td><td>不回應，留給你在 OA 聊天室一對一回覆</td><td></td></tr>' +
+          '<tr><td>5</td><td>其他文字</td><td>AI 依後台裡最新的 FAQ 回答</td><td></td></tr>' +
+          '</tbody></table></div>' +
+          '<br>第 3 到 5 條就是上午做好的，下午只是在最前面加上第 1、2 條。',
+        tip: '💡 <strong>會改動資料的事交給固定規則，回答問題交給 AI。</strong>客人打「我上次預約的是幾點？」，如果讓 AI 判斷要不要建立預約，它偶爾會判斷錯。所以 AI 永遠不能建立、修改或取消預約。',
+        checklist: ['說得出「我要預約」和「👉 我要預約【…】」為什麼走不同的路', '知道關掉 AI 或真人接手時，按鈕預約仍然會被處理']
+      },
+      {
+        title: '建立商品與訂單規格',
+        body: '定義你的商品表與訂單表的欄位結構。AI 等一下要根據這份規格，在上午的系統上加功能。<br><br>👇 <strong>請先選擇符合你產業的範本，再微調</strong>：',
         templateSelector: true,
         worksheet: {
           title: '📋 資料表規格與通知範本定義',
@@ -235,110 +324,46 @@ const STAGES = [
             { id: 'user_notify_tpl', label: '客戶通知內容範本', type: 'textarea', hint: '選擇範本後自動填入。用 [欄位名] 作為動態替換變數' }
           ]
         },
-        tip: '💡 <strong>為什麼要定義這些欄位？</strong><br>把這個步驟想成「跟 AI 說你要開什麼類型的店、要記錄哪些客人資料」。你描述得越清楚，AI 建出來的系統就越貼近你的需求。等等我們會把這份規格跟 LINE 憑證一起「打包」交給 AI。<br><br>' +
-          '除了商品和訂單，系統還會自動多兩張表（不用填，整合提示詞已經寫好）：<br>' +
-          '1. <strong>客人狀態</strong>：這位客人要不要用 AI 回答、真人接手到幾點<br>' +
-          '2. <strong>問題紀錄</strong>：AI 答不出來的問題，讓你知道 FAQ 該補什麼'
-      }
-    ]
-  },
-  {
-    id: 'afternoon1', label: 'Step 1-4 建置核心', color: 's3',
-    title: '實作前段：整合提示詞與核心系統',
-    desc: '使用彙整後的提示詞引導 AI 建立商品與訂單核心系統',
-    steps: [
+        tip: '💡 <strong>為什麼要定義這些欄位？</strong><br>把這個步驟想成「跟 AI 說你要開什麼類型的店、要記錄哪些客人資料」。你描述得越清楚，AI 建出來的系統就越貼近你的需求。'
+      },
       {
-        title: 'Step 1 - 匯整系統提示詞',
-        body: '整合前面步驟填寫的 LINE 憑證與欄位規格設定，自動彙整為一頁完整的 AI 指引 Prompt。您將使用此 Prompt 搭配 Cloudflare Skill 引導 AI 進行開發。',
+        title: 'Step B1 - 交給 Codex：加上商品與預約',
+        body: '回到<strong>上午同一個 Codex 對話</strong>（或在 line-shop 資料夾開新對話），整段貼上。這段提示詞不含鑰匙：上午已經存進 Cloudflare 了。',
         promptBox: {
-          id: 'system_prompt_output',
-          buttonText: '複製 AI 開發提示詞'
+          id: 'booking_system_prompt',
+          buttonText: '複製提示詞 B（商品與預約）'
         },
-        tip: '💡 <strong>這個步驟在做什麼？</strong><br>就是把前面填好的「鑰匙（LINE 憑證）」和「店面規格（商品/訂單欄位）」打包成一份清單，交給 AI。AI 收到這份清單，就知道要幫你建什麼樣的系統了。這就是 Vibe Coding 的核心：<strong>你負責告訴 AI 要做什麼、驗收結果；AI 負責寫程式、建資料庫。</strong>'
-      },
-      {
-        title: 'Step 2 - 建立商品與訂單管理系統',
-        body: '使用 AI 協作完成商品管理與訂單的核心功能，包含新增、修改、上下架與狀態異動。',
         checklist: [
-          '商品新增與修改功能',
-          '商品上下架狀態切換',
-          '訂單建立與查詢功能',
-          '訂單切換「已付款／未付款」',
-          '刪除訂單後，庫存加回去'
+          'Codex 先存了還原點（git commit），才開始改',
+          'Codex 說明它要加什麼，沒有要重寫上午的功能'
         ],
-        extra: '⏱️ 預估此步驟實作與排障時間：30 - 45 分鐘'
+        extra: '⏱️ 預估實作與排障時間：40 - 60 分鐘'
       },
       {
-        title: 'Step 3 - 本地資料庫連接與測試',
-        body: '在本地環境模擬連接 D1 資料庫，確認商品與訂單的核心功能完全正常。',
+        title: 'Step B2 - 在自己電腦上試商品與訂單',
+        body: 'Codex 改完會再開本機測試網站，打開後台逐項試：',
         checklist: [
-          'Codex 在本機建立資料表（wrangler d1 execute --local）',
-          'Codex 啟動本地測試網站 npm run dev（在自己電腦開一個暫時的測試網頁）',
-          '打開 Codex 給的本地後台網址，新增一個商品、改一次、再刪掉'
+          '「商品管理」看得到上午寫的項目草稿，補上價格和庫存後上架',
+          '商品新增、修改、上下架都正常',
+          '訂單可以切換「已付款／未付款」',
+          '刪除訂單後，庫存加回去',
+          '上午的 FAQ 管理和客人管理還能正常使用'
         ],
-        extra: '⏱️ 預估此步驟實作與排障時間：20 - 30 分鐘'
+        extra: '⏱️ 預估：15 - 20 分鐘'
       },
       {
-        title: '🗣️ AI 溝通心法與語音輸入',
-        body: '遇到卡關或想要改功能，如何最有效率地跟 AI 溝通？',
-        aiTips: true
-      }
-    ]
-  },
-  {
-    id: 'afternoon2', label: 'Step 5-10 部署上線', color: 's4',
-    title: '下午實作後段：資料庫、部署與串接',
-    desc: '連接 D1 Database、部署到 Cloudflare、串接 LINE Webhook，完成 Rich Menu 與預約流程',
-    steps: [
-      {
-        title: 'Step 5 - 建立 Cloudflare D1',
-        body: '在 Cloudflare 上建立 D1 資料庫（超級 Excel，用來存商品和訂單）',
-        checklist: ['建立 D1 Database', '取得 Database ID', 'Codex 把 Database ID 填進 wrangler 設定檔'],
-        extra: '⏱️ 預估此步驟實作與排障時間：15 - 25 分鐘',
-        worksheet: {
-          title: 'D1 資料庫資訊',
-          fields: [
-            { id: 'cloudflare_db_name', label: 'Database 名稱', type: 'text', hint: '例如：vibe-booking-db' },
-            { id: 'cloudflare_db_id', label: 'Database ID', type: 'text', hint: '建立後取得的 UUID' }
-          ]
-        }
-      },
-      {
-        title: 'Step 6 - 接上 D1 Database',
-        body: '將本地測試通過的系統連接到雲端 D1 資料庫',
+        title: 'Step B3 - 部署更新',
+        body: '本機試過沒問題後，跟 Codex 說「<strong>可以了，請更新雲端資料庫並部署</strong>」。<br><br>' +
+          '這次是<strong>更新同一個 Worker</strong>，網址不會變，LINE 的 Webhook 不用重填。',
         checklist: [
-          '修改程式碼連接 D1',
-          '確認資料可正常寫入',
-          '確認資料可正常讀取'
-        ]
+          'Codex 回報雲端 D1 已加上商品和訂單表，上午的 FAQ 和客人資料還在',
+          'Codex 回報部署成功，Worker 網址和上午一樣',
+          '手機問一題 FAQ，AI 照常回答'
+        ],
+        extra: '⏱️ 預估：10 - 15 分鐘'
       },
       {
-        title: 'Step 7 - 部署到 Cloudflare Worker',
-        body: '將系統部署到雲端，取得正式的 Worker URL（部署 = 把程式打包上傳到雲端，讓全世界都能透過網址連進來）',
-        checklist: ['執行 wrangler deploy', '確認部署成功', '記錄 Worker URL'],
-        result: '成果：取得 Worker URL',
-        extra: '⏱️ 預估此步驟實作與排障時間：15 - 20 分鐘',
-        worksheet: {
-          title: '部署資訊記錄',
-          fields: [
-            { id: 'cloudflare_worker_url', label: 'Worker URL', type: 'text', hint: '例如：https://my-booking.xxx.workers.dev' }
-          ]
-        }
-      },
-      {
-        title: 'Step 8 - LINE Webhook 串接',
-        body: '將 LINE OA 與你的 Worker 系統連接起來（Webhook = 門鈴。客人在 LINE 敲你，LINE 就去按 Cloudflare 的門鈴）<br><br>' +
-          '<div class="antifraud-notice">⚠️ 今天是<strong>新的 Worker</strong>，網址和第一天不一樣。LINE Developers 的 Webhook URL 要<strong>換成今天的網址</strong>，不然訊息還是會送到第一天的機器人。</div><br>' +
-          '<strong>Step 1：</strong>LINE Developers &rarr; Messaging API 分頁 &rarr; Webhook URL 改成「<strong>今天的 Worker URL/webhook/line</strong>」&rarr; Verify。<br><br>' +
-          '<strong>Step 2：</strong>確認「Use webhook」開啟、OA Manager 的「自動回應訊息」關閉、「聊天」開啟（第一天設過，再看一次）。',
-        checklist: [
-          'Webhook URL 已換成今天的 Worker 網址',
-          'Webhook Verify 顯示 Success',
-          '手機問一題 FAQ，今天的系統有回答'
-        ]
-      },
-      {
-        title: 'Step 9 - 建立 Rich Menu',
+        title: 'Step B4 - 建立圖文選單',
         body: '產圖或改尺寸超過 10 分鐘，先用<a href="assets/rich-menu-backup.jpg" download>備用選單圖（2500×843 JPG）</a>繼續串接；圖文內容可於課後調整。<br><br><strong>Step 1：</strong>複製下方的產圖提示詞，貼到 <strong>ChatGPT</strong> 產生選單底圖，下載圖片。<br><br>' +
           '<strong>Step 2：</strong>LINE 規定選單圖片的尺寸是固定的。把圖片交給 Codex，說：「<strong>請把這張圖轉成 2500×843 的 JPG，檔案小於 1MB，左右兩格的文字要完整保留</strong>」。<br><br>' +
           '<strong>Step 3：</strong>OA Manager &rarr; 圖文選單 &rarr; 建立 &rarr; 版型選「<strong>小型、左右兩格</strong>」&rarr; 上傳 Codex 轉好的圖片。<br><br>' +
@@ -356,7 +381,7 @@ const STAGES = [
         tip: '💡 動作一定要選「文字」：客人按下去，聊天室會真的出現一句話，系統才收得到，OA 聊天室也會留下這位客人。'
       },
       {
-        title: 'Step 10 - 預約流程打通',
+        title: 'Step B5 - 預約流程打通',
         body: '完成端到端的流程測試',
         flow: ['手機點選商品', '系統回傳列表', '點擊訂購產生文字訊息', '寫入 LINE Chat 記錄', '系統寫入 D1 扣庫存', '發送雙向即時通知'],
         result: '銷售/預約流程完整打通 🎉'
@@ -369,28 +394,32 @@ const STAGES = [
     desc: '逐一確認所有功能是否正常運作，確保帶走一個可運作的 MVP',
     steps: [
       {
-        title: '功能驗收清單',
+        title: '上午驗收：AI 客服後台',
         body: '請逐一實測，並在<a href="course/課堂驗收與交接.html">驗收與交接表</a>填實際結果；頁面勾選只代表自我檢查。',
         checklist: [
-          '商品新增成功',
-          '商品顯示成功',
+          '沒輸入密碼打不開後台；輸入自己設的密碼才看得到',
+          '問一題 FAQ：AI 依後台的 FAQ 回答',
+          '後台 FAQ 頁看得到第一天的 FAQ；改一句存檔後，不用重新部署，下一題就照新內容回答',
+          '後台看得到所有傳過訊息的客人，真人接手中的可以手動結束',
+          '後台把自己的「AI 自動回覆」關掉，再傳一般問題：機器人不回，在 OA Manager 聊天室可以直接回覆；打開後 AI 恢復回答',
+          '按「聯絡客服」後再傳訊息：機器人不回應，管理員收到通知',
+          '後台看得到 FAQ 缺漏問題；API 暫時失敗不誤記為 FAQ 缺漏',
+          '重複按人工不再通知；永久停用 AI 不因 30 分鐘到期而恢復'
+        ]
+      },
+      {
+        title: '下午驗收：預約與商品',
+        body: '下午的功能加上去之後，上午的項目也要抽測一兩項，確認沒有被改壞。',
+        checklist: [
+          '商品新增成功，手機按「瀏覽商品」看得到',
+          'Rich Menu 正常顯示',
           '按下訂購時對話框正確產生文字訊息（LINE Chat 留下對話紀錄）',
           '訂單建立成功且名額庫存正確扣減',
-          'Webhook 正常運作',
-          'Rich Menu 正常顯示',
           '管理員即時收到下單推播',
           '客戶即時收到確認通知',
           '自己打「我要預約」：AI 引導點選單，沒有建立訂單',
-          '問一題 FAQ：AI 依後台的 FAQ 回答',
-          '後台 FAQ 頁看得到第一天的 FAQ；改一句存檔後，不用重新部署，下一題就照新內容回答',
-          '按「聯絡客服」後再傳訊息：機器人不回應，管理員收到通知',
-          '真人接手中按預約按鈕：仍然建立訂單',
+          '真人接手中或 AI 關閉時按預約按鈕：仍然建立訂單',
           '把一個商品庫存改成 0 再按預約：回覆無法預約，沒有建立訂單',
-          '沒輸入密碼打不開後台；輸入 Codex 給的密碼才看得到',
-          '後台看得到所有傳過訊息的客人，真人接手中的可以手動結束',
-          '後台把自己的「AI 自動回覆」關掉，再傳一般問題：機器人不回，在 OA Manager 聊天室可以直接回覆；打開後 AI 恢復回答',
-          '後台看得到 FAQ 缺漏問題；API 暫時失敗不誤記為 FAQ 缺漏',
-          '重複按人工不再通知；永久停用 AI 不因 30 分鐘到期而恢復',
           '老師已確認事件重送、最後一份庫存競爭與重複刪單測試'
         ],
         result: '填妥驗收結果、換完憑證且複測通過，才標記本次課堂 MVP 完成'
