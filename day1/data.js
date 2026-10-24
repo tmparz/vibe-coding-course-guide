@@ -42,7 +42,7 @@ const STAGES = [
           '<tr><td colspan="3"><strong>下半場：讓 LINE 自動回答（210 分鐘）</strong></td></tr>' +
           '<tr><td>02:30–03:10</td><td>LINE 官方帳號：歡迎訊息、關鍵字自動回覆、開通 Messaging API</td><td>手機收到一則關鍵字回覆</td></tr>' +
           '<tr><td>03:10–03:30</td><td>LINE 訊息怎麼跑到程式裡（順便認識內建的 AI 聊天機器人）</td><td>能解釋 LINE、Worker、Google Gemini 與回覆的來回</td></tr>' +
-          '<tr><td>03:30–04:00</td><td>Cloudflare 與 Codex</td><td>Codex 能登入 Cloudflare</td></tr>' +
+          '<tr><td>03:30–04:00</td><td>Cloudflare 與 Codex、安裝 Cloudflare Skill</td><td>Codex 能登入 Cloudflare、看得到 skill</td></tr>' +
           '<tr><td>04:00–05:20</td><td>申請 Gemini 鑰匙 → 把所有資料交給 Codex，從零做出 FAQ 機器人 → 串接 Webhook</td><td>機器人上線</td></tr>' +
           '<tr><td>05:20–05:40</td><td>手機驗收：同一題比兩次</td><td>親眼看到關鍵字和 AI 的差別</td></tr>' +
           '<tr><td>05:40–06:00</td><td>回顧、明天預告</td><td>知道明天為什麼需要後台</td></tr>' +
@@ -323,6 +323,23 @@ const STAGES = [
           'Codex 回報的帳號 Email 是自己的 Gmail'
         ],
         extra: '⏱️ 課前檢查時已經跑過一次授權的話，這一步大約 5 分鐘。Windows 跳出「是否允許變更」時，請按「是」。'
+      },
+      {
+        title: '安裝 Cloudflare Skill（給 Codex 的操作手冊）',
+        body: 'Skill 就像幫 Codex 裝一本「Cloudflare 操作手冊」，之後部署機器人、查錯誤時，它會照手冊的安全步驟做（先查看、跟你確認、再動手）。<br><br>' +
+          '<strong>Step 1：</strong>開啟 <a href="https://drive.google.com/drive/u/0/folders/1GElvP2OY2pYHxTTBLERVxVUVeoRhlYi7" target="_blank" class="ext-link-btn">🔗 Cloudflare Skill 下載（Google 雲端硬碟）</a>，在 <strong>cloudflare</strong> 資料夾上按右鍵 &rarr; 「下載」。<br><br>' +
+          '<strong>Step 2：</strong>下載下來會是一個壓縮檔，在「<strong>下載</strong>」資料夾裡按右鍵 &rarr; 「解壓縮全部」，確認裡面有 <strong>cloudflare</strong> 資料夾。<br><br>' +
+          '<strong>Step 3：</strong>在 Codex 貼上下面這段話。',
+        promptBox: {
+          id: 'day1_skill_install_prompt',
+          buttonText: '複製安裝提示詞',
+          text: '老師給了我一個 Cloudflare 的 skill，資料夾名稱是 cloudflare，放在我電腦的「下載」資料夾裡（可能在解壓縮後的資料夾裡面）。\n請幫我安裝成「每個專案都能用」的 skill：\n1. 找到這個資料夾，確認裡面有 SKILL.md\n2. 把整個資料夾複製到我的使用者資料夾底下的 .agents/skills/cloudflare（資料夾不存在就建立）\n3. 告訴我安裝好了沒有，以及你現在看不看得到這個 skill；需要重開 Codex 才看得到的話，請直接告訴我\n請用繁體中文白話回答我。'
+        },
+        checklist: [
+          'Codex 回報已安裝到 .agents/skills/cloudflare',
+          '重開 Codex 後，問它「你有 cloudflare 這個 skill 嗎？」，它回答有'
+        ],
+        tip: '💡 裝在「使用者資料夾」而不是某一個專案裡，以後每個專案都用得到，第二天也不用再裝一次。'
       }
     ]
   },
