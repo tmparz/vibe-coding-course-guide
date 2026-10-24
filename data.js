@@ -398,7 +398,7 @@ const STAGES = [
           '<strong>3. Access Token：</strong>Messaging API → Channel access token → Reissue；依畫面確認舊 Token 失效時間，更新 Worker。<br><br>' +
           '<strong>4. Gemini：</strong>建立新 API Key → 更新 Worker → 測一題 FAQ → 刪除舊 Key。新 Key 不會重置同一專案的額度。<br><br>' +
           '<strong>5. 驗收：</strong>Webhook Verify、手機 FAQ、一次預約及雙向通知都要重測。還需本機開發時，自行更新 .dev.vars；不再用的本機副本移除舊憑證。<br><br>' +
-          '<strong>6. 清理與交接：</strong>按頁面上方「清除本機教材中的三個憑證」，另複製一段一般文字覆蓋剪貼簿。保存 FAQ、程式與網址；完成<a href="course/課堂驗收與交接.html">驗收與交接表</a>。第一天的 Worker 先記錄停用，確認沒有用途後再自行決定是否刪除。',
+          '<strong>6. 清理與交接：</strong>複製一段一般文字覆蓋剪貼簿。保存 FAQ、程式與網址；完成<a href="course/課堂驗收與交接.html">驗收與交接表</a>。第一天的 Worker 先記錄停用，確認沒有用途後再自行決定是否刪除。',
         checklist: [
           'Channel Secret 與 LINE Access Token 已重新發行，Worker 已更新',
           'Gemini 舊金鑰已刪除，新金鑰已建立',
