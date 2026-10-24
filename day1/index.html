@@ -27,7 +27,7 @@
   <main class="main-content" id="mainContent"></main>
 
   <script src="../course-tools.js?v=20261024-03"></script>
-  <script src="data.js?v=20261024-05"></script>
+  <script src="data.js?v=20261025-01"></script>
   <script>
     (function () {
       const nav = document.getElementById('tabNav');
@@ -318,53 +318,34 @@ ${val('my_info') || '[請先在上方填寫你確定的資料]'}
         // DAY 1 部署提示詞
         const buildPrompt = document.getElementById('day1_build_prompt');
         if (buildPrompt) {
-          buildPrompt.value = `你是我的 LINE 機器人工程師。請從零開始，幫我做一個「LINE AI 客服」並部署上線。
-我是零基礎學員，請先用三句白話說明你的計畫，再一步一步做，每一步做完用一句白話告訴我結果。
+          buildPrompt.value = `請幫我做一個 LINE AI 客服機器人，部署到 Cloudflare Workers。
+我是新手，每做完一步，用一句白話告訴我結果。
 
-【這個機器人要做什麼】
-客人在 LINE 傳任何文字，機器人把客人的問題連同【我的 FAQ】一起交給 Google Gemini，請它理解意思後，只依照 FAQ 回答。
-客人不會照 FAQ 的原句問，例如 FAQ 寫「營業時間」，客人可能問「你們幾點開門？」，都要答得出來。
+【機器人要做的事】
+客人在 LINE 傳文字，請用 Gemini 理解客人的意思，再依照下面的 FAQ 回答。客人不會照 FAQ 原句問，意思對就要答得出來。
+- 客人傳「人工」：回「好的，真人客服看到訊息後會回覆您，請稍候。」，不用 AI。
+- FAQ 沒有的問題，或 Gemini 出錯：回「這個我需要確認，請傳「人工」，由真人為您回覆。」
+- 只能用 FAQ 的內容，不能編造價格、日期、地址或優惠。用繁體中文，簡短親切。
 
 【我的 FAQ】
 ${val('my_faq') || '[請回「我的 FAQ」分頁貼上確認好的 FAQ]'}
 
-【LINE 與 Gemini 憑證】
+【金鑰】（只能用 npx wrangler secret put 設定，不要寫進程式碼，也不要上傳 GitHub）
 - LINE_CHANNEL_SECRET: ${channelSecret || '[請回「LINE 官方帳號」分頁填寫 Channel Secret]'}
 - LINE_CHANNEL_ACCESS_TOKEN: ${accessToken || '[請回「LINE 官方帳號」分頁填寫 Access Token]'}
 - GEMINI_API_KEY: ${geminiKey || '[請在上方填寫 Gemini API Key]'}
 
-【憑證保存規則】
-- 憑證只能用 npx wrangler secret put 設定到 Cloudflare，或放在本機的 .dev.vars。
-- 不要把它們寫進任何程式碼、wrangler 設定檔或 README，也不要 commit 到 GitHub。
+【做法】
+1. 建立資料夾 line-ai-faq，不需要資料庫。FAQ 放在獨立檔案，之後改 FAQ 只改這個檔案。
+2. /webhook/line 接收 LINE 訊息：要驗證 LINE 簽章；LINE 按 Verify 時也要回 200；先回 200 再在背景回覆，避免逾時。
+3. /health 回 {"status":"ok"}。
+4. 模型用 gemini-3.6-flash，找不到就換成目前可用的 Flash 模型，並告訴我換成哪個。
+5. 確認已登入 Cloudflare（沒有就執行 npx wrangler login），設定金鑰、部署，打開 /health 確認成功。
 
-【技術規格】
-1. 在我的電腦建立一個新資料夾 line-ai-faq，用 Cloudflare Workers（JavaScript）。不需要資料庫，不要建立 D1 或 R2。
-2. FAQ 放在一個獨立的檔案，之後我要改 FAQ 只改這個檔案。
-3. GET /health 回傳 {"status":"ok"}，讓我確認有上線。
-4. POST /webhook/line 接收 LINE 訊息：
-   - 用 LINE_CHANNEL_SECRET 驗證 x-line-signature，驗證失敗回 401。
-   - LINE 按 Verify 時送來的 events 是空的，也要回 200。
-   - 先回 200 給 LINE，再在背景呼叫 Gemini 和回覆（用 ctx.waitUntil），避免逾時。
-   - 只處理文字訊息，用 replyToken 回覆。
-5. 客人傳「人工」：回覆「好的，真人客服看到訊息後會回覆您，請稍候。」，不呼叫 Gemini。
-6. 其他文字：呼叫 Gemini，規則：
-   - 模型用 gemini-3.6-flash（課前須用自己的專案實測可用模型與額度，回覆時間不保證）。不要照抄舊模型名稱；可用模型依帳號、專案與當日政策確認。
-     如果出現模型不存在或 404，先查 https://ai.google.dev/gemini-api/docs/models 換成目前可用的 Flash 模型，並告訴我換成哪一個。
-   - Gemini 回 429（額度限制，可能是每分鐘或每日）或 503（忙線）時，等 2 秒重試一次；還是失敗才回覆下面那句。整個回覆要在 20 秒內完成。
-   - 用繁體中文，簡短親切，像店家在 LINE 回覆客人。
-   - 只能使用 FAQ 的內容，不能編造價格、日期、地址、優惠。
-   - FAQ 沒有的，回答：這個我需要確認，請傳「人工」，由真人為您回覆。
-   - Gemini 出錯時，也回覆上面這句，不要讓客人收不到回應。
+【做完後告訴我】
+要貼到 LINE Developers 的完整 Webhook 網址，格式像：https://line-ai-faq.你的帳號.workers.dev/webhook/line
 
-【部署步驟】
-7. 確認 npx wrangler whoami 已登入 Cloudflare，沒有的話執行 npx wrangler login。
-8. 用 npx wrangler secret put 設定上面三個憑證。
-9. 部署，完成後告訴我 Worker 網址。
-10. 打開「Worker 網址/health」，確認看到 "status":"ok"。
-11. 告訴我要貼到 LINE Developers 的 Webhook URL：「Worker 網址/webhook/line」。
-
-【遇到錯誤時】
-先用白話說明發生什麼事，再告訴我你打算怎麼修，一次只修一個問題，不要整個專案重寫。`;
+遇到錯誤先用白話說明，一次修一個問題，不要整個重寫。`;
         }
       }
 

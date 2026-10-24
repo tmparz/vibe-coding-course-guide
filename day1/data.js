@@ -378,20 +378,14 @@ const STAGES = [
           buttonText: '複製部署提示詞'
         },
         checklist: [
-          'Codex 回報部署成功，給了 Worker 網址',
-          '打開「Worker 網址/health」看到 "status":"ok"'
+          'Codex 回報部署成功，/health 測試通過',
+          'Codex 給了完整的 Webhook 網址（結尾是 /webhook/line）'
         ],
-        extra: '⏱️ 預估實作與排障時間：45 - 60 分鐘',
-        worksheet: {
-          title: '部署資訊記錄',
-          fields: [
-            { id: 'day1_worker_url', label: 'Worker 網址', type: 'text', hint: '例如：https://line-ai-faq.xxx.workers.dev' }
-          ]
-        }
+        extra: '⏱️ 預估實作與排障時間：45 - 60 分鐘'
       },
       {
         title: '把門鈴地址填進 LINE',
-        body: '<strong>Step 1：</strong>LINE Developers &rarr; Messaging API 分頁 &rarr; Webhook URL 填入「<strong>Worker 網址/webhook/line</strong>」&rarr; Verify。<br><br>' +
+        body: '<strong>Step 1：</strong>LINE Developers &rarr; Messaging API 分頁 &rarr; Webhook URL 貼上<strong>Codex 給你的 Webhook 網址</strong> &rarr; Verify。<br><br>' +
           '<strong>Step 2：</strong>打開「Use webhook」。<br><br>' +
           '<strong>Step 3：</strong>回到 OA Manager &rarr; 回應設定，把「<strong>自動回應訊息</strong>」關閉。<br>' +
           '（不關的話，客人問一題，剛剛設定的關鍵字和 AI 會<strong>各回一次</strong>）<br><br>' +
