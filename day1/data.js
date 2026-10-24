@@ -232,6 +232,19 @@ const STAGES = [
     desc: '先用 LINE 內建的關鍵字自動回覆，再開通給自己的程式使用的 Messaging API',
     steps: [
       {
+        title: '申請 LINE 官方帳號',
+        body: '還沒有官方帳號的人，先花幾分鐘申請一個：<br>' +
+          '1. 用自己的 LINE 帳號登入 LINE Official Account Manager<br>' +
+          '2. 左側選單按「建立」，填帳號名稱、電子郵件、業種等資料<br>' +
+          '3. 確認條款後送出，就能在帳號列表看到自己的官方帳號<br><br>' +
+          '每一步的畫面和注意事項，請看詳細教學：<br><br>' +
+          '<a href="../line-official-account-setup-guide.html#apply" target="_blank" rel="noopener noreferrer" class="ext-link-btn">📘 LINE 官方帳號申請詳細教學 ↗</a>',
+        checklist: [
+          '能在 OA Manager 看到自己的官方帳號'
+        ],
+        tip: '💡 課前已經建好的人，這一步直接打勾跳過。'
+      },
+      {
         title: '設定歡迎訊息與關鍵字自動回覆',
         image: '../line-flow-screenshots/05-official-account-dashboard-marked.png',
         body: '<div class="antifraud-notice">📣 <strong>防呆提示</strong>：講師會把每一步的連結發到 LINE 群組。請用 Chrome 開啟，不要用 LINE 內建瀏覽器。</div><br>' +
@@ -257,7 +270,8 @@ const STAGES = [
           '<strong>Step 3：</strong>取得以下資料，填進下方欄位：<br>' +
           '- <strong>Channel ID</strong>、<strong>Channel Secret</strong>：Basic settings 頁面<br>' +
           '- <strong>Your user ID（管理員 UID）</strong>：Basic settings 最下方，U 開頭的 33 碼（第二天的通知會用到）<br>' +
-          '- <strong>Channel Access Token</strong>：Messaging API 分頁最下方 &rarr; Issue',
+          '- <strong>Channel Access Token</strong>：Messaging API 分頁最下方 &rarr; Issue<br><br>' +
+          '<a href="../line-official-account-setup-guide.html#messaging-api" target="_blank" rel="noopener noreferrer" class="ext-link-btn">📘 Messaging API 開通詳細教學 ↗</a>',
         checklist: [
           'Messaging API 已啟用',
           '已取得 Channel ID 與 Channel Secret',
