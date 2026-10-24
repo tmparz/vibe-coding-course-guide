@@ -275,7 +275,7 @@ const STAGES = [
     steps: [
       {
         title: '一則訊息的旅程',
-        image: './faq-message-flow.svg',
+        image: './faq-message-flow.webp',
         body: '客人在 LINE 問「星期日有營業嗎？」，LINE 會把訊息交給 Cloudflare Worker；Worker 先讀取已確認的完整 FAQ，再透過 <strong>Google Gemini API</strong> 送出「這位顧客的問題＋完整 FAQ＋只依 FAQ 回答的規則」。Google 回傳文字答案給 Worker，Worker 最後呼叫 <strong>LINE Reply API</strong> 把結果送回客人手機。若 FAQ 沒有相關資訊，應引導客人傳「人工」，不能亂猜。<br><br><strong>重點：</strong>Google 不會直接傳 LINE 訊息；向 Google 發問的是 Worker，Gemini API Key 安全放在 Worker Secret。',
         flow: ['① 顧客 LINE 提問', '② LINE Webhook', '③ Worker 讀取完整 FAQ', '④ Worker 詢問 Google Gemini API', '⑤ Google 傳回答案', '⑥ Worker 呼叫 LINE Reply API', '⑦ 顧客看到回覆'],
         tip: '💡 <strong>Webhook = 門鈴。</strong>LINE 把顧客問題通知 Worker，Worker 帶著 FAQ 去詢問 Google Gemini API。請沿著上方新版情境圖的編號說出訊息如何出去、又如何回來。'
