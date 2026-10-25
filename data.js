@@ -12,6 +12,13 @@ const TEMPLATES = {
     orderFields: '學員姓名, 課程名稱, 付款狀態',
     adminNotify: '系統通知：[學員姓名] 已預約！課程：[課程名稱]，開課時間：[開課時間]，剩餘名額：[剩餘名額] 位。',
     userNotify: '[學員姓名] 您好！預約成功 🎉 課程：[課程名稱]，開課時間：[開課時間]，單號：[單號]。期待與您相見！'
+  },
+  service: {
+    label: '💆 服務預約版（按摩、美甲）',
+    productFields: '服務名稱,服務介紹, 價格, 服務時長, 上下架狀態, 可預約時段, 剩餘名額',
+    orderFields: '客人姓名, 服務名稱, 預約時段, 付款狀態',
+    adminNotify: '系統通知：[客人姓名] 已預約！服務：[服務名稱]，時段：[可預約時段]，剩餘名額：[剩餘名額] 位。',
+    userNotify: '[客人姓名] 您好！預約成功 🎉 服務：[服務名稱]，時段：[可預約時段]，單號：[單號]。如需改期請提前 24 小時告知。'
   }
 };
 
@@ -19,7 +26,7 @@ const STAGES = [
   {
     id: 'overview', label: '課程總覽', color: 's1',
     title: 'Vibe Coding 手把手實戰班',
-    desc: '用 LINE OA 打造你的第一套銷售/預約系統 MVP — 6 小時完成從零到上線',
+    desc: '第二天：把第一天的 FAQ 機器人升級成有後台的 AI 客服，再加上預約或賣商品',
     steps: [
       {
         title: '🌟 什麼是 Vibe Coding？',
@@ -28,9 +35,10 @@ const STAGES = [
       },
       {
         title: '課程目標',
-        body: '學員在 6 小時內完成一套可運作的 LINE OA 銷售/預約系統 MVP。<br>真正想教的能力：如何把商業需求拆解成系統需求，並透過 AI 完成系統建置。',
+        body: '學員在 6 小時內完成一套可運作的 LINE OA 銷售/預約系統 MVP。<br>真正想教的能力：如何把商業需求拆解成系統需求，並透過 AI 完成系統建置。<br><br>' +
+          '<strong>上午</strong>做出第一張圖：AI 依 FAQ 回答，客人要找真人時通知老闆。<br><strong>下午</strong>做出第二張圖：客人點選單、看商品、按預約，名額自動扣減。',
         image: ['faq流程圖.png', 'line流程圖.png'],
-        checklist: ['LINE OA 串接', '商品管理', '訂單管理', 'LINE Webhook', 'Cloudflare Worker', 'D1 Database', 'Rich Menu', 'LINE 通知', 'MVP 上線']
+        checklist: ['上午：FAQ 線上修改', '上午：每位客人的 AI 開關、真人接手', '上午：問題紀錄', '下午：商品管理', '下午：訂單管理', '下午：Rich Menu', '下午：雙向 LINE 通知', 'MVP 上線']
       },
       {
         title: '🗓️ 今日排程（第二天）',
@@ -63,15 +71,15 @@ const STAGES = [
           '<a href="downloads/兩天學員教材.zip" download class="ext-link-btn">⬇️ 下載兩天完整教材包</a>'
       },
       {
-        title: '📋 課前準備（防呆清單）',
-        body: '請在課程開始前確認以下設備與帳號都已備妥，尤其是 Gmail 帳號，少了它會卡在第一關！',
+        title: '📋 上課前檢查',
+        body: '第二天直接接著第一天做，開始前確認這幾件事：',
         checklist: [
-          '✅ 攜帶筆電與充電線',
-          '✅ 確認自己有 Gmail 帳號，且能正常登入（課程建議用同一個 Gmail 管理帳號）',
-          '✅ ChatGPT Plus 仍在訂閱中，Codex 可以正常登入',
-          '✅ 手機已安裝並登入 LINE'
+          '✅ 帶第一天同一台筆電與充電線',
+          '✅ 用第一天同一個瀏覽器打開本頁，LINE 資料和 FAQ 才會自動帶入',
+          '✅ Codex 可以正常登入（ChatGPT Plus 仍在訂閱中）',
+          '✅ 手機 LINE 可以傳訊息給自己的官方帳號'
         ],
-        extra: '⚠️ 若您忘記 Gmail 密碼，請務必在課前解決，否則無法完成 Cloudflare 帳號申請。'
+        extra: '⚠️ 換了電腦或瀏覽器也沒關係，「複習與準備」分頁會帶你把資料重新填好。'
       },
       {
         title: '📖 專有名詞白話對照表',
@@ -130,9 +138,8 @@ const STAGES = [
           '- <strong>Your user ID（管理員 LINE UID）</strong>：Basic settings 最下方，U 開頭的 33 碼<br>' +
           '- <strong>Channel Access Token</strong>：Messaging API 分頁最下方 Issue',
         checklist: [
-          '已取得 Channel ID 與 Channel Secret',
-          '已取得 Channel Access Token',
-          '已取得管理員 LINE UID (Your user ID)'
+          '下方四個欄位都有資料（自動帶入或重新填寫）',
+          '管理員 LINE UID 是 U 開頭的 33 碼'
         ],
         tip: '💡 <strong>這三項 LINE 資料有什麼用？</strong><br>1. <strong>Channel Secret</strong> 是「門禁密碼」：確認訊息真的來自 LINE<br>2. <strong>Access Token</strong> 是「發話遙控器」：讓系統可以回覆、推播<br>3. <strong>Your user ID</strong> 是「老闆專屬信箱」：客人找真人或下單時通知你<br>User ID 是收件人識別碼，不是密碼。要保密並在最後更換的是 Channel Secret、Access Token 和 Gemini API Key。',
         worksheet: {
@@ -149,6 +156,7 @@ const STAGES = [
       },
       {
         title: '第一天的 FAQ 與 Gemini 鑰匙',
+        checklist: ['FAQ 和 Gemini API Key 都有資料'],
         body: '上午的 AI 客服會用<strong>第一天確認好的 FAQ</strong> 當作起點，建好後存進資料庫，之後你就能在後台直接修改。同一瀏覽器設定檔、同一網站網址會自動帶入，換電腦的同學請到第一天頁面的「我的 FAQ」分頁複製，或重新貼上。',
         worksheet: {
           title: '第一天資料（同一瀏覽器設定檔、同一網站網址會自動帶入）',
@@ -228,10 +236,10 @@ const STAGES = [
       {
         title: 'Step A3 - 建立雲端資料庫並部署',
         body: '本機試過沒問題後，跟 Codex 說「<strong>可以了，請建立雲端 D1 並部署</strong>」。它會建立雲端資料庫（D1，像一本放在雲端的超級 Excel）、設定鑰匙和後台密碼、部署上線。<br><br>' +
-          '完成後，Codex 會給你 Worker 網址、後台網址，以及要貼到 LINE 的 Webhook URL。',
+          '完成後，Codex 會給你三個網址：Worker 網址、後台網址、要貼到 LINE 的完整 Webhook 網址。',
         checklist: [
           'Codex 回報雲端 D1 建立完成',
-          'Codex 回報部署成功，給了 Worker 網址和後台網址',
+          'Codex 回報部署成功，給了 Worker 網址、後台網址和 Webhook 網址',
           '用手機或電腦打開雲端後台網址，輸入密碼登入成功'
         ],
         worksheet: {
@@ -246,7 +254,7 @@ const STAGES = [
       {
         title: 'Step A4 - LINE Webhook 換成今天的網址',
         body: '<div class="antifraud-notice">⚠️ 今天是<strong>新的 Worker</strong>，網址和第一天不一樣。LINE Developers 的 Webhook URL 要<strong>換成今天的網址</strong>，不然訊息還是會送到第一天的機器人。</div><br>' +
-          '<strong>Step 1：</strong>LINE Developers &rarr; Messaging API 分頁 &rarr; Webhook URL 改成「<strong>今天的 Worker 網址/webhook/line</strong>」&rarr; Verify。<br><br>' +
+          '<strong>Step 1：</strong>LINE Developers &rarr; Messaging API 分頁 &rarr; Webhook URL 換成 <strong>Codex 剛剛給你的 Webhook 網址</strong>（結尾是 /webhook/line）&rarr; Verify。<br><br>' +
           '<strong>Step 2：</strong>確認「Use webhook」開啟、OA Manager 的「自動回應訊息」關閉、「聊天」開啟（第一天設過，再看一次）。',
         checklist: [
           'Webhook URL 已換成今天的 Worker 網址',
@@ -382,8 +390,14 @@ const STAGES = [
       },
       {
         title: 'Step B5 - 預約流程打通',
-        body: '完成端到端的流程測試',
+        body: '用手機當客人，從頭到尾走一次預約，再到後台確認結果。',
         flow: ['手機點選商品', '系統回傳列表', '點擊訂購產生文字訊息', '寫入 LINE Chat 記錄', '系統寫入 D1 扣庫存', '發送雙向即時通知'],
+        checklist: [
+          '按選單「瀏覽商品」，看到商品輪播',
+          '按「立即預約」，聊天室出現自己送出的預約文字',
+          '手機收到預約成功通知，老闆的 LINE 也收到通知',
+          '後台「訂單管理」出現這筆訂單，名額或庫存少 1'
+        ],
         result: '銷售/預約流程完整打通 🎉'
       }
     ]
@@ -436,10 +450,10 @@ const STAGES = [
         checklist: [
           'Channel Secret 與 LINE Access Token 已重新發行，Worker 已更新',
           'Gemini 舊金鑰已刪除，新金鑰已建立',
-          '三個憑證在 Cloudflare 已更新，本機教材欄位已清除',
+          '三個憑證在 Cloudflare 已更新',
           '手機測試正常'
         ],
-        tip: '💡 <strong>為什麼要換？</strong>鑰匙貼給 AI 之後，會留在對話紀錄裡。換掉以後，就算舊的對話被別人看到，也拿不到你的帳號權限。新鑰匙由你在 Cloudflare secrets 或本機開發設定自行輸入。清除教材欄位不會清除 AI 對話，真正使舊憑證失效仍要靠重新發行與撤銷。'
+        tip: '💡 <strong>為什麼要換？</strong>鑰匙貼給 AI 之後，會留在對話紀錄裡。換掉以後，就算舊的對話被別人看到，也拿不到你的帳號權限。新鑰匙由你在 Cloudflare secrets 或本機開發設定自行輸入。'
       },
       {
         title: '備援方案',
