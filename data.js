@@ -48,7 +48,7 @@ const STAGES = [
           '<tr><td>00:00–00:20</td><td>複習：昨天的機器人，和它的三個問題</td><td>開場</td></tr>' +
           '<tr><td>00:20–00:40</td><td>今天的目標、確認 LINE 資料、Cloudflare、Skill</td><td>準備</td></tr>' +
           '<tr><td>00:40–01:40</td><td>提示詞 A：建立 AI 客服後台、本機測試</td><td>A1–A2</td></tr>' +
-          '<tr><td>01:40–02:20</td><td>建立雲端 D1、部署、Webhook 換成今天的網址</td><td>A3–A4</td></tr>' +
+          '<tr><td>01:40–02:20</td><td>建立雲端 D1、部署、手機確認升級成功</td><td>A3–A4</td></tr>' +
           '<tr><td>02:20–02:50</td><td>營運演練：補 FAQ、關 AI 一對一、整理要上架的項目</td><td>A5</td></tr>' +
           '<tr><td colspan="3"><strong>下午：預約與商品</strong></td></tr>' +
           '<tr><td>02:50–03:10</td><td>完整訊息分流、建立商品與訂單規格</td><td>規格</td></tr>' +
@@ -117,7 +117,7 @@ const STAGES = [
       },
       {
         title: '今天要完成什麼',
-        body: '今天的系統做在<strong>同一個專案</strong>（line-shop）裡，分兩段蓋：',
+        body: '今天直接在<strong>第一天的專案</strong>（line-ai-faq）上繼續加功能，網址不變，分兩段蓋：',
         checklist: [
           '✅ 上午：AI 客服後台（後台密碼、FAQ 線上修改、每位客人的 AI 開關、真人接手、問題紀錄）',
           '✅ 下午：商品管理、上下架、庫存或名額',
@@ -155,14 +155,13 @@ const STAGES = [
         }
       },
       {
-        title: '第一天的 FAQ 與 Gemini 鑰匙',
-        checklist: ['FAQ 和 Gemini API Key 都有資料'],
-        body: '上午的 AI 客服會用<strong>第一天確認好的 FAQ</strong> 當作起點，建好後存進資料庫，之後你就能在後台直接修改。同一瀏覽器設定檔、同一網站網址會自動帶入，換電腦的同學請到第一天頁面的「我的 FAQ」分頁複製，或重新貼上。',
+        title: '第一天的 Gemini 鑰匙',
+        checklist: ['Gemini API Key 有資料'],
+        body: '同一瀏覽器設定檔、同一網站網址會自動帶入。<strong>FAQ 不用再貼</strong>：它已經在第一天的專案裡，Codex 會直接把它搬進資料庫。',
         worksheet: {
           title: '第一天資料（同一瀏覽器設定檔、同一網站網址會自動帶入）',
           fields: [
-            { id: 'gemini_api_key', label: 'Gemini API Key', type: 'text', hint: '第一天在 Google AI Studio 建立的金鑰' },
-            { id: 'my_faq', label: '我的 FAQ', type: 'textarea', hint: '第一天確認好的 FAQ' }
+            { id: 'gemini_api_key', label: 'Gemini API Key', type: 'text', hint: '第一天在 Google AI Studio 建立的金鑰' }
           ]
         }
       },
@@ -188,7 +187,7 @@ const STAGES = [
           'Codex 回報 .agents/skills/cloudflare 已安裝',
           '問 Codex「你有 cloudflare 這個 skill 嗎？」，它回答有'
         ],
-        tip: '💡 skill 裝在「使用者資料夾」，不是裝在某個專案裡，所以第一天裝的今天照樣能用，等一下建立的 line-shop 專案也用得到。'
+        tip: '💡 skill 裝在「使用者資料夾」，不是裝在某個專案裡，所以第一天裝的今天照樣能用，今天升級 line-ai-faq 時也用得到。'
       }
     ]
   },
@@ -210,16 +209,16 @@ const STAGES = [
       },
       {
         title: 'Step A1 - 交給 Codex：建立 AI 客服後台',
-        body: '下面的提示詞已經自動放進你的 LINE 資料、Gemini 鑰匙和第一天的 FAQ。請<strong>開一個新的 Codex 對話</strong>，整段貼上。',
+        body: '下面的提示詞已經自動放進你的管理員 UID 和鑰匙。請在 Codex 打開<strong>第一天的 line-ai-faq 資料夾</strong>，開一個新對話，整段貼上。',
         promptBox: {
           id: 'faq_system_prompt',
           buttonText: '複製提示詞 A（AI 客服後台）'
         },
         checklist: [
-          'Codex 用三句白話說明了計畫',
+          'Codex 用三句白話說明了計畫，而且先存了還原點',
           'Codex 讓你自己輸入後台密碼（至少 12 碼），沒有顯示在畫面上'
         ],
-        tip: '💡 <strong>這段提示詞在做什麼？</strong>把鑰匙、FAQ 和規則一次交給 AI。你負責說需求、按允許、驗收結果；AI 負責寫程式、建資料庫。',
+        tip: '💡 <strong>這段提示詞在做什麼？</strong>把要加的功能用白話一次交給 AI。你負責說需求、按允許、驗收結果；AI 負責寫程式、建資料庫。',
         extra: '⏱️ 預估實作與排障時間：40 - 60 分鐘'
       },
       {
@@ -235,33 +234,31 @@ const STAGES = [
       },
       {
         title: 'Step A3 - 建立雲端資料庫並部署',
-        body: '本機試過沒問題後，跟 Codex 說「<strong>可以了，請建立雲端 D1 並部署</strong>」。它會建立雲端資料庫（D1，像一本放在雲端的超級 Excel）、設定鑰匙和後台密碼、部署上線。<br><br>' +
-          '完成後，Codex 會給你三個網址：Worker 網址、後台網址、要貼到 LINE 的完整 Webhook 網址。',
+        body: '本機試過沒問題後，跟 Codex 說「<strong>可以了，請建立雲端 D1 並部署</strong>」。它會建立雲端資料庫（D1，像一本放在雲端的超級 Excel）、設定後台密碼，部署到第一天的同一個 Worker。<br><br>' +
+          '完成後，Codex 會給你後台網址，並確認 Webhook 網址和第一天一樣。',
         checklist: [
           'Codex 回報雲端 D1 建立完成',
-          'Codex 回報部署成功，給了 Worker 網址、後台網址和 Webhook 網址',
+          'Codex 回報部署成功，給了後台網址',
           '用手機或電腦打開雲端後台網址，輸入密碼登入成功'
         ],
         worksheet: {
           title: '部署資訊記錄（下午會用到）',
           fields: [
-            { id: 'cloudflare_db_name', label: 'D1 資料庫名稱', type: 'text', hint: 'Codex 建立的名稱，例如：line-shop-db' },
-            { id: 'cloudflare_worker_url', label: 'Worker 網址', type: 'text', hint: '例如：https://line-shop.xxx.workers.dev' }
+            { id: 'cloudflare_db_name', label: 'D1 資料庫名稱', type: 'text', hint: 'Codex 建立的名稱，例如：line-ai-faq-db' },
+            { id: 'cloudflare_worker_url', label: 'Worker 網址', type: 'text', hint: '和第一天一樣，例如：https://line-ai-faq.xxx.workers.dev' }
           ]
         },
         extra: '⏱️ 預估：15 - 25 分鐘'
       },
       {
-        title: 'Step A4 - LINE Webhook 換成今天的網址',
-        body: '<div class="antifraud-notice">⚠️ 今天是<strong>新的 Worker</strong>，網址和第一天不一樣。LINE Developers 的 Webhook URL 要<strong>換成今天的網址</strong>，不然訊息還是會送到第一天的機器人。</div><br>' +
-          '<strong>Step 1：</strong>LINE Developers &rarr; Messaging API 分頁 &rarr; Webhook URL 換成 <strong>Codex 剛剛給你的 Webhook 網址</strong>（結尾是 /webhook/line）&rarr; Verify。<br><br>' +
-          '<strong>Step 2：</strong>確認「Use webhook」開啟、OA Manager 的「自動回應訊息」關閉、「聊天」開啟（第一天設過，再看一次）。',
+        title: 'Step A4 - 用手機確認升級成功',
+        body: '今天是升級<strong>第一天的同一個 Worker</strong>，網址沒變，LINE 的 Webhook <strong>不用重填</strong>。直接用手機試：',
         checklist: [
-          'Webhook URL 已換成今天的 Worker 網址',
-          'Webhook Verify 顯示 Success',
-          '手機問一題 FAQ，今天的系統有回答',
-          '後台「客人管理」出現了你自己'
-        ]
+          '手機問一題 FAQ，AI 照常回答',
+          '後台「客人管理」出現了你自己',
+          '傳「人工」：收到「已轉給真人客服」，自己的 LINE 也收到通知'
+        ],
+        tip: '💡 手機沒有反應的話，到 LINE Developers 的 Messaging API 分頁按 Webhook 的 Verify，把結果截圖給 Codex 看。'
       },
       {
         title: 'Step A5 - 營運演練：把 FAQ 補完整',
@@ -336,7 +333,7 @@ const STAGES = [
       },
       {
         title: 'Step B1 - 交給 Codex：加上商品與預約',
-        body: '回到<strong>上午同一個 Codex 對話</strong>（或在 line-shop 資料夾開新對話），整段貼上。這段提示詞不含鑰匙：上午已經存進 Cloudflare 了。',
+        body: '回到<strong>上午同一個 Codex 對話</strong>（或在 line-ai-faq 資料夾開新對話），整段貼上。這段提示詞不含鑰匙：上午已經存進 Cloudflare 了。',
         promptBox: {
           id: 'booking_system_prompt',
           buttonText: '複製提示詞 B（商品與預約）'
@@ -446,7 +443,7 @@ const STAGES = [
           '<strong>3. Access Token：</strong>Messaging API → Channel access token → Reissue；依畫面確認舊 Token 失效時間，更新 Worker。<br><br>' +
           '<strong>4. Gemini：</strong>建立新 API Key → 更新 Worker → 測一題 FAQ → 刪除舊 Key。新 Key 不會重置同一專案的額度。<br><br>' +
           '<strong>5. 驗收：</strong>Webhook Verify、手機 FAQ、一次預約及雙向通知都要重測。還需本機開發時，自行更新 .dev.vars；不再用的本機副本移除舊憑證。<br><br>' +
-          '<strong>6. 清理與交接：</strong>複製一段一般文字覆蓋剪貼簿。保存 FAQ、程式與網址；完成<a href="course/課堂驗收與交接.html">驗收與交接表</a>。第一天的 Worker 先記錄停用，確認沒有用途後再自行決定是否刪除。',
+          '<strong>6. 清理與交接：</strong>複製一段一般文字覆蓋剪貼簿。保存 FAQ、程式與網址；完成<a href="course/課堂驗收與交接.html">驗收與交接表</a>。',
         checklist: [
           'Channel Secret 與 LINE Access Token 已重新發行，Worker 已更新',
           'Gemini 舊金鑰已刪除，新金鑰已建立',
