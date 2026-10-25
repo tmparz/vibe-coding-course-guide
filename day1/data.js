@@ -32,8 +32,8 @@ const STAGES = [
     steps: [
       {
         title: '🎯 兩天後你會做出什麼？',
-        body: '講師先展示<strong>第二天的成品</strong>：客人在 LINE 點選單、看服務、按下預約，系統自動記錄並通知老闆。<br><br>今天是第一步：讓 LINE <strong>聽懂客人用自己的話問問題</strong>，並根據你給的資料回答。',
-        flow: ['DAY 1｜AI 協作', 'DAY 1｜LINE 自動回答問題', 'DAY 2｜LINE 接受預約', 'DAY 2｜後台管理'],
+        body: '講師先展示<strong>第二天的成品</strong>：AI 客服有後台可以改 FAQ、客人找真人時通知老闆；客人在 LINE 點選單、看商品、按下預約，系統自動記錄並通知老闆。<br><br>今天是第一步：讓 LINE <strong>聽懂客人用自己的話問問題</strong>，並根據你給的資料回答。',
+        flow: ['DAY 1｜AI 協作', 'DAY 1｜LINE 自動回答問題', 'DAY 2 上午｜AI 客服後台', 'DAY 2 下午｜預約與商品'],
         result: '今天帶走：一個會根據你的 FAQ 回答客人的 LINE 機器人'
       },
       {
@@ -56,7 +56,7 @@ const STAGES = [
       },
       {
         title: '📦 下載教材包',
-        body: '上課要用的練習檔（練習表、Excel、會議筆記、FAQ 素材、可複製提示詞）都在裡面。下載後在「下載」資料夾按右鍵 &rarr; 「解壓縮全部」，打開 <strong>START.html</strong> 開始。<br><br>' +
+        body: '上課要用的練習檔（練習表、Excel、會議筆記、FAQ 素材）都在裡面。下載後在「下載」資料夾按右鍵 &rarr; 「解壓縮全部」，打開 <strong>START.html</strong> 開始。<strong>提示詞一律從這個網頁複製</strong>，網頁是最新版。<br><br>' +
           '<a href="../downloads/第一天學員教材.zip" download class="ext-link-btn">⬇️ 下載第一天教材包</a> ' +
           '<a href="../downloads/兩天學員教材.zip" download class="ext-link-btn">⬇️ 下載兩天完整教材包</a>'
       },
@@ -384,7 +384,7 @@ const STAGES = [
         worksheet: {
           title: 'Gemini 鑰匙（第二天會自動帶入）',
           fields: [
-            { id: 'gemini_api_key', label: 'Gemini API Key', type: 'text', hint: 'AI Studio 建立的金鑰，AIza 開頭' }
+            { id: 'gemini_api_key', label: 'Gemini API Key', type: 'text', hint: 'AI Studio 建立的金鑰，按「複製」整串貼上' }
           ]
         },
         tip: '💡 弄丟了也沒關係，回到 AI Studio 再建一把新的就好。'
@@ -446,10 +446,10 @@ const STAGES = [
         title: '今天的回顧',
         body: '每個人說一件今天和 AI 合作完成的事。',
         checklist: [
-          '上午：我用三招，讓 AI 幫我完成一份工作',
-          '上午：我用 AI 整理出自己的 FAQ',
-          '下午：我請 Codex 幫我把機器人接上 LINE',
-          '下午：我親眼看到關鍵字和 AI 的差別'
+          '上半場：我用三招，讓 AI 幫我完成一份工作',
+          '上半場：我用 AI 整理出自己的 FAQ',
+          '下半場：我請 Codex 幫我把機器人接上 LINE',
+          '下半場：我親眼看到關鍵字和 AI 的差別'
         ]
       }
     ]
