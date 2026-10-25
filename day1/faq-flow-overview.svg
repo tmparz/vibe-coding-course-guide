@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" role="img" aria-labelledby="title desc">
+<title id="title">LINE FAQ 自動回覆完整資料流</title>
+<desc id="desc">顧客在 LINE 詢問星期日有沒有營業，LINE 平台透過 Webhook 把訊息送到 Cloudflare Worker。Worker 先讀取完整 FAQ，再以 Gemini API Key 在後端向 Google Gemini API 詢問，Gemini 依 FAQ 回傳答案。Worker 呼叫 LINE Reply API 回覆顧客。FAQ 沒資料時改引導真人客服。第一天不建立預約或使用資料庫。</desc>
+<defs>
+<filter id="shadow" x="-20%" y="-20%" width="140%" height="160%"><feDropShadow dx="0" dy="9" stdDeviation="13" flood-color="#25344a" flood-opacity=".11"/></filter>
+<marker id="arrow" markerWidth="11" markerHeight="11" refX="9" refY="5.5" orient="auto-start-reverse"><path d="M1 1L10 5.5L1 10" fill="none" stroke="#3d79dd" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/></marker>
+</defs>
+<rect width="1600" height="1000" fill="#fbf9f7"/>
+<text x="800" y="75" font-family="'Noto Sans TC','Microsoft JhengHei',sans-serif" font-size="39" font-weight="800" text-anchor="middle" fill="#234285">LINE FAQ 智慧客服｜一則訊息怎麼走？</text>
+<text x="800" y="120" font-family="'Noto Sans TC','Microsoft JhengHei',sans-serif" font-size="22" text-anchor="middle" fill="#62718a">第一天的情境：自然語言問答，不做預約、不扣名額、不使用 D1</text>
+<!-- Phone 1 -->
+<g filter="url(#shadow)"><rect x="65" y="169" width="391" height="641" rx="36" fill="#eef1f6" stroke="#aab7cb" stroke-width="3"/>
+<rect x="65" y="169" width="391" height="90" rx="36" fill="#33435a"/><rect x="65" y="214" width="391" height="45" fill="#33435a"/>
+<rect x="215" y="185" width="90" height="10" rx="5" fill="#718099"/></g>
+<text x="260" y="239" text-anchor="middle" font-size="23" font-family="'Noto Sans TC','Microsoft JhengHei',sans-serif" font-weight="700" fill="#ffffff">LINE 顧客手機</text>
+<rect x="95" y="304" width="320" height="98" rx="20" fill="#ffffff" stroke="#ccd5e1" stroke-width="2"/>
+<text x="119" y="340" font-size="22" font-family="'Noto Sans TC','Microsoft JhengHei',sans-serif" fill="#33435a">你好！有問題可以</text>
+<text x="119" y="375" font-size="22" font-family="'Noto Sans TC','Microsoft JhengHei',sans-serif" fill="#33435a">直接在這裡問我。</text>
+<rect x="111" y="462" width="306" height="100" rx="21" fill="#b5f5bf"/>
+<text x="134" y="502" font-size="22" font-family="'Noto Sans TC','Microsoft JhengHei',sans-serif" font-weight="700" fill="#1b5c38">請問星期日</text>
+<text x="134" y="536" font-size="22" font-family="'Noto Sans TC','Microsoft JhengHei',sans-serif" font-weight="700" fill="#1b5c38">有營業嗎？</text>
+<text x="260" y="634" font-size="19" text-anchor="middle" font-family="'Noto Sans TC','Microsoft JhengHei',sans-serif" fill="#596a80">① 顧客用自己的話提問</text>
+<text x="260" y="668" font-size="19" text-anchor="middle" font-family="'Noto Sans TC','Microsoft JhengHei',sans-serif" fill="#596a80">不用輸入完全相同的關鍵字</text>
+<!-- Arrow left to center -->
+<path d="M464 420 C500 420 514 420 541 420" stroke="#3d79dd" stroke-width="5" fill="none" marker-end="url(#arrow)"/>
+<text x="503" y="358" font-size="18" font-family="'Noto Sans TC','Microsoft JhengHei',sans-serif" fill="#2862bb" text-anchor="middle" font-weight="700">LINE 平台</text>
+<text x="503" y="378" font-size="16" font-family="'Noto Sans TC','Microsoft JhengHei',sans-serif" fill="#2862bb" text-anchor="middle">Webhook</text>
+<!-- Center processing -->
+<rect x="558" y="170" width="497" height="641" rx="28" fill="#ffffff" stroke="#c3d4e7" stroke-width="3" filter="url(#shadow)"/>
+<path d="M586 170H1027Q1055 170 1055 198V252H558V198Q558 170 586 170Z" fill="#2a4a82"/>
+<text x="806" y="220" font-family="'Noto Sans TC','Microsoft JhengHei',sans-serif" font-size="25" font-weight="800" fill="white" text-anchor="middle">Cloudflare Worker｜後端處理</text>
+<rect x="588" y="285" width="437" height="83" rx="18" fill="#edf4ff" stroke="#bdd1ef" stroke-width="2"/>
+<text x="610" y="318" font-family="'Noto Sans TC','Microsoft JhengHei',sans-serif" font-size="20" font-weight="700" fill="#244c87">② 收到 LINE 訊息並驗證來源</text>
+<text x="610" y="348" font-family="'Noto Sans TC','Microsoft JhengHei',sans-serif" font-size="18" fill="#54708d">LINE Webhook → 確認問題內容</text>
+<path d="M807 372V392" stroke="#3d79dd" stroke-width="3" marker-end="url(#arrow)"/>
+<rect x="588" y="401" width="437" height="98" rx="18" fill="#f3f8ee" stroke="#c3dcae" stroke-width="2"/>
+<text x="610" y="434" font-family="'Noto Sans TC','Microsoft JhengHei',sans-serif" font-size="20" font-weight="700" fill="#39654f">③ 讀取 faq-data.js 的完整 FAQ</text>
+<text x="610" y="466" font-family="'Noto Sans TC','Microsoft JhengHei',sans-serif" font-size="18" fill="#526e5d">Q：星期日有營業嗎？</text>
+<text x="818" y="466" font-family="'Noto Sans TC','Microsoft JhengHei',sans-serif" font-size="18" fill="#526e5d">A：星期日公休</text>
+<path d="M807 503V524" stroke="#3d79dd" stroke-width="3" marker-end="url(#arrow)"/>
+<rect x="588" y="535" width="437" height="140" rx="18" fill="#f1edfa" stroke="#d6c9ef" stroke-width="2"/>
+<text x="610" y="571" font-family="'Noto Sans TC','Microsoft JhengHei',sans-serif" font-size="22" font-weight="800" fill="#644b99">④ 向 Google Gemini API 詢問</text>
+<text x="610" y="608" font-family="'Noto Sans TC','Microsoft JhengHei',sans-serif" font-size="18" fill="#645879">傳送「顧客問題＋完整 FAQ」</text>
+<text x="610" y="636" font-family="'Noto Sans TC','Microsoft JhengHei',sans-serif" font-size="18" fill="#645879">要求：只能依 FAQ 回答，不知道要轉真人</text>
+<path d="M807 680V701" stroke="#3d79dd" stroke-width="3" marker-end="url(#arrow)"/>
+<rect x="588" y="713" width="437" height="69" rx="18" fill="#e9f5ee" stroke="#b6d9c3" stroke-width="2"/>
+<text x="610" y="742" font-family="'Noto Sans TC','Microsoft JhengHei',sans-serif" font-size="19" font-weight="700" fill="#33664d">⑤ 收到 AI 答案 → LINE Reply API</text>
+<text x="610" y="767" font-family="'Noto Sans TC','Microsoft JhengHei',sans-serif" font-size="16" fill="#50745f">Worker 用 LINE Token 將答案送回聊天室</text>
+<!-- Arrow center to right -->
+<path d="M1066 420 H1137" stroke="#3d79dd" stroke-width="5" fill="none" marker-end="url(#arrow)"/>
+<text x="1104" y="358" font-size="18" font-family="'Noto Sans TC','Microsoft JhengHei',sans-serif" fill="#2862bb" text-anchor="middle" font-weight="700">回傳</text>
+<text x="1104" y="378" font-size="16" font-family="'Noto Sans TC','Microsoft JhengHei',sans-serif" fill="#2862bb" text-anchor="middle">LINE</text>
+<!-- Phone 3 -->
+<g filter="url(#shadow)"><rect x="1156" y="169" width="391" height="641" rx="36" fill="#eef1f6" stroke="#aab7cb" stroke-width="3"/>
+<rect x="1156" y="169" width="391" height="90" rx="36" fill="#33435a"/><rect x="1156" y="214" width="391" height="45" fill="#33435a"/>
+<rect x="1306" y="185" width="90" height="10" rx="5" fill="#718099"/></g>
+<text x="1351" y="239" text-anchor="middle" font-size="23" font-family="'Noto Sans TC','Microsoft JhengHei',sans-serif" font-weight="700" fill="#ffffff">LINE 客服回覆</text>
+<rect x="1188" y="308" width="325" height="118" rx="20" fill="#ffffff" stroke="#ccd5e1" stroke-width="2"/>
+<text x="1211" y="350" font-size="22" font-family="'Noto Sans TC','Microsoft JhengHei',sans-serif" fill="#33435a">依目前 FAQ 資料，</text>
+<text x="1211" y="387" font-size="23" font-family="'Noto Sans TC','Microsoft JhengHei',sans-serif" font-weight="700" fill="#2c6b47">星期日公休。</text>
+<rect x="1188" y="476" width="325" height="127" rx="20" fill="#f4f0fa" stroke="#dfd5ed" stroke-width="2"/>
+<text x="1211" y="514" font-size="20" font-weight="700" font-family="'Noto Sans TC','Microsoft JhengHei',sans-serif" fill="#775c8e">如果 FAQ 沒有答案…</text>
+<text x="1211" y="549" font-size="19" font-family="'Noto Sans TC','Microsoft JhengHei',sans-serif" fill="#5f5870">目前沒有確認的資訊，</text>
+<text x="1211" y="580" font-size="19" font-family="'Noto Sans TC','Microsoft JhengHei',sans-serif" fill="#5f5870">請傳「人工」聯繫客服。</text>
+<text x="1351" y="664" font-size="19" text-anchor="middle" font-family="'Noto Sans TC','Microsoft JhengHei',sans-serif" fill="#596a80">⑥ 顧客收到自然語言答案</text>
+<!-- bottom note -->
+<rect x="67" y="848" width="1479" height="104" rx="22" fill="#fff2df" stroke="#e2b77e" stroke-width="2"/>
+<text x="101" y="887" font-family="'Noto Sans TC','Microsoft JhengHei',sans-serif" font-size="21" font-weight="800" fill="#8d5d30">金鑰安全｜</text>
+<text x="213" y="887" font-family="'Noto Sans TC','Microsoft JhengHei',sans-serif" font-size="20" fill="#75583a">GEMINI_API_KEY 放在 Worker Secret，Google Gemini API 由後端呼叫；不要把金鑰放進 LINE、網頁或 GitHub。</text>
+<text x="101" y="923" font-family="'Noto Sans TC','Microsoft JhengHei',sans-serif" font-size="19" fill="#75583a">今天只處理 FAQ：不寫入訂單或預約紀錄。費用、時間等無已確認資料，一律引導真人客服。</text>
+</svg>
