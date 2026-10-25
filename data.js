@@ -61,8 +61,8 @@ const STAGES = [
           '<tr><td colspan="3"><strong>下午：預約與商品</strong></td></tr>' +
           '<tr><td>02:50–03:10</td><td>完整訊息分流、建立商品與訂單規格</td><td>規格</td></tr>' +
           '<tr><td>03:10–04:20</td><td>提示詞 B：加上商品與預約、本機測試、部署更新</td><td>B1–B3</td></tr>' +
-          '<tr><td>04:20–05:00</td><td>用 AI 產生選單圖，在 OA 後台建立圖文選單</td><td>B4</td></tr>' +
-          '<tr><td>05:00–05:30</td><td>預約流程打通、驗收</td><td>B5、驗收</td></tr>' +
+          '<tr><td>04:20–05:00</td><td>用 AI 產生選單圖，請 Codex 上傳並啟用圖文選單</td><td>B4–B5</td></tr>' +
+          '<tr><td>05:00–05:30</td><td>預約流程打通、驗收</td><td>B6、驗收</td></tr>' +
           '<tr><td>05:30–06:00</td><td>換一把新鑰匙、緩衝</td><td>驗收</td></tr>' +
           '</tbody></table></div>',
         extra: '午休與短休息另計，放在單元交界處。'
@@ -376,25 +376,44 @@ const STAGES = [
         extra: '⏱️ 預估：10 - 15 分鐘'
       },
       {
-        title: 'Step B4 - 建立圖文選單',
-        body: '產圖或改尺寸超過 10 分鐘，先用<a href="assets/rich-menu-backup.jpg" download>備用選單圖（2500×843 JPG）</a>繼續串接；圖文內容可於課後調整。<br><br><strong>Step 1：</strong>複製下方的產圖提示詞，貼到 <strong>ChatGPT</strong> 產生選單底圖，下載圖片。<br><br>' +
-          '<strong>Step 2：</strong>LINE 規定選單圖片的尺寸是固定的。把圖片交給 Codex，說：「<strong>請把這張圖轉成 2500×843 的 JPG，檔案小於 1MB，左右兩格的文字要完整保留</strong>」。<br><br>' +
-          '<strong>Step 3：</strong>OA Manager &rarr; 圖文選單 &rarr; 建立 &rarr; 版型選「<strong>小型、左右兩格</strong>」&rarr; 上傳 Codex 轉好的圖片。<br><br>' +
-          '<strong>Step 4：</strong>左邊格子的動作選「<strong>文字</strong>」，內容填「瀏覽商品」；右邊選「<strong>文字</strong>」，填「聯絡客服」。<br><br>' +
-          '<strong>Step 5：</strong>設定顯示期間、儲存，用手機重新打開官方帳號的聊天室確認選單出現。',
+        title: 'Step B4 - 產生選單圖片',
+        body: '<strong>Step 1：</strong>複製下方的產圖提示詞，貼到 <strong>ChatGPT</strong> 產生選單圖，下載圖片。<br><br>' +
+          '<strong>Step 2：</strong>把圖片放進 <strong>line-ai-faq 資料夾</strong>，檔名改成 <code>rich-menu</code>（保留原本的 .png 或 .jpg）。<br><br>' +
+          '產圖超過 10 分鐘，直接下載<a href="assets/rich-menu-backup.jpg" download>備用選單圖（2500×843 JPG）</a>，一樣放進資料夾、改檔名。圖文內容可以課後再換。',
         promptBox: {
           id: 'rich_menu_image_prompt',
           buttonText: '複製選單產圖提示詞'
         },
         checklist: [
-          '兩個按鈕的動作都是「文字」，不是連結',
+          '選單圖片已經放進 line-ai-faq 資料夾，檔名是 rich-menu'
+        ],
+        tip: '💡 尺寸不用自己調，下一步 Codex 會幫你轉成 LINE 規定的大小。'
+      },
+      {
+        title: 'Step B5 - 交給 Codex：上傳並啟用圖文選單',
+        body: '在同一個 Codex 對話貼上下面這段話。Codex 會用 LINE 的 API 幫你建立選單、上傳圖片、設定成所有人都看得到，<strong>不用進 OA Manager 手動設定</strong>。',
+        promptBox: {
+          id: 'rich_menu_setup_prompt',
+          buttonText: '複製圖文選單提示詞',
+          text: '請幫我用 LINE Messaging API 建立圖文選單，並設成所有客人預設看到的選單。\n' +
+            '1. 圖片是 line-ai-faq 資料夾裡的 rich-menu 圖檔。請轉成 2500×843 的 JPG、小於 1MB，左右兩格的文字要完整保留。\n' +
+            '2. 選單分左右兩格，按下去都要讓客人真的送出一句文字（message action，不要用 postback 或連結）：左邊送出「瀏覽商品」，右邊送出「聯絡客服」。選單列文字寫「選單」。\n' +
+            '3. 用 .dev.vars 裡的 LINE_CHANNEL_ACCESS_TOKEN 呼叫 API，不要把 Token 寫進程式或顯示在畫面上；找不到 .dev.vars 就先問我。\n' +
+            '4. 把建立選單的步驟寫成專案裡的一個小腳本，之後換圖片時重跑一次就好；重跑時只刪掉這個腳本之前建的選單，避免越建越多。\n' +
+            '5. 完成後告訴我選單 ID，並請我用手機重新打開官方帳號的聊天室確認。\n' +
+            '遇到錯誤先用白話說明，一次修一個問題。'
+        },
+        checklist: [
+          'Codex 回報圖文選單建立成功，給了選單 ID',
+          '手機重新打開聊天室，看到下方的選單',
           '按左邊會送出「瀏覽商品」，收到商品輪播',
           '按右邊會送出「聯絡客服」，進入真人接手'
         ],
-        tip: '💡 動作一定要選「文字」：客人按下去，聊天室會真的出現一句話，系統才收得到，OA 聊天室也會留下這位客人。'
+        tip: '💡 <strong>用 API 建的選單，OA Manager 的「圖文選單」頁面看不到</strong>，這是正常的。它的優先順序比 OA Manager 建的還高，要換圖片就把新圖放進資料夾，請 Codex 重跑一次腳本。',
+        extra: '⏱️ 預估：10 - 15 分鐘'
       },
       {
-        title: 'Step B5 - 預約流程打通',
+        title: 'Step B6 - 預約流程打通',
         body: '用手機當客人，從頭到尾走一次預約，再到後台確認結果。',
         flow: ['手機點選商品', '系統回傳列表', '點擊訂購產生文字訊息', '寫入 LINE Chat 記錄', '系統寫入 D1 扣庫存', '發送雙向即時通知'],
         checklist: [
