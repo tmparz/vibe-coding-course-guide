@@ -34,8 +34,8 @@ const STAGES = [
         title: '🎯 兩天後你會做出什麼？',
         body: '講師先展示<strong>第二天的成品</strong>：客人在 LINE 點選單、看服務、按下預約，系統自動記錄並通知老闆。<br><br>今天是第一步：讓 LINE <strong>聽懂客人用自己的話問問題</strong>，並根據你給的資料回答。',
         images: [
-          { src: './faq-flow-overview.svg', caption: 'DAY 1 成果：客人用自己的話問，AI 依照你的 FAQ 回答' },
-          { src: '../line流程圖.png', caption: 'DAY 2 成果：客人點選單、看商品、按報名，名額自動扣減並通知老闆' }
+          { src: '../faq流程圖.png', caption: 'DAY 2 上午：AI 依 FAQ 回答，客人按「聯絡真人客服」，老闆立刻收到通知' },
+          { src: '../line流程圖.png', caption: 'DAY 2 下午：客人點選單、看商品、按報名，名額自動扣減並通知老闆' }
         ],
         flow: ['DAY 1｜AI 協作', 'DAY 1｜LINE 自動回答問題', 'DAY 2｜LINE 接受預約', 'DAY 2｜後台管理'],
         result: '今天帶走：一個會根據你的 FAQ 回答客人的 LINE 機器人'
