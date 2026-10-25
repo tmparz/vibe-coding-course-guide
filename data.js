@@ -315,7 +315,7 @@ const STAGES = [
         body: '按鈕送出的文字有<strong>固定格式</strong>（例如「👉 我要預約【頭部芳香放鬆】」），手動打出相同完整格式也會觸發下單；固定格式不是身分驗證。所以系統比對的是「格式」，不是「預約」兩個字。<br><br>' +
           '<div class="glossary-table"><table><thead><tr><th>順序</th><th>收到的文字</th><th>處理方式</th><th>AI 關閉或真人接手中也處理？</th></tr></thead><tbody>' +
           '<tr><td>1</td><td>開頭是「👉 我要預約【」</td><td>建立預約、通知管理員</td><td>✅ 照常</td></tr>' +
-          '<tr><td>2</td><td>按選單的「瀏覽商品」（postback），或打「瀏覽商品」</td><td>用卡片列出商品</td><td>✅ 照常</td></tr>' +
+          '<tr><td>2</td><td>按選單的「瀏覽商品」（postback），或打「瀏覽商品」</td><td>用 Flex Message 卡片橫向列出商品</td><td>✅ 照常</td></tr>' +
           '<tr><td>3</td><td>「聯絡客服」或「人工」</td><td>進入真人接手模式、通知管理員</td><td>只延長時間</td></tr>' +
           '<tr><td>4</td><td>這位客人在後台被關掉 AI，或在真人接手中</td><td>不回應，留給你在 OA 聊天室一對一回覆</td><td></td></tr>' +
           '<tr><td>5</td><td>其他文字</td><td>AI 依後台裡最新的 FAQ 回答</td><td></td></tr>' +
@@ -402,7 +402,7 @@ const STAGES = [
         checklist: [
           'Codex 回報圖文選單做好了',
           '手機重新打開聊天室，看到下方的選單',
-          '按左邊「瀏覽商品」，收到商品卡片',
+          '按左邊「瀏覽商品」，收到可以左右滑的商品卡片',
           '按右邊會送出「聯絡客服」，進入真人接手'
         ],
         tip: '💡 Codex 做的選單，<strong>在 OA Manager 的「圖文選單」頁面看不到</strong>，這是正常的。之後想換圖，把新圖放進資料夾，跟 Codex 說「幫我換成新的選單圖」就好。',
