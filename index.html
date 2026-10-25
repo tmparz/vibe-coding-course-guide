@@ -28,7 +28,7 @@
   <main class="main-content" id="mainContent"></main>
 
   <script src="course-tools.js?v=20261024-03"></script>
-  <script src="data.js?v=20261024-05"></script>
+  <script src="data.js?v=20261025-07"></script>
   <script>
     (function () {
       const nav = document.getElementById('tabNav');
@@ -216,12 +216,13 @@
           }
 
           // Image
+          // step.image may be a single path or a list shown top to bottom.
           if (step.image) {
-            html += `
+            html += [].concat(step.image).map(src => `
           <div class="step-image-container" style="margin: 16px 0; border: 1px solid var(--c-border); border-radius: var(--radius); overflow: hidden; max-width: 100%;">
-            <img src="${step.image}" alt="LINE OA MVP 流程圖" style="width: 100%; height: auto; display: block; object-fit: contain;">
+            <img src="${src}" alt="LINE OA MVP 流程圖" style="width: 100%; height: auto; display: block; object-fit: contain;">
           </div>
-        `;
+        `).join('');
           }
 
           // Flow diagram

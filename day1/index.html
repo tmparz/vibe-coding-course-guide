@@ -27,7 +27,7 @@
   <main class="main-content" id="mainContent"></main>
 
   <script src="../course-tools.js?v=20261024-03"></script>
-  <script src="data.js?v=20261025-06"></script>
+  <script src="data.js?v=20261025-07"></script>
   <script>
     (function () {
       const nav = document.getElementById('tabNav');
@@ -144,17 +144,6 @@
           </div>
           ${isFaqFlow ? '<p style="text-align:center;font-size:13px;color:var(--c-text-muted);">點擊圖片可在新分頁放大檢視</p>' : ''}
         `;
-          }
-
-          // Result previews: several captioned images, each opens full size in a new tab.
-          if (step.images) {
-            html += step.images.map(img => `
-          <p style="margin: 16px 0 6px; font-weight: 700;">${img.caption}</p>
-          <div class="step-image-container" style="border: 1px solid var(--c-border); border-radius: var(--radius); overflow: hidden; max-width: 100%;">
-            <a href="${img.src}" target="_blank" rel="noopener noreferrer" title="點擊放大">
-              <img src="${img.src}" alt="${img.caption}" loading="lazy" style="width: 100%; height: auto; display: block; object-fit: contain;">
-            </a>
-          </div>`).join('') + '<p style="text-align:center;font-size:13px;color:var(--c-text-muted);">點擊圖片可在新分頁放大檢視</p>';
           }
 
           // Flow diagram

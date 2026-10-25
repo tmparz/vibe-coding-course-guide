@@ -29,7 +29,7 @@ const STAGES = [
       {
         title: '課程目標',
         body: '學員在 6 小時內完成一套可運作的 LINE OA 銷售/預約系統 MVP。<br>真正想教的能力：如何把商業需求拆解成系統需求，並透過 AI 完成系統建置。',
-        image: 'line流程圖.png',
+        image: ['faq流程圖.png', 'line流程圖.png'],
         checklist: ['LINE OA 串接', '商品管理', '訂單管理', 'LINE Webhook', 'Cloudflare Worker', 'D1 Database', 'Rich Menu', 'LINE 通知', 'MVP 上線']
       },
       {
