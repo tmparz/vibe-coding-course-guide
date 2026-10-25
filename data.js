@@ -390,26 +390,22 @@ const STAGES = [
         tip: '💡 尺寸不用自己調，下一步 Codex 會幫你轉成 LINE 規定的大小。'
       },
       {
-        title: 'Step B5 - 交給 Codex：上傳並啟用圖文選單',
-        body: '在同一個 Codex 對話貼上下面這段話。Codex 會用 LINE 的 API 幫你建立選單、上傳圖片、設定成所有人都看得到，<strong>不用進 OA Manager 手動設定</strong>。',
+        title: 'Step B5 - 交給 Codex：把圖片做成圖文選單',
+        body: '在同一個 Codex 對話貼上下面這段話，Codex 會幫你把選單做好、放上官方帳號，<strong>不用進 OA Manager 手動設定</strong>。',
         promptBox: {
           id: 'rich_menu_setup_prompt',
           buttonText: '複製圖文選單提示詞',
-          text: '請幫我用 LINE Messaging API 建立圖文選單，並設成所有客人預設看到的選單。\n' +
-            '1. 圖片是 line-ai-faq 資料夾裡的 rich-menu 圖檔。請轉成 2500×843 的 JPG、小於 1MB，左右兩格的文字要完整保留。\n' +
-            '2. 選單分左右兩格，按下去都要讓客人真的送出一句文字（message action，不要用 postback 或連結）：左邊送出「瀏覽商品」，右邊送出「聯絡客服」。選單列文字寫「選單」。\n' +
-            '3. 用 .dev.vars 裡的 LINE_CHANNEL_ACCESS_TOKEN 呼叫 API，不要把 Token 寫進程式或顯示在畫面上；找不到 .dev.vars 就先問我。\n' +
-            '4. 把建立選單的步驟寫成專案裡的一個小腳本，之後換圖片時重跑一次就好；重跑時只刪掉這個腳本之前建的選單，避免越建越多。\n' +
-            '5. 完成後告訴我選單 ID，並請我用手機重新打開官方帳號的聊天室確認。\n' +
-            '遇到錯誤先用白話說明，一次修一個問題。'
+          text: '幫我把 line-ai-faq 資料夾裡的 rich-menu 圖片，做成官方帳號的圖文選單，讓所有客人都看得到。\n' +
+            '選單分左右兩格：左邊按下去，客人會在聊天室送出「瀏覽商品」；右邊按下去，送出「聯絡客服」。\n' +
+            '圖片尺寸不對就幫我調整。做好後告訴我，我用手機確認。'
         },
         checklist: [
-          'Codex 回報圖文選單建立成功，給了選單 ID',
+          'Codex 回報圖文選單做好了',
           '手機重新打開聊天室，看到下方的選單',
           '按左邊會送出「瀏覽商品」，收到商品輪播',
           '按右邊會送出「聯絡客服」，進入真人接手'
         ],
-        tip: '💡 <strong>用 API 建的選單，OA Manager 的「圖文選單」頁面看不到</strong>，這是正常的。它的優先順序比 OA Manager 建的還高，要換圖片就把新圖放進資料夾，請 Codex 重跑一次腳本。',
+        tip: '💡 Codex 做的選單，<strong>在 OA Manager 的「圖文選單」頁面看不到</strong>，這是正常的。之後想換圖，把新圖放進資料夾，跟 Codex 說「幫我換成新的選單圖」就好。',
         extra: '⏱️ 預估：10 - 15 分鐘'
       },
       {
