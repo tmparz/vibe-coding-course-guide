@@ -28,7 +28,7 @@
   <main class="main-content" id="mainContent"></main>
 
   <script src="course-tools.js?v=20261026-01"></script>
-  <script src="data.js?v=20261026-01"></script>
+  <script src="data.js?v=20261026-02"></script>
   <script>
     (function () {
       const nav = document.getElementById('tabNav');
@@ -404,7 +404,7 @@
 5. 後台網頁：要輸入密碼才能進去，分成「客人管理」「FAQ 管理」（一個大文字框，直接改、按儲存）「問題紀錄」三頁。選單留位置，下午會加「商品管理」「訂單管理」。
 
 【密碼與金鑰】
-- 後台密碼由我自己輸入（至少 12 碼），用 npx wrangler secret put ADMIN_PASSWORD 設定，不要顯示在畫面或對話裡。
+- 後台密碼由我自己輸入（至少 6 碼），用 npx wrangler secret put ADMIN_PASSWORD 設定，不要顯示在畫面或對話裡。
 - 管理員 LINE UID（通知要送給我）：${adminUid || '[請回前步驟填寫管理員 LINE UID]'}
 - LINE 和 Gemini 的金鑰第一天已經設定在 Cloudflare，不用重設。本機測試需要的話放進 .dev.vars，不要寫進程式碼、也不要 commit：
   LINE_CHANNEL_SECRET: ${channelSecret || '[請回前步驟填寫 Channel Secret]'}
